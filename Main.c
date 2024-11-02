@@ -1,8 +1,8 @@
 #include "raylib.h"
 
 // Variáveis globais
-int bola_x;
-int bola_y;
+int retangulo_x;
+int retangulo_y;
 int velocidadeBola = 3;
 bool pausa = false;
 
@@ -37,7 +37,9 @@ void menu() {
 
 // Função principal do jogo
 void iniciarJogo() {
+    
     while (!WindowShouldClose()){
+        Rectangle retangulo = {retangulo_x, retangulo_y,60,100};
         if (IsKeyPressed(KEY_P)) {
             
             pausa = !pausa;
@@ -45,52 +47,77 @@ void iniciarJogo() {
         if(!pausa){
             // Movimento da bola
             if (IsKeyDown(KEY_UP)) {
-                bola_y -= velocidadeBola;
+                retangulo_y -= velocidadeBola;
             }
             if (IsKeyDown(KEY_DOWN)) {
-                bola_y += velocidadeBola;
+                retangulo_y += velocidadeBola;
             }
             if (IsKeyDown(KEY_RIGHT)) {
-                bola_x += velocidadeBola;
+                retangulo_x += velocidadeBola;
             }
             if (IsKeyDown(KEY_LEFT)) {
-                bola_x -= velocidadeBola;
+                retangulo_x -= velocidadeBola;
             }
             
             // Restringir a bola para não sair da tela
-            if (bola_x < 0){
-                bola_x = 0;
+            if (retangulo_x < 0){
+                retangulo_x = 0;
             }
                     
-            if (bola_y < 0){
-                bola_y = 0;
+            if (retangulo_y < 0){
+                retangulo_y = 0;
             }
                     
-            if (bola_x >= GetScreenWidth()){
-                bola_x -=3;
+            if (retangulo_x > GetScreenWidth()-60){
+                retangulo_x = GetRenderWidth()-60;
             } 
                     
-            if (bola_y >= GetScreenHeight()) {
-                bola_y -=3;
+            if (retangulo_y > GetScreenHeight()-100) {
+                retangulo_y = GetScreenHeight()-100;
             }
                     
             // Voltar ao menu se a tecla P for pressionada
             
-            Rectangle retangulo = {100, 100, 500, 300};
-            Vector2 vetor = {bola_x, bola_y};
+            Rectangle retanguloEstatico = {100, 100, 500, 300};
+            //Vector2 vetor = {retangulo_x, retangulo_y};
             
             
             
-            if(CheckCollisionCircleRec(vetor, 30, retangulo)){
+            if (CheckCollisionRecs(retangulo, retanguloEstatico)) {
+                // Calcular a penetração em cada direção
+                float penetraçãoEsquerda = (retangulo.x + retangulo.width) - retanguloEstatico.x;
+                float penetraçãoDireita = (retanguloEstatico.x + retanguloEstatico.width) - retangulo.x;
+                float penetraçãoCima = (retangulo.y + retangulo.height) - retanguloEstatico.y;
+                float penetraçãoBaixo = (retanguloEstatico.y + retanguloEstatico.height) - retangulo.y;
+
+                // Encontrar a menor penetração para determinar a direção da colisão
+                if (penetraçãoEsquerda < penetraçãoDireita && penetraçãoEsquerda < penetraçãoCima && penetraçãoEsquerda < penetraçãoBaixo) {
+                    // Colisão pela esquerda
+                    retangulo_x = retanguloEstatico.x - retangulo.width;
+                } 
+                else if (penetraçãoDireita < penetraçãoEsquerda && penetraçãoDireita < penetraçãoCima && penetraçãoDireita < penetraçãoBaixo) {
+                    // Colisão pela direita
+                    retangulo_x = retanguloEstatico.x + retanguloEstatico.width;
+                } 
+                else if (penetraçãoCima < penetraçãoBaixo && penetraçãoCima < penetraçãoEsquerda && penetraçãoCima < penetraçãoDireita) {
+                    // Colisão por cima
+                    retangulo_y = retanguloEstatico.y - retangulo.height;
+                } 
+                else if (penetraçãoBaixo < penetraçãoCima && penetraçãoBaixo < penetraçãoEsquerda && penetraçãoBaixo < penetraçãoDireita) {
+                    // Colisão por baixo
+                    retangulo_y = retanguloEstatico.y + retanguloEstatico.height;
+                }
+}
                 
-            }
+            
+            
             // Desenho do jogo
             BeginDrawing();
             ClearBackground(RAYWHITE);
             
-            DrawRectangleRec(retangulo, BLACK);
+            DrawRectangleRec(retanguloEstatico, BLACK);
         
-            DrawRectangle(bola_x, bola_y,60,100, BLUE);
+            DrawRectangleRec(retangulo, BLUE);
             
             EndDrawing();
         }
@@ -107,8 +134,8 @@ void iniciarJogo() {
 int main(void) {
     // Configuração inicial da janela e posição inicial da bola
     int larguraTela = 1280, alturaTela = 720;
-    bola_x = larguraTela / 2;
-    bola_y = alturaTela / 2;
+    retangulo_x = larguraTela / 2;
+    retangulo_y = alturaTela / 2;
     
     InitWindow(larguraTela, alturaTela, "Uma Noite no Castelo");
     SetTargetFPS(60);
