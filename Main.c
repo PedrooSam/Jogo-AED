@@ -3,7 +3,7 @@
 // Variáveis globais
 int retangulo_x;
 int retangulo_y;
-int velocidadeBola = 3;
+int velocidadeBola = 5;
 bool pausa = false;
 
 // Função do Menu
@@ -62,20 +62,21 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             }
             
             // Restringir a bola para não sair da tela
-            if (retangulo_x < 0){
-                retangulo_x = 0;
+            // Os valores são únicos pra ficar visualmente real com o personagem 
+            if (retangulo_x < -80){     // Canto esquerdo
+                retangulo_x = -80;
                 }
                 
-            if (retangulo_y < 0){
-                retangulo_y = 0;
+            if (retangulo_y < 300){     // Sobe até onde tem chão
+                retangulo_y = 300;
                 }
                 
-            if (retangulo_x > GetScreenWidth() - 60){
-                retangulo_x = GetScreenWidth() - 60;
+            if (retangulo_x > GetScreenWidth() - 145){  // Canto direito
+                retangulo_x = GetScreenWidth() - 145;
                 }
                 
-            if (retangulo_y > GetScreenHeight() - 100){
-                retangulo_y = GetScreenHeight() - 100;
+            if (retangulo_y > GetScreenHeight() - 220){ // Canto inferior
+                retangulo_y = GetScreenHeight() - 220;
                 }
             
             Rectangle retanguloEstatico = {100, 100, 500, 300};
