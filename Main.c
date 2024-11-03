@@ -35,7 +35,8 @@ void menu() {
 }
 
 // Função principal do jogo
-void iniciarJogo(Texture2D backgroundImage) {
+void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture2D personagemEsquerda) {
+    bool andandoDireita = true; // Direção inicial
     while (!WindowShouldClose()) {
         Rectangle retangulo = {retangulo_x, retangulo_y, 60, 100};
         
@@ -53,10 +54,12 @@ void iniciarJogo(Texture2D backgroundImage) {
                 }
             if (IsKeyDown(KEY_RIGHT)){
                 retangulo_x += velocidadeBola;
-                }
+                andandoDireita = true; // Personagem está indo para a direita
+            }
             if (IsKeyDown(KEY_LEFT)){
                 retangulo_x -= velocidadeBola;
-                }
+                andandoDireita = false; // Personagem está indo para a esquerda
+            }
             
             // Restringir a bola para não sair da tela
             if (retangulo_x < 0){
@@ -76,7 +79,6 @@ void iniciarJogo(Texture2D backgroundImage) {
                 }
             
             Rectangle retanguloEstatico = {100, 100, 500, 300};
-             //Vector2 vetor = {retangulo_x, retangulo_y};
             
             // Colisão com o retângulo estático
             if (CheckCollisionRecs(retangulo, retanguloEstatico)) {
@@ -108,7 +110,17 @@ void iniciarJogo(Texture2D backgroundImage) {
             DrawTexture(backgroundImage, 0, 0, WHITE);
             
             DrawRectangleRec(retanguloEstatico, BLACK);
-            DrawRectangleRec(retangulo, BLUE);
+            
+            // Fator de escala para o personagem
+            float scale = 3.5f; // Aumenta o tamanho do personagem em 350%
+  
+            // Desenha o personagem dependendo da direção
+            if (andandoDireita) {
+                DrawTextureEx(personagemDireita, (Vector2){retangulo_x, retangulo_y}, 0.0f, scale, WHITE); 
+            } 
+            if(!andandoDireita){
+                DrawTextureEx(personagemEsquerda, (Vector2){retangulo_x, retangulo_y}, 0.0f, scale, WHITE); 
+            }
             
             EndDrawing();
         }
@@ -132,19 +144,19 @@ int main(void) {
     InitWindow(larguraTela, alturaTela, "Uma Noite no Castelo");
     SetTargetFPS(60);
     
-    // Carregar recursos (ex.: imagens, texturas) se necessário
-    
-    // Texture2D backgroundImage = LoadTexture("caminho/para/imagem.png");
-    // Carregar a imagem de fundo
-    Texture2D backgroundImage = LoadTexture("background.png");
+    // Carregar recursos (ex.: imagens, texturas)
+    Texture2D backgroundImage = LoadTexture("Imagens/background.png");
+    Texture2D personagemDireita = LoadTexture("Imagens/personagemDireita.png"); // Carregar a textura do personagem olhando para a direita
+    Texture2D personagemEsquerda = LoadTexture("Imagens/personagemEsquerda.png"); // Carregar a textura do personagem olhando para a esquerda
 
     // Exibir menu e iniciar o jogo
     menu();
-    iniciarJogo(backgroundImage);
+    iniciarJogo(backgroundImage, personagemDireita, personagemEsquerda);
     
-    // Apartir daqui tem que descarregar recursos e fechar a janela
-    // Descarregar a imagem de fundo e fechar a janela
+    // Descarregar as texturas e fechar a janela
     UnloadTexture(backgroundImage);
+    UnloadTexture(personagemDireita);
+    UnloadTexture(personagemEsquerda); // Descarregar a textura do personagem
     CloseWindow();
     
     return 0;
