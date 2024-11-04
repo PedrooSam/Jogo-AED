@@ -1,4 +1,5 @@
 #include "raylib.h"
+#include <stdio.h>
 
 typedef struct {
     int x;
@@ -9,6 +10,7 @@ typedef struct {
 // Variáveis globais
 
 //Objetos
+
     // Jogador
 Objeto player;
 int playerOffSet = 140;
@@ -145,10 +147,22 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             //colisões
             Rectangle playerCollision = {player.x, player.y, 83, 83};
             Rectangle chaveCollision = {chave.x, chave.y, 28, 18};
+            Rectangle doorCollision = {865, 300, 160, 200};
             
-            // Coleta de itens
-            if(player.mapa == 0 && pegando && CollisionObject(playerCollision, chaveCollision)) {
-                chavePegandoFlag = true;
+            if(player.mapa == 0) {
+                if(pegando && CollisionObject(playerCollision, chaveCollision)) chavePegandoFlag = true;
+                
+                if(CollisionObject(playerCollision, doorCollision)) {
+                    player.mapa = 1;
+                    player.x = 920;
+                    player.y = 540;
+                }
+            } else if(player.mapa == 1) {
+                if(CollisionObject(playerCollision, doorCollision)) {
+                    player.mapa = 0;
+                    player.x = 920;
+                    player.y = 540;
+                }
             }
             
             // Desenho do jogo
@@ -156,13 +170,22 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             ClearBackground(RAYWHITE);
             
             
+            
             // Só vai desenhar o item se estiver no mapa dele
             if(player.mapa == 0) {
                 DrawTexture(backgroundImage, 0, 0, WHITE);
+                
                 if(chavePegandoFlag == false) {
                     DrawTextureEx(chaveCenario, (Vector2){chave.x, chave.y}, 0.0f, 1.0f, WHITE);
                 }
             }
+            
+            //porta
+            //DrawRectangle(doorCollision.x, doorCollision.y, doorCollision.width, doorCollision.height, BLUE);
+            
+            char text[10];
+            sprintf(text, "X:%d Y:%d", player.x, player.y);
+            DrawText(text, 20, 20, 20, WHITE);
             
 
             // Verifica se o personagem está no estado de "pegando" e a direção em que ele está olhando
