@@ -1,13 +1,24 @@
 #include "raylib.h"
 
+typedef struct {
+    int x;
+    int y;
+    int mapa;
+}Objeto;
+
 // Variáveis globais
-Vector2 player;
+
+//Objetos
+    // Jogador
+Objeto player;
+int playerOffSet = 140;
 int velocidade = 5;
-
-Vector2 chave;
-
+float scale = 3.5f; // Fator de escala para o personagem
 bool pausa = false;
 bool pegando = false; // Variável para verificar se o personagem está pegando algo
+
+    // Chave
+Objeto chave;
 
 //Colisão Universal, 
 bool CollisionObject(Rectangle playerCollision, Rectangle objeto) {
@@ -70,10 +81,12 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
     //posição jogador
     player.x = 200;
     player.y = 200;
+    player.mapa = 0;
     
     //posição de chave
     chave.x = 500;
     chave.y = 550;
+    chave.mapa = 0;
     
     while (!WindowShouldClose()) {
         if (IsKeyPressed(KEY_P)) {
@@ -84,6 +97,16 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             // Verificar se a tecla 'E' foi pressionada para pegar algo
             if (IsKeyPressed(KEY_E)) {
                 pegando = !pegando; // Alternar o estado de pegando
+                if(chavePegandoFlag) chavePegandoFlag = !chavePegandoFlag;
+            }   
+            
+            //Teleporte de mapas
+            if (IsKeyPressed(KEY_R)) {
+               player.mapa = 1;
+            }   
+            
+            if (IsKeyPressed(KEY_T)) {
+               player.mapa = 0;
             }   
             
             // Movimento do jogador
@@ -103,30 +126,28 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             }
 
             // Restringir o jogador para não sair da tela
-            if (player.x < 0) {     // Canto esquerdo
+            if (player.x < 0) {     // Lado esquerdo
                 player.x = 0;
             }
                 
-            if (player.y < 380) {     // Sobe até onde tem chão
-                player.y = 380;
+            if (player.y < 300 + playerOffSet) {     // Limite teto
+                player.y = 300 + playerOffSet;
             }
                 
-            if (player.x > GetScreenWidth() - 83) {  // Canto direito
+            if (player.x > GetScreenWidth() - 83) {  // Lado direito
                 player.x = GetScreenWidth() - 83;
             }
                 
-            if (player.y > GetScreenHeight() - 140) { // Canto inferior
-                player.y = GetScreenHeight() - 140;
+            if (player.y > GetScreenHeight() - playerOffSet + 60) { //Limite chão
+                player.y = GetScreenHeight() - playerOffSet + 60;
             }
             
-            Rectangle retanguloCollision = {100, 100, 500, 300};
+            //colisões
             Rectangle playerCollision = {player.x, player.y, 83, 83};
             Rectangle chaveCollision = {chave.x, chave.y, 28, 18};
             
-            // Colisão com o retângulo estático
-            //CollisionObject(playerCollision, retanguloCollision);
-            
-            if(pegando && CollisionObject(playerCollision, chaveCollision)) {
+            // Coleta de itens
+            if(player.mapa == 0 && pegando && CollisionObject(playerCollision, chaveCollision)) {
                 chavePegandoFlag = true;
             }
             
@@ -134,29 +155,32 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             BeginDrawing();
             ClearBackground(RAYWHITE);
             
-            DrawTexture(backgroundImage, 0, 0, WHITE);
-            if(chavePegandoFlag == false) {
-                DrawTextureEx(chaveCenario, chave, 0.0f, 1.0f, WHITE);
+            
+            // Só vai desenhar o item se estiver no mapa dele
+            if(player.mapa == 0) {
+                DrawTexture(backgroundImage, 0, 0, WHITE);
+                if(chavePegandoFlag == false) {
+                    DrawTextureEx(chaveCenario, (Vector2){chave.x, chave.y}, 0.0f, 1.0f, WHITE);
+                }
             }
-            // Fator de escala para o personagem
-            float scale = 3.5f;
+            
 
             // Verifica se o personagem está no estado de "pegando" e a direção em que ele está olhando
             if (pegando) {
                 if(chavePegandoFlag && andandoDireita) {
-                    DrawTextureEx(personagemPegandoChaveDireita, (Vector2){player.x, player.y-80}, 0.0f, scale, WHITE); 
+                    DrawTextureEx(personagemPegandoChaveEsquerda, (Vector2){player.x, player.y-playerOffSet}, 0.0f, scale, WHITE); 
                 } else if(chavePegandoFlag) {
-                    DrawTextureEx(personagemPegandoChaveEsquerda, (Vector2){player.x, player.y-80}, 0.0f, scale, WHITE); 
+                    DrawTextureEx(personagemPegandoChaveDireita, (Vector2){player.x, player.y-playerOffSet}, 0.0f, scale, WHITE); 
                 } else if (andandoDireita) {
-                    DrawTextureEx(personagemPegando, (Vector2){player.x, player.y-80}, 0.0f, scale, WHITE); 
+                    DrawTextureEx(personagemPegando, (Vector2){player.x, player.y-playerOffSet}, 0.0f, scale, WHITE); 
                 } else {
-                    DrawTextureEx(personagemPegandoEsquerda, (Vector2){player.x, player.y-80}, 0.0f, scale, WHITE);
+                    DrawTextureEx(personagemPegandoEsquerda, (Vector2){player.x, player.y-playerOffSet}, 0.0f, scale, WHITE);
                 }
             } else {
                 if (andandoDireita) {
-                    DrawTextureEx(personagemDireita, (Vector2){player.x, player.y-80}, 0.0f, scale, WHITE);
+                    DrawTextureEx(personagemDireita, (Vector2){player.x, player.y-playerOffSet}, 0.0f, scale, WHITE);
                 } else {
-                    DrawTextureEx(personagemEsquerda, (Vector2){player.x, player.y-80}, 0.0f, scale, WHITE);
+                    DrawTextureEx(personagemEsquerda, (Vector2){player.x, player.y-playerOffSet}, 0.0f, scale, WHITE);
                 }
             }
             
