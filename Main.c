@@ -36,7 +36,7 @@ void menu() {
 }
 
 // Função principal do jogo
-void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture2D personagemEsquerda, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda) {
+void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture2D personagemEsquerda, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario) {
     bool andandoDireita = true; // Direção inicial
     while (!WindowShouldClose()) {
         Rectangle retangulo = {player_x, player_y, 60, 100};
@@ -122,6 +122,8 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             
             // DrawRectangleRec(retanguloEstatico, BLACK);  RETANGULO PRETO
             
+            DrawTextureEx(chaveCenario, (Vector2){500, 550}, 0.0f, 1, WHITE);
+            
             // Fator de escala para o personagem
             float scale = 3.5f; // Aumenta o tamanho do personagem em 350%
 
@@ -161,20 +163,22 @@ int main(void) {
     SetTargetFPS(60);
     
     // Carregar recursos (ex.: imagens, texturas)
-    Texture2D backgroundImage = LoadTexture("Imagens/background.png");
+    Texture2D backgroundImage = LoadTexture("cenario/background.png");
     Texture2D personagemDireita = LoadTexture("Imagens/personagemDireita.png");
     Texture2D personagemEsquerda = LoadTexture("Imagens/personagemEsquerda.png");
     Texture2D personagemPegando = LoadTexture("Imagens/personagemPegando.png"); // Nova imagem de pegando
     Texture2D personagemPegandoEsquerda = LoadTexture("Imagens/personagemPegandoEsquerda.png");
+    Texture2D chaveCenario = LoadTexture("cenario/chaveCenario.png");
     
     menu();
-    iniciarJogo(backgroundImage, personagemDireita, personagemEsquerda, personagemPegando, personagemPegandoEsquerda);
+    iniciarJogo(backgroundImage, personagemDireita, personagemEsquerda, personagemPegando, personagemPegandoEsquerda, chaveCenario);
     
     UnloadTexture(backgroundImage);
     UnloadTexture(personagemDireita);
     UnloadTexture(personagemEsquerda);
     UnloadTexture(personagemPegando);
     UnloadTexture(personagemPegandoEsquerda);
+    UnloadTexture(chaveCenario);
     CloseWindow();
     
     return 0;
