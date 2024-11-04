@@ -5,6 +5,7 @@ int player_x;
 int player_y;
 int velocidadeBola = 5;
 bool pausa = false;
+bool pegando = false; // Variável para verificar se o personagem está pegando algo
 
 // Função do Menu
 void menu() {
@@ -35,7 +36,7 @@ void menu() {
 }
 
 // Função principal do jogo
-void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture2D personagemEsquerda) {
+void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture2D personagemEsquerda, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda) {
     bool andandoDireita = true; // Direção inicial
     while (!WindowShouldClose()) {
         Rectangle retangulo = {player_x, player_y, 60, 100};
@@ -45,6 +46,16 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
         }
         
         if (!pausa) {
+            // Verificar se a tecla 'E' foi pressionada para pegar algo
+            if (IsKeyPressed(KEY_E)) {
+                if(pegando){
+                    pegando = false;
+                }
+                else{
+                    pegando = true;
+                }
+            }   
+            
             // Movimento da bola
             if (IsKeyDown(KEY_UP)){
                 player_y -= velocidadeBola;
@@ -107,9 +118,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             BeginDrawing();
             ClearBackground(RAYWHITE);
             
-            // Desenha a imagem de fundo
             DrawTexture(backgroundImage, 0, 0, WHITE);
-            
             DrawRectangleRec(retanguloEstatico, BLACK);
             
             // Fator de escala para o personagem
@@ -122,22 +131,36 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             if(!andandoDireita){
                 DrawTextureEx(personagemEsquerda, (Vector2){player_x, player_y}, 0.0f, scale, WHITE); 
             }
+            float scale = 3.5f;
+
+            // Verifica se o personagem está no estado de "pegando" e a direção em que ele está olhando
+            if (pegando) {
+                if (andandoDireita) {
+                    DrawTextureEx(personagemPegando, (Vector2){retangulo_x, retangulo_y}, 0.0f, scale, WHITE);
+                }else {
+                DrawTextureEx(personagemPegandoEsquerda, (Vector2){retangulo_x, retangulo_y}, 0.0f, scale, WHITE);
+            }
+            } else {
+            // Desenha o personagem normal, dependendo da direção
+                if (andandoDireita) {
+                    DrawTextureEx(personagemDireita, (Vector2){retangulo_x, retangulo_y}, 0.0f, scale, WHITE);
+            }   else {
+                    DrawTextureEx(personagemEsquerda, (Vector2){retangulo_x, retangulo_y}, 0.0f, scale, WHITE);
+            }
+}
             
             EndDrawing();
         }
         
         if (pausa) {
             BeginDrawing();
-            
             DrawText("PAUSE", 500, 290, 70, GOLD);
-            
             EndDrawing();
         }
     }
 }
 
 int main(void) {
-    // Configuração inicial da janela e posição inicial da bola
     int larguraTela = 1280, alturaTela = 720;
     player_x = larguraTela / 2;
     player_y = alturaTela / 2;
@@ -147,17 +170,19 @@ int main(void) {
     
     // Carregar recursos (ex.: imagens, texturas)
     Texture2D backgroundImage = LoadTexture("Imagens/background.png");
-    Texture2D personagemDireita = LoadTexture("Imagens/personagemDireita.png"); // Carregar a textura do personagem olhando para a direita
-    Texture2D personagemEsquerda = LoadTexture("Imagens/personagemEsquerda.png"); // Carregar a textura do personagem olhando para a esquerda
-
-    // Exibir menu e iniciar o jogo
-    menu();
-    iniciarJogo(backgroundImage, personagemDireita, personagemEsquerda);
+    Texture2D personagemDireita = LoadTexture("Imagens/personagemDireita.png");
+    Texture2D personagemEsquerda = LoadTexture("Imagens/personagemEsquerda.png");
+    Texture2D personagemPegando = LoadTexture("Imagens/personagemPegando.png"); // Nova imagem de pegando
+    Texture2D personagemPegandoEsquerda = LoadTexture("Imagens/personagemPegandoEsquerda.png");
     
-    // Descarregar as texturas e fechar a janela
+    menu();
+    iniciarJogo(backgroundImage, personagemDireita, personagemEsquerda, personagemPegando, personagemPegandoEsquerda);
+    
     UnloadTexture(backgroundImage);
     UnloadTexture(personagemDireita);
-    UnloadTexture(personagemEsquerda); // Descarregar a textura do personagem
+    UnloadTexture(personagemEsquerda);
+    UnloadTexture(personagemPegando);
+    UnloadTexture(personagemPegandoEsquerda);
     CloseWindow();
     
     return 0;
