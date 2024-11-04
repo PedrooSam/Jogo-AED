@@ -90,10 +90,10 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                 player_y = GetScreenHeight() - 220;
                 }
             
-            Rectangle retanguloEstatico = {100, 100, 500, 300};
+            // Rectangle retanguloEstatico = {100, 100, 500, 300};
             
             // Colisão com o retângulo estático
-            if (CheckCollisionRecs(retangulo, retanguloEstatico)) {
+            /*if (CheckCollisionRecs(retangulo, retanguloEstatico)) {
                 float penetracaoEsquerda = (retangulo.x + retangulo.width) - retanguloEstatico.x;
                 float penetracaoDireita = (retanguloEstatico.x + retanguloEstatico.width) - retangulo.x;
                 float penetracaoCima = (retangulo.y + retangulo.height) - retanguloEstatico.y;
@@ -112,25 +112,18 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                     // Colisão por baixo
                     player_y = retanguloEstatico.y + retanguloEstatico.height;
                 }
-            }
+            }*/ // COLISAO
             
             // Desenho do jogo
             BeginDrawing();
             ClearBackground(RAYWHITE);
             
             DrawTexture(backgroundImage, 0, 0, WHITE);
-            DrawRectangleRec(retanguloEstatico, BLACK);
+            
+            // DrawRectangleRec(retanguloEstatico, BLACK);  RETANGULO PRETO
             
             // Fator de escala para o personagem
             float scale = 3.5f; // Aumenta o tamanho do personagem em 350%
-  
-            // Desenha o personagem dependendo da direção
-            if (andandoDireita) {
-                DrawTextureEx(personagemDireita, (Vector2){player_x, player_y}, 0.0f, scale, WHITE); 
-            } 
-            if(!andandoDireita){
-                DrawTextureEx(personagemEsquerda, (Vector2){player_x, player_y}, 0.0f, scale, WHITE); 
-            }
 
             // Verifica se o personagem está no estado de "pegando" e a direção em que ele está olhando
             if (pegando) {
