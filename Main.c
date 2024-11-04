@@ -1,4 +1,4 @@
-include "raylib.h"
+#include "raylib.h"
 
 // Variáveis globais
 int player_x;
@@ -131,21 +131,20 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             if(!andandoDireita){
                 DrawTextureEx(personagemEsquerda, (Vector2){player_x, player_y}, 0.0f, scale, WHITE); 
             }
-            float scale = 3.5f;
 
             // Verifica se o personagem está no estado de "pegando" e a direção em que ele está olhando
             if (pegando) {
                 if (andandoDireita) {
-                    DrawTextureEx(personagemPegando, (Vector2){retangulo_x, retangulo_y}, 0.0f, scale, WHITE);
+                    DrawTextureEx(personagemPegando, (Vector2){player_x, player_y}, 0.0f, scale, WHITE);
                 }else {
-                DrawTextureEx(personagemPegandoEsquerda, (Vector2){retangulo_x, retangulo_y}, 0.0f, scale, WHITE);
+                DrawTextureEx(personagemPegandoEsquerda, (Vector2){player_x, player_y}, 0.0f, scale, WHITE);
             }
             } else {
             // Desenha o personagem normal, dependendo da direção
                 if (andandoDireita) {
-                    DrawTextureEx(personagemDireita, (Vector2){retangulo_x, retangulo_y}, 0.0f, scale, WHITE);
+                    DrawTextureEx(personagemDireita, (Vector2){player_x, player_y}, 0.0f, scale, WHITE);
             }   else {
-                    DrawTextureEx(personagemEsquerda, (Vector2){retangulo_x, retangulo_y}, 0.0f, scale, WHITE);
+                    DrawTextureEx(personagemEsquerda, (Vector2){player_x, player_y}, 0.0f, scale, WHITE);
             }
 }
             
