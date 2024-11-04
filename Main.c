@@ -1,11 +1,38 @@
 #include "raylib.h"
 
 // Variáveis globais
-int player_x;
-int player_y;
-int velocidadeBola = 5;
+Vector2 player;
+int velocidade = 5;
+
+Vector2 chave;
+
 bool pausa = false;
 bool pegando = false; // Variável para verificar se o personagem está pegando algo
+
+//Colisão Universal, 
+bool CollisionObject(Rectangle playerCollision, Rectangle objeto) {
+    if (CheckCollisionRecs(playerCollision, objeto)) {
+        float penetracaoEsquerda = (playerCollision.x + playerCollision.width) - objeto.x;
+        float penetracaoDireita = (playerCollision.x + playerCollision.width) - playerCollision.x;
+        float penetracaoCima = (playerCollision.y + playerCollision.height) - objeto.y;
+        float penetracaoBaixo = (objeto.y + objeto.height) - playerCollision.y;
+
+        if (penetracaoEsquerda < penetracaoDireita && penetracaoEsquerda < penetracaoCima && penetracaoEsquerda < penetracaoBaixo) {
+            player.x -= velocidade;
+            return true;
+        } else if (penetracaoDireita < penetracaoEsquerda && penetracaoDireita < penetracaoCima && penetracaoDireita < penetracaoBaixo) {
+            player.x += velocidade;
+            return true;
+        } else if (penetracaoCima < penetracaoBaixo && penetracaoCima < penetracaoEsquerda && penetracaoCima < penetracaoDireita) {
+            player.y -= velocidade;
+            return true;
+        } else if (penetracaoBaixo < penetracaoCima && penetracaoBaixo < penetracaoEsquerda && penetracaoBaixo < penetracaoDireita) {
+            player.y += velocidade;
+            return true;
+        }
+    }
+    return false;
+}
 
 // Função do Menu
 void menu() {
@@ -38,6 +65,16 @@ void menu() {
 // Função principal do jogo
 void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture2D personagemEsquerda, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D personagemPegandoChaveEsquerda, Texture2D personagemPegandoChaveDireita) {
     bool andandoDireita = true; // Direção inicial
+    bool chavePegandoFlag = false;
+    
+    //posição jogador
+    player.x = 200;
+    player.y = 200;
+    
+    //posição de chave
+    chave.x = 500;
+    chave.y = 550;
+    
     while (!WindowShouldClose()) {
         if (IsKeyPressed(KEY_P)) {
             pausa = !pausa;
@@ -49,37 +86,48 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                 pegando = !pegando; // Alternar o estado de pegando
             }   
             
-            // Movimento da bola
+            // Movimento do jogador
             if (IsKeyDown(KEY_UP)) {
-                player_y -= velocidadeBola;
+                player.y -= velocidade;
             }
             if (IsKeyDown(KEY_DOWN)) {
-                player_y += velocidadeBola;
+                player.y += velocidade;
             }
             if (IsKeyDown(KEY_RIGHT)) {
-                player_x += velocidadeBola;
+                player.x += velocidade;
                 andandoDireita = true; // Personagem está indo para a direita
             }
             if (IsKeyDown(KEY_LEFT)) {
-                player_x -= velocidadeBola;
+                player.x -= velocidade;
                 andandoDireita = false; // Personagem está indo para a esquerda
             }
 
-            // Restringir a bola para não sair da tela
-            if (player_x < 0) {     // Canto esquerdo
-                player_x = 0;
+            // Restringir o jogador para não sair da tela
+            if (player.x < 0) {     // Canto esquerdo
+                player.x = 0;
             }
                 
-            if (player_y < 300) {     // Sobe até onde tem chão
-                player_y = 300;
+            if (player.y < 380) {     // Sobe até onde tem chão
+                player.y = 380;
             }
                 
-            if (player_x > GetScreenWidth() - 83) {  // Canto direito
-                player_x = GetScreenWidth() - 83;
+            if (player.x > GetScreenWidth() - 83) {  // Canto direito
+                player.x = GetScreenWidth() - 83;
             }
                 
-            if (player_y > GetScreenHeight() - 220) { // Canto inferior
-                player_y = GetScreenHeight() - 220;
+            if (player.y > GetScreenHeight() - 140) { // Canto inferior
+                player.y = GetScreenHeight() - 140;
+            }
+            
+            Rectangle retanguloCollision = {100, 100, 500, 300};
+            Rectangle playerCollision = {player.x, player.y, 83, 83};
+            Rectangle chaveCollision = {chave.x, chave.y, 28, 18};
+            
+            // Colisão com o retângulo estático
+            //CollisionObject(playerCollision, retanguloCollision);
+            
+            if(pegando && CollisionObject(playerCollision, chaveCollision)) {
+                chavePegandoFlag = true;
             }
             
             // Desenho do jogo
@@ -87,24 +135,28 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             ClearBackground(RAYWHITE);
             
             DrawTexture(backgroundImage, 0, 0, WHITE);
-            DrawTextureEx(chaveCenario, (Vector2){500, 550}, 0.0f, 1.0f, WHITE);
-            
+            if(chavePegandoFlag == false) {
+                DrawTextureEx(chaveCenario, chave, 0.0f, 1.0f, WHITE);
+            }
             // Fator de escala para o personagem
-            float scale = 3.5f; // Aumenta o tamanho do personagem em 350%
+            float scale = 3.5f;
 
             // Verifica se o personagem está no estado de "pegando" e a direção em que ele está olhando
             if (pegando) {
-                if (andandoDireita) {
-                    DrawTextureEx(personagemPegando, (Vector2){player_x, player_y}, 0.0f, scale, WHITE); 
+                if(chavePegandoFlag && andandoDireita) {
+                    DrawTextureEx(personagemPegandoChaveDireita, (Vector2){player.x, player.y-80}, 0.0f, scale, WHITE); 
+                } else if(chavePegandoFlag) {
+                    DrawTextureEx(personagemPegandoChaveEsquerda, (Vector2){player.x, player.y-80}, 0.0f, scale, WHITE); 
+                } else if (andandoDireita) {
+                    DrawTextureEx(personagemPegando, (Vector2){player.x, player.y-80}, 0.0f, scale, WHITE); 
                 } else {
-                    DrawTextureEx(personagemPegandoEsquerda, (Vector2){player_x, player_y}, 0.0f, scale, WHITE);
+                    DrawTextureEx(personagemPegandoEsquerda, (Vector2){player.x, player.y-80}, 0.0f, scale, WHITE);
                 }
             } else {
-                // Desenha o personagem normal, dependendo da direção
                 if (andandoDireita) {
-                    DrawTextureEx(personagemDireita, (Vector2){player_x, player_y}, 0.0f, scale, WHITE);
+                    DrawTextureEx(personagemDireita, (Vector2){player.x, player.y-80}, 0.0f, scale, WHITE);
                 } else {
-                    DrawTextureEx(personagemEsquerda, (Vector2){player_x, player_y}, 0.0f, scale, WHITE);
+                    DrawTextureEx(personagemEsquerda, (Vector2){player.x, player.y-80}, 0.0f, scale, WHITE);
                 }
             }
             
@@ -121,29 +173,22 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
 
 int main(void) {
     int larguraTela = 1280, alturaTela = 720;
-    player_x = larguraTela / 2;
-    player_y = alturaTela / 2;
         
     InitWindow(larguraTela, alturaTela, "Uma Noite no Castelo");
     SetTargetFPS(60);
     
-    // Carregar recursos (ex.: imagens, texturas)
     Texture2D backgroundImage = LoadTexture("cenario/background.png");
-    
-    Texture2D personagemDireita = LoadTexture("Imagens/personagemDireita.png");     // Virando de lado 
+    Texture2D personagemDireita = LoadTexture("Imagens/personagemDireita.png");
     Texture2D personagemEsquerda = LoadTexture("Imagens/personagemEsquerda.png");
-    
-    Texture2D personagemPegando = LoadTexture("Imagens/personagemPegando.png");         // Pegando
+    Texture2D personagemPegando = LoadTexture("Imagens/personagemPegando.png");
     Texture2D personagemPegandoEsquerda = LoadTexture("Imagens/personagemPegandoEsquerda.png");
     Texture2D chaveCenario = LoadTexture("cenario/chaveCenario.png");
-    
-    Texture2D personagemPegandoChaveDireita = LoadTexture("pegandoItens/personagemPegandoChaveDireita.png");    // Pegando chave
+    Texture2D personagemPegandoChaveDireita = LoadTexture("pegandoItens/personagemPegandoChaveDireita.png");
     Texture2D personagemPegandoChaveEsquerda = LoadTexture("pegandoItens/personagemPegandoChaveEsquerda.png");
     
     menu();
     iniciarJogo(backgroundImage, personagemDireita, personagemEsquerda, personagemPegando, personagemPegandoEsquerda, chaveCenario, personagemPegandoChaveDireita, personagemPegandoChaveEsquerda);
     
-    // Libera as texturas carregadas
     UnloadTexture(backgroundImage);
     UnloadTexture(personagemDireita);
     UnloadTexture(personagemEsquerda);
@@ -158,26 +203,3 @@ int main(void) {
     return 0;
 }
 
-// Rectangle retanguloEstatico = {100, 100, 500, 300};
-            
-            // Colisão com o retângulo estático
-            /*if (CheckCollisionRecs(retangulo, retanguloEstatico)) {
-                float penetracaoEsquerda = (retangulo.x + retangulo.width) - retanguloEstatico.x;
-                float penetracaoDireita = (retanguloEstatico.x + retanguloEstatico.width) - retangulo.x;
-                float penetracaoCima = (retangulo.y + retangulo.height) - retanguloEstatico.y;
-                float penetracaoBaixo = (retanguloEstatico.y + retanguloEstatico.height) - retangulo.y;
-
-                if (penetracaoEsquerda < penetracaoDireita && penetracaoEsquerda < penetracaoCima && penetracaoEsquerda < penetracaoBaixo) {
-                    // Colisão pela esquerda
-                    player_x = retanguloEstatico.x - retangulo.width;
-                } else if (penetracaoDireita < penetracaoEsquerda && penetracaoDireita < penetracaoCima && penetracaoDireita < penetracaoBaixo) {
-                    // Colisão pela direita
-                    player_x = retanguloEstatico.x + retanguloEstatico.width;
-                } else if (penetracaoCima < penetracaoBaixo && penetracaoCima < penetracaoEsquerda && penetracaoCima < penetracaoDireita) {
-                    // Colisão por cima
-                    player_y = retanguloEstatico.y - retangulo.height;
-                } else if (penetracaoBaixo < penetracaoCima && penetracaoBaixo < penetracaoEsquerda && penetracaoBaixo < penetracaoDireita) {
-                    // Colisão por baixo
-                    player_y = retanguloEstatico.y + retanguloEstatico.height;
-                }
-            }*/ // COLISAO
