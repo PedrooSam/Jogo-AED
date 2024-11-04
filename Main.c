@@ -63,16 +63,16 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             
             // Restringir a bola para não sair da tela
             // Os valores são únicos pra ficar visualmente real com o personagem 
-            if (retangulo_x < -80){     // Canto esquerdo
-                retangulo_x = -80;
+            if (retangulo_x < 0){     // Canto esquerdo
+                retangulo_x = 0;
                 }
                 
             if (retangulo_y < 300){     // Sobe até onde tem chão
                 retangulo_y = 300;
                 }
                 
-            if (retangulo_x > GetScreenWidth() - 145){  // Canto direito
-                retangulo_x = GetScreenWidth() - 145;
+            if (retangulo_x > GetScreenWidth() - 83){  // Canto direito
+                retangulo_x = GetScreenWidth() - 83;
                 }
                 
             if (retangulo_y > GetScreenHeight() - 220){ // Canto inferior
