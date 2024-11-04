@@ -5,6 +5,7 @@ int retangulo_x;
 int retangulo_y;
 int velocidadeBola = 5;
 bool pausa = false;
+bool pegando = false; // Variável para verificar se o personagem está pegando algo
 
 // Função do Menu
 void menu() {
@@ -35,7 +36,7 @@ void menu() {
 }
 
 // Função principal do jogo
-void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture2D personagemEsquerda) {
+void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture2D personagemEsquerda, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda) {
     bool andandoDireita = true; // Direção inicial
     while (!WindowShouldClose()) {
         Rectangle retangulo = {retangulo_x, retangulo_y, 60, 100};
@@ -45,6 +46,16 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
         }
         
         if (!pausa) {
+            // Verificar se a tecla 'E' foi pressionada para pegar algo
+            if (IsKeyPressed(KEY_E)) {
+                if(pegando){
+                    pegando = false;
+                }
+                else{
+                    pegando = true;
+                }
+            }   
+            
             // Movimento da bola
             if (IsKeyDown(KEY_UP)){
                 retangulo_y -= velocidadeBola;
@@ -62,22 +73,10 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             }
             
             // Restringir a bola para não sair da tela
-            // Os valores são únicos pra ficar visualmente real com o personagem 
-            if (retangulo_x < 0){     // Canto esquerdo
-                retangulo_x = 0;
-                }
-                
-            if (retangulo_y < 300){     // Sobe até onde tem chão
-                retangulo_y = 300;
-                }
-                
-            if (retangulo_x > GetScreenWidth() - 83){  // Canto direito
-                retangulo_x = GetScreenWidth() - 83;
-                }
-                
-            if (retangulo_y > GetScreenHeight() - 220){ // Canto inferior
-                retangulo_y = GetScreenHeight() - 220;
-                }
+            if (retangulo_x < 0) retangulo_x = 0;
+            if (retangulo_y < 300) retangulo_y = 300;
+            if (retangulo_x > GetScreenWidth() - 83) retangulo_x = GetScreenWidth() - 83;
+            if (retangulo_y > GetScreenHeight() - 220) retangulo_y = GetScreenHeight() - 220;
             
             Rectangle retanguloEstatico = {100, 100, 500, 300};
             
@@ -89,16 +88,12 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                 float penetracaoBaixo = (retanguloEstatico.y + retanguloEstatico.height) - retangulo.y;
 
                 if (penetracaoEsquerda < penetracaoDireita && penetracaoEsquerda < penetracaoCima && penetracaoEsquerda < penetracaoBaixo) {
-                    // Colisão pela esquerda
                     retangulo_x = retanguloEstatico.x - retangulo.width;
                 } else if (penetracaoDireita < penetracaoEsquerda && penetracaoDireita < penetracaoCima && penetracaoDireita < penetracaoBaixo) {
-                    // Colisão pela direita
                     retangulo_x = retanguloEstatico.x + retanguloEstatico.width;
                 } else if (penetracaoCima < penetracaoBaixo && penetracaoCima < penetracaoEsquerda && penetracaoCima < penetracaoDireita) {
-                    // Colisão por cima
                     retangulo_y = retanguloEstatico.y - retangulo.height;
                 } else if (penetracaoBaixo < penetracaoCima && penetracaoBaixo < penetracaoEsquerda && penetracaoBaixo < penetracaoDireita) {
-                    // Colisão por baixo
                     retangulo_y = retanguloEstatico.y + retanguloEstatico.height;
                 }
             }
@@ -107,37 +102,40 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             BeginDrawing();
             ClearBackground(RAYWHITE);
             
-            // Desenha a imagem de fundo
             DrawTexture(backgroundImage, 0, 0, WHITE);
-            
             DrawRectangleRec(retanguloEstatico, BLACK);
             
             // Fator de escala para o personagem
-            float scale = 3.5f; // Aumenta o tamanho do personagem em 350%
-  
-            // Desenha o personagem dependendo da direção
-            if (andandoDireita) {
-                DrawTextureEx(personagemDireita, (Vector2){retangulo_x, retangulo_y}, 0.0f, scale, WHITE); 
-            } 
-            if(!andandoDireita){
-                DrawTextureEx(personagemEsquerda, (Vector2){retangulo_x, retangulo_y}, 0.0f, scale, WHITE); 
+            float scale = 3.5f;
+
+            // Verifica se o personagem está no estado de "pegando" e a direção em que ele está olhando
+            if (pegando) {
+                if (andandoDireita) {
+                    DrawTextureEx(personagemPegando, (Vector2){retangulo_x, retangulo_y}, 0.0f, scale, WHITE);
+                }else {
+                DrawTextureEx(personagemPegandoEsquerda, (Vector2){retangulo_x, retangulo_y}, 0.0f, scale, WHITE);
             }
+            } else {
+            // Desenha o personagem normal, dependendo da direção
+                if (andandoDireita) {
+                    DrawTextureEx(personagemDireita, (Vector2){retangulo_x, retangulo_y}, 0.0f, scale, WHITE);
+            }   else {
+                    DrawTextureEx(personagemEsquerda, (Vector2){retangulo_x, retangulo_y}, 0.0f, scale, WHITE);
+            }
+}
             
             EndDrawing();
         }
         
         if (pausa) {
             BeginDrawing();
-            
             DrawText("PAUSE", 500, 290, 70, GOLD);
-            
             EndDrawing();
         }
     }
 }
 
 int main(void) {
-    // Configuração inicial da janela e posição inicial da bola
     int larguraTela = 1280, alturaTela = 720;
     retangulo_x = larguraTela / 2;
     retangulo_y = alturaTela / 2;
@@ -147,17 +145,19 @@ int main(void) {
     
     // Carregar recursos (ex.: imagens, texturas)
     Texture2D backgroundImage = LoadTexture("Imagens/background.png");
-    Texture2D personagemDireita = LoadTexture("Imagens/personagemDireita.png"); // Carregar a textura do personagem olhando para a direita
-    Texture2D personagemEsquerda = LoadTexture("Imagens/personagemEsquerda.png"); // Carregar a textura do personagem olhando para a esquerda
-
-    // Exibir menu e iniciar o jogo
-    menu();
-    iniciarJogo(backgroundImage, personagemDireita, personagemEsquerda);
+    Texture2D personagemDireita = LoadTexture("Imagens/personagemDireita.png");
+    Texture2D personagemEsquerda = LoadTexture("Imagens/personagemEsquerda.png");
+    Texture2D personagemPegando = LoadTexture("Imagens/personagemPegando.png"); // Nova imagem de pegando
+    Texture2D personagemPegandoEsquerda = LoadTexture("Imagens/personagemPegandoEsquerda.png");
     
-    // Descarregar as texturas e fechar a janela
+    menu();
+    iniciarJogo(backgroundImage, personagemDireita, personagemEsquerda, personagemPegando, personagemPegandoEsquerda);
+    
     UnloadTexture(backgroundImage);
     UnloadTexture(personagemDireita);
-    UnloadTexture(personagemEsquerda); // Descarregar a textura do personagem
+    UnloadTexture(personagemEsquerda);
+    UnloadTexture(personagemPegando);
+    UnloadTexture(personagemPegandoEsquerda);
     CloseWindow();
     
     return 0;
