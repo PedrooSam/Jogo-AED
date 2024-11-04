@@ -1,8 +1,8 @@
-#include "raylib.h"
+include "raylib.h"
 
 // Variáveis globais
-int retangulo_x;
-int retangulo_y;
+int player_x;
+int player_y;
 int velocidadeBola = 5;
 bool pausa = false;
 
@@ -38,7 +38,7 @@ void menu() {
 void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture2D personagemEsquerda) {
     bool andandoDireita = true; // Direção inicial
     while (!WindowShouldClose()) {
-        Rectangle retangulo = {retangulo_x, retangulo_y, 60, 100};
+        Rectangle retangulo = {player_x, player_y, 60, 100};
         
         if (IsKeyPressed(KEY_P)) {
             pausa = !pausa;
@@ -47,36 +47,36 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
         if (!pausa) {
             // Movimento da bola
             if (IsKeyDown(KEY_UP)){
-                retangulo_y -= velocidadeBola;
+                player_y -= velocidadeBola;
                 }
             if (IsKeyDown(KEY_DOWN)){
-                retangulo_y += velocidadeBola;
+                player_y += velocidadeBola;
                 }
             if (IsKeyDown(KEY_RIGHT)){
-                retangulo_x += velocidadeBola;
+                player_x += velocidadeBola;
                 andandoDireita = true; // Personagem está indo para a direita
             }
             if (IsKeyDown(KEY_LEFT)){
-                retangulo_x -= velocidadeBola;
+                player_x -= velocidadeBola;
                 andandoDireita = false; // Personagem está indo para a esquerda
             }
             
             // Restringir a bola para não sair da tela
             // Os valores são únicos pra ficar visualmente real com o personagem 
-            if (retangulo_x < 0){     // Canto esquerdo
-                retangulo_x = 0;
+            if (player_x < 0){     // Canto esquerdo
+                player_x = 0;
                 }
                 
-            if (retangulo_y < 300){     // Sobe até onde tem chão
-                retangulo_y = 300;
+            if (player_y < 300){     // Sobe até onde tem chão
+                player_y = 300;
                 }
                 
-            if (retangulo_x > GetScreenWidth() - 83){  // Canto direito
-                retangulo_x = GetScreenWidth() - 83;
+            if (player_x > GetScreenWidth() - 83){  // Canto direito
+                player_x = GetScreenWidth() - 83;
                 }
                 
-            if (retangulo_y > GetScreenHeight() - 220){ // Canto inferior
-                retangulo_y = GetScreenHeight() - 220;
+            if (player_y > GetScreenHeight() - 220){ // Canto inferior
+                player_y = GetScreenHeight() - 220;
                 }
             
             Rectangle retanguloEstatico = {100, 100, 500, 300};
@@ -90,16 +90,16 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
 
                 if (penetracaoEsquerda < penetracaoDireita && penetracaoEsquerda < penetracaoCima && penetracaoEsquerda < penetracaoBaixo) {
                     // Colisão pela esquerda
-                    retangulo_x = retanguloEstatico.x - retangulo.width;
+                    player_x = retanguloEstatico.x - retangulo.width;
                 } else if (penetracaoDireita < penetracaoEsquerda && penetracaoDireita < penetracaoCima && penetracaoDireita < penetracaoBaixo) {
                     // Colisão pela direita
-                    retangulo_x = retanguloEstatico.x + retanguloEstatico.width;
+                    player_x = retanguloEstatico.x + retanguloEstatico.width;
                 } else if (penetracaoCima < penetracaoBaixo && penetracaoCima < penetracaoEsquerda && penetracaoCima < penetracaoDireita) {
                     // Colisão por cima
-                    retangulo_y = retanguloEstatico.y - retangulo.height;
+                    player_y = retanguloEstatico.y - retangulo.height;
                 } else if (penetracaoBaixo < penetracaoCima && penetracaoBaixo < penetracaoEsquerda && penetracaoBaixo < penetracaoDireita) {
                     // Colisão por baixo
-                    retangulo_y = retanguloEstatico.y + retanguloEstatico.height;
+                    player_y = retanguloEstatico.y + retanguloEstatico.height;
                 }
             }
             
@@ -117,10 +117,10 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
   
             // Desenha o personagem dependendo da direção
             if (andandoDireita) {
-                DrawTextureEx(personagemDireita, (Vector2){retangulo_x, retangulo_y}, 0.0f, scale, WHITE); 
+                DrawTextureEx(personagemDireita, (Vector2){player_x, player_y}, 0.0f, scale, WHITE); 
             } 
             if(!andandoDireita){
-                DrawTextureEx(personagemEsquerda, (Vector2){retangulo_x, retangulo_y}, 0.0f, scale, WHITE); 
+                DrawTextureEx(personagemEsquerda, (Vector2){player_x, player_y}, 0.0f, scale, WHITE); 
             }
             
             EndDrawing();
@@ -139,8 +139,8 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
 int main(void) {
     // Configuração inicial da janela e posição inicial da bola
     int larguraTela = 1280, alturaTela = 720;
-    retangulo_x = larguraTela / 2;
-    retangulo_y = alturaTela / 2;
+    player_x = larguraTela / 2;
+    player_y = alturaTela / 2;
         
     InitWindow(larguraTela, alturaTela, "Uma Noite no Castelo");
     SetTargetFPS(60);
