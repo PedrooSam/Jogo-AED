@@ -76,12 +76,12 @@ void menu() {
 }
 
 // Função principal do jogo
-void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture2D personagemEsquerda, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D personagemPegandoChaveEsquerda, Texture2D personagemPegandoChaveDireita, Texture2D mapa1, Texture2D mapa2) {
+void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture2D personagemEsquerda, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D personagemPegandoChaveEsquerda, Texture2D personagemPegandoChaveDireita, Texture2D mapa1, Texture2D mapa2, Texture2D arena) {
     bool andandoDireita = true; // Direção inicial
     bool chavePegandoFlag = false;
     
     //posição jogador
-    player.x = 200;
+    player.x = 800;
     player.y = 200;
     player.mapa = 0;
     
@@ -148,6 +148,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             Rectangle playerCollision = {player.x, player.y, 83, 83};
             Rectangle chaveCollision = {chave.x, chave.y, 28, 18};
             
+            //Rectangle arenaCollision = {225 , 200, 200, 300};
             Rectangle doorCollision = {1190, 500, 160, 200};
             Rectangle doorCollisionEsquerda = {0, 500, 100, 200};
             
@@ -169,6 +170,8 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                     player.x = 200;
                     player.y = 540;
                 }
+                
+                
             } else if(player.mapa == 1) {
                 
                 CollisionObject(playerCollision, mesaMapa1);
@@ -192,6 +195,12 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                     player.x = 920;
                     player.y = 540;
                 }
+                
+                /*if(CollisionObject(playerCollision, arenaCollision)){
+                    player.mapa = 3;
+                    player.x = 400;
+                    player.y = 540;
+                }*/
             }
             // Desenho do jogo
             BeginDrawing();
@@ -215,8 +224,12 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                 DrawTexture(mapa2,0,0,WHITE);
             
             }
+            else if(player.mapa == 3){
+                DrawTexture(arena,0,0,WHITE);
             
-              //DrawRectangle(mesaMapa2.x, mesaMapa2.y, mesaMapa2.width, mesaMapa2.height, BLUE);
+            }
+            
+            //DrawRectangle(arenaCollision.x, arenaCollision.y, arenaCollision.width, arenaCollision.height, BLUE);
             
             char text[10];
             sprintf(text, "X:%d Y:%d", player.x, player.y);
@@ -260,31 +273,43 @@ int main(void) {
     SetTargetFPS(60);
     
     Texture2D backgroundImage = LoadTexture("cenario/background.png");
+    
     Texture2D personagemDireita = LoadTexture("Imagens/personagemDireita.png");
     Texture2D personagemEsquerda = LoadTexture("Imagens/personagemEsquerda.png");
+    
     Texture2D personagemPegando = LoadTexture("Imagens/personagemPegando.png");
     Texture2D personagemPegandoEsquerda = LoadTexture("Imagens/personagemPegandoEsquerda.png");
+    
     Texture2D chaveCenario = LoadTexture("cenario/chaveCenario.png");
+    
     Texture2D personagemPegandoChaveDireita = LoadTexture("pegandoItens/personagemPegandoChaveDireita.png");
     Texture2D personagemPegandoChaveEsquerda = LoadTexture("pegandoItens/personagemPegandoChaveEsquerda.png");
     
     Texture2D mapa1 = LoadTexture("cenario/mapa1.png");
     Texture2D mapa2 = LoadTexture("cenario/mapa2.png");
     
+    Texture2D arena = LoadTexture("cenario/arena.png");
+    
     menu();
-    iniciarJogo(backgroundImage, personagemDireita, personagemEsquerda, personagemPegando, personagemPegandoEsquerda, chaveCenario, personagemPegandoChaveDireita, personagemPegandoChaveEsquerda, mapa1, mapa2);
+    iniciarJogo(backgroundImage, personagemDireita, personagemEsquerda, personagemPegando, personagemPegandoEsquerda, chaveCenario, personagemPegandoChaveDireita, personagemPegandoChaveEsquerda, mapa1, mapa2, arena);
     
     UnloadTexture(backgroundImage);
+    
     UnloadTexture(personagemDireita);
     UnloadTexture(personagemEsquerda);
+    
     UnloadTexture(personagemPegando);
     UnloadTexture(personagemPegandoEsquerda);
+    
     UnloadTexture(chaveCenario);
+    
     UnloadTexture(personagemPegandoChaveDireita);
     UnloadTexture(personagemPegandoChaveEsquerda);
     
     UnloadTexture(mapa1);
     UnloadTexture(mapa2);
+    
+    UnloadTexture(arena);
     
     CloseWindow();
     
