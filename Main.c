@@ -166,7 +166,7 @@ void menu() {
 }
 
 // Função principal do jogo
-void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture2D personagemEsquerda, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D personagemPegandoChaveEsquerda, Texture2D personagemPegandoChaveDireita, Texture2D mapa1, Texture2D mapa2, Texture2D arena, Texture2D mensagem1) {
+void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture2D personagemEsquerda, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D personagemPegandoChaveEsquerda, Texture2D personagemPegandoChaveDireita, Texture2D mapa1, Texture2D mapa2, Texture2D arena, Texture2D mensagem1, Texture2D menuBack) {
     bool andandoDireita = true; // Direção inicial
     bool chavePegandoFlag = false;
     bool puzzleDesbloqueado = false;
@@ -408,8 +408,8 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
         if (pausa) {
             Rectangle botaoVoltarInicio = {500, 400, 250, 50};
             BeginDrawing();
-            DrawRectangleRec(botaoVoltarInicio, GRAY);
-            DrawText("Votar ao início", 510, 400, 30, GOLD);
+            DrawTexture(menuBack, 10, 50 , WHITE );
+            DrawText("Voltar ao início", 510, 400, 30, GOLD);
             DrawText("PAUSE", 500, 290, 70, GOLD);
             EndDrawing();
             
@@ -451,8 +451,10 @@ int main(void) {
     
     Texture2D mensagem1 = LoadTexture("mensagens/mensagem1.png");
     
+    Texture2D menuBack = LoadTexture("cenario/menuBack.png");
+    
     menu();
-    iniciarJogo(backgroundImage, personagemDireita, personagemEsquerda, personagemPegando, personagemPegandoEsquerda, chaveCenario, personagemPegandoChaveDireita, personagemPegandoChaveEsquerda, mapa1, mapa2, arena, mensagem1);
+    iniciarJogo(backgroundImage, personagemDireita, personagemEsquerda, personagemPegando, personagemPegandoEsquerda, chaveCenario, personagemPegandoChaveDireita, personagemPegandoChaveEsquerda, mapa1, mapa2, arena, mensagem1, menuBack);
     
     UnloadTexture(backgroundImage);
     
@@ -473,6 +475,8 @@ int main(void) {
     UnloadTexture(arena);
     
     UnloadTexture(mensagem1);
+    
+    UnloadTexture(menuBack);
     CloseWindow();
     
     return 0;
