@@ -6,7 +6,6 @@ typedef struct {
     int y;
     int mapa;
 }Objeto;
-
 // Variáveis globais
 
 
@@ -133,8 +132,8 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                 player.x = 0;
             }
                 
-            if (player.y < 300 + playerOffSet) {     // Limite teto
-                player.y = 300 + playerOffSet;
+            if (player.y < 325 + playerOffSet) {     // Limite teto
+                player.y = 325 + playerOffSet;
             }
                 
             if (player.x > GetScreenWidth() - 83) {  // Lado direito
@@ -148,11 +147,22 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             //colisões
             Rectangle playerCollision = {player.x, player.y, 83, 83};
             Rectangle chaveCollision = {chave.x, chave.y, 28, 18};
+            
             Rectangle doorCollision = {1190, 500, 160, 200};
             Rectangle doorCollisionEsquerda = {0, 500, 100, 200};
             
+            Rectangle pilarMapa0 = {500, 50, 230, 500};
+            Rectangle pilarEsqMapa0 = {0, 50, 100, 500};
+            
+            Rectangle mesaMapa1 = {200, 400, 200, 100};
+            
+            Rectangle mesaMapa2 = {850, 400, 400, 100};
+            
             if(player.mapa == 0) {
                 if(pegando && CollisionObject(playerCollision, chaveCollision)) chavePegandoFlag = true;
+               
+                CollisionObject(playerCollision, pilarMapa0);
+                CollisionObject(playerCollision, pilarEsqMapa0);
                 
                 if(CollisionObject(playerCollision, doorCollision)) {
                     player.mapa = 1;
@@ -160,6 +170,9 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                     player.y = 540;
                 }
             } else if(player.mapa == 1) {
+                
+                CollisionObject(playerCollision, mesaMapa1);
+                
                 if(CollisionObject(playerCollision, doorCollisionEsquerda)) {
                     player.mapa = 0;
                     player.x = 920;
@@ -172,6 +185,8 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             }
             }
             else if(player.mapa == 2){
+                CollisionObject(playerCollision, mesaMapa2);
+                
                 if(CollisionObject(playerCollision, doorCollisionEsquerda)) {
                     player.mapa = 1;
                     player.x = 920;
@@ -201,10 +216,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             
             }
             
-            //porta
-            //DrawRectangle(doorCollision.x, doorCollision.y, doorCollision.width, doorCollision.height, BLUE);
-            //porta da esquerda
-            //DrawRectangle(doorCollisionEsquerda.x, doorCollisionEsquerda.y, doorCollisionEsquerda.width, doorCollisionEsquerda.height, RED);
+              //DrawRectangle(mesaMapa2.x, mesaMapa2.y, mesaMapa2.width, mesaMapa2.height, BLUE);
             
             char text[10];
             sprintf(text, "X:%d Y:%d", player.x, player.y);
