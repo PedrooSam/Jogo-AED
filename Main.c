@@ -9,12 +9,13 @@ typedef struct {
 
 // Variáveis globais
 
+
 //Objetos
 
     // Jogador
 Objeto player;
 int playerOffSet = 140;
-int velocidade = 5;
+int velocidade = 9;
 float scale = 3.5f; // Fator de escala para o personagem
 bool pausa = false;
 bool pegando = false; // Variável para verificar se o personagem está pegando algo
@@ -76,7 +77,7 @@ void menu() {
 }
 
 // Função principal do jogo
-void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture2D personagemEsquerda, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D personagemPegandoChaveEsquerda, Texture2D personagemPegandoChaveDireita) {
+void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture2D personagemEsquerda, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D personagemPegandoChaveEsquerda, Texture2D personagemPegandoChaveDireita, Texture2D mapa1, Texture2D mapa2) {
     bool andandoDireita = true; // Direção inicial
     bool chavePegandoFlag = false;
     
@@ -147,24 +148,36 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             //colisões
             Rectangle playerCollision = {player.x, player.y, 83, 83};
             Rectangle chaveCollision = {chave.x, chave.y, 28, 18};
-            Rectangle doorCollision = {865, 300, 160, 200};
+            Rectangle doorCollision = {1190, 500, 160, 200};
+            Rectangle doorCollisionEsquerda = {0, 500, 100, 200};
             
             if(player.mapa == 0) {
                 if(pegando && CollisionObject(playerCollision, chaveCollision)) chavePegandoFlag = true;
                 
                 if(CollisionObject(playerCollision, doorCollision)) {
                     player.mapa = 1;
-                    player.x = 920;
+                    player.x = 200;
                     player.y = 540;
                 }
             } else if(player.mapa == 1) {
-                if(CollisionObject(playerCollision, doorCollision)) {
+                if(CollisionObject(playerCollision, doorCollisionEsquerda)) {
                     player.mapa = 0;
                     player.x = 920;
                     player.y = 540;
                 }
+                else if(CollisionObject(playerCollision, doorCollision)){
+                    player.mapa = 2;
+                    player.x = 200;
+                    player.y = 540;
             }
-            
+            }
+            else if(player.mapa == 2){
+                if(CollisionObject(playerCollision, doorCollisionEsquerda)) {
+                    player.mapa = 1;
+                    player.x = 920;
+                    player.y = 540;
+                }
+            }
             // Desenho do jogo
             BeginDrawing();
             ClearBackground(RAYWHITE);
@@ -179,9 +192,19 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                     DrawTextureEx(chaveCenario, (Vector2){chave.x, chave.y}, 0.0f, 1.0f, WHITE);
                 }
             }
+            else if(player.mapa == 1){
+                DrawTexture(mapa1, 0, 0, WHITE);
+                
+            }
+            else if(player.mapa == 2){
+                DrawTexture(mapa2,0,0,WHITE);
+            
+            }
             
             //porta
             //DrawRectangle(doorCollision.x, doorCollision.y, doorCollision.width, doorCollision.height, BLUE);
+            //porta da esquerda
+            //DrawRectangle(doorCollisionEsquerda.x, doorCollisionEsquerda.y, doorCollisionEsquerda.width, doorCollisionEsquerda.height, RED);
             
             char text[10];
             sprintf(text, "X:%d Y:%d", player.x, player.y);
@@ -233,8 +256,11 @@ int main(void) {
     Texture2D personagemPegandoChaveDireita = LoadTexture("pegandoItens/personagemPegandoChaveDireita.png");
     Texture2D personagemPegandoChaveEsquerda = LoadTexture("pegandoItens/personagemPegandoChaveEsquerda.png");
     
+    Texture2D mapa1 = LoadTexture("cenario/mapa1.png");
+    Texture2D mapa2 = LoadTexture("cenario/mapa2.png");
+    
     menu();
-    iniciarJogo(backgroundImage, personagemDireita, personagemEsquerda, personagemPegando, personagemPegandoEsquerda, chaveCenario, personagemPegandoChaveDireita, personagemPegandoChaveEsquerda);
+    iniciarJogo(backgroundImage, personagemDireita, personagemEsquerda, personagemPegando, personagemPegandoEsquerda, chaveCenario, personagemPegandoChaveDireita, personagemPegandoChaveEsquerda, mapa1, mapa2);
     
     UnloadTexture(backgroundImage);
     UnloadTexture(personagemDireita);
@@ -244,6 +270,9 @@ int main(void) {
     UnloadTexture(chaveCenario);
     UnloadTexture(personagemPegandoChaveDireita);
     UnloadTexture(personagemPegandoChaveEsquerda);
+    
+    UnloadTexture(mapa1);
+    UnloadTexture(mapa2);
     
     CloseWindow();
     
