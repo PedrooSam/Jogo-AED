@@ -131,10 +131,19 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             if (player.x < 0) {     // Lado esquerdo
                 player.x = 0;
             }
+            
+            if(player.mapa != 3){
                 
-            if (player.y < 325 + playerOffSet) {     // Limite teto
-                player.y = 325 + playerOffSet;
+                if (player.y < 325 + playerOffSet) {     // Limite teto
+                    player.y = 325 + playerOffSet;
+                }
             }
+            else{
+                if(player.y < 150 + playerOffSet){
+                    player.y = 150 + playerOffSet;
+                }
+            }
+            
                 
             if (player.x > GetScreenWidth() - 83) {  // Lado direito
                 player.x = GetScreenWidth() - 83;
@@ -148,7 +157,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             Rectangle playerCollision = {player.x, player.y, 83, 83};
             Rectangle chaveCollision = {chave.x, chave.y, 28, 18};
             
-            //Rectangle arenaCollision = {225 , 200, 200, 300};
+            Rectangle arenaCollision = {225 , 200, 200, 300};
             Rectangle doorCollision = {1190, 500, 160, 200};
             Rectangle doorCollisionEsquerda = {0, 500, 100, 200};
             
@@ -158,6 +167,11 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             Rectangle mesaMapa1 = {200, 400, 200, 100};
             
             Rectangle mesaMapa2 = {850, 400, 400, 100};
+            
+            Rectangle pilarEsqMapa3 = {20, 115, 50, 400};
+            Rectangle pilarMapa3 = {600, 115, 120, 400};
+            Rectangle pilarDirMapa3 = {1190, 115, 120, 400};
+            Rectangle portaMapa3 = {500, 700, 300, 50};
             
             if(player.mapa == 0) {
                 if(pegando && CollisionObject(playerCollision, chaveCollision)) chavePegandoFlag = true;
@@ -196,12 +210,25 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                     player.y = 540;
                 }
                 
-                /*if(CollisionObject(playerCollision, arenaCollision)){
+                if(CollisionObject(playerCollision, arenaCollision)){
                     player.mapa = 3;
                     player.x = 400;
                     player.y = 540;
-                }*/
+                }
             }
+            else if(player.mapa == 3){
+                CollisionObject(playerCollision, pilarEsqMapa3);
+                CollisionObject(playerCollision, pilarMapa3);
+                CollisionObject(playerCollision, pilarDirMapa3);
+                
+                if(CollisionObject(playerCollision, portaMapa3)){
+                    player.mapa = 2;
+                    player.x = 400;
+                    player.y = 540;
+                }
+                
+            }
+            
             // Desenho do jogo
             BeginDrawing();
             ClearBackground(RAYWHITE);
@@ -229,7 +256,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             
             }
             
-            //DrawRectangle(arenaCollision.x, arenaCollision.y, arenaCollision.width, arenaCollision.height, BLUE);
+            //DrawRectangle(portaMapa3.x, portaMapa3.y, portaMapa3.width, portaMapa3.height, BLUE);
             
             char text[10];
             sprintf(text, "X:%d Y:%d", player.x, player.y);
