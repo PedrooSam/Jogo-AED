@@ -167,7 +167,7 @@ void menu() {
 }
 
 // Função principal do jogo
-void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture2D personagemEsquerda, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D personagemPegandoChaveEsquerda, Texture2D personagemPegandoChaveDireita, Texture2D mapa1, Texture2D mapa2, Texture2D arena, Texture2D mensagem1, Texture2D menuBack, Texture2D espadaTesouro, Texture2D chaveTesouro, Texture2D bau, Texture2D bauPreenchido, Texture2D botao1Off, Texture2D botao1On, Texture2D botao2Off, Texture2D botao2On, Texture2D pegandoChaveTesouroDireita, Texture2D pegandoChaveTesouroEsquerda, Texture2D pegandoEspadaEsquerda, Texture2D pegandoEspadaDireita, Texture2D bauPreenchido2, Texture2D diamante, Texture2D pegandoDiamanteEsquerda,Texture2D  pegandoDiamanteDireita, Texture2D bauPreenchido3) {
+void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture2D personagemEsquerda, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D personagemPegandoChaveEsquerda, Texture2D personagemPegandoChaveDireita, Texture2D mapa1, Texture2D mapa2, Texture2D arena, Texture2D mensagem1, Texture2D menuBack, Texture2D espadaTesouro, Texture2D chaveTesouro, Texture2D bau, Texture2D bauPreenchido, Texture2D botao1Off, Texture2D botao1On, Texture2D botao2Off, Texture2D botao2On, Texture2D pegandoChaveTesouroDireita, Texture2D pegandoChaveTesouroEsquerda, Texture2D pegandoEspadaEsquerda, Texture2D pegandoEspadaDireita, Texture2D bauPreenchido2, Texture2D diamante, Texture2D pegandoDiamanteEsquerda,Texture2D  pegandoDiamanteDireita, Texture2D bauPreenchido3, Texture2D puzzle1) {
     
     bool andandoDireita = true; // Direção inicial
     bool chavePegandoFlag = false;
@@ -184,6 +184,13 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
     bool diamanteTesouroPegandoFlag = false;
     bool diamanteTesouroSpawn = true;
     bool diamanteTesouroNoBau = false;
+    
+    /*bool puzzle1Resolvido = false;
+    bool puzzle2Resolvido = false;
+    bool botao1Pressionado = false;
+    bool botao2Pressionado = false;
+    
+    float vetorJogador[4] = {0};*/
     
     //configuração do mapa
     Node *head = NULL; 
@@ -300,6 +307,15 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             
             Rectangle espadaTesouroCollision = {200, 200, 60 , 100};
             Rectangle diamanteTesouroCollision = {300, 400, 50, 50};
+            
+            /*
+            Rectangle botao1Collision = {140,350,50,50};
+            Rectangle botao2Collision = {360,350,50,50};
+            
+            Rectangle alternativa1Collision = {520, 310, 200, 60, WHITE};
+            Rectangle alternativa2Collision = {520, 390, 200, 60, WHITE};
+            Rectangle alternativa3Collision = {520, 480, 200, 60, WHITE};
+            Rectangle alternativa4Collision = {520, 570, 200, 60, WHITE};*/
             
             if(player.mapa == 0) {
                 if(chaveSpawn && pegando && CollisionObject(playerCollision, chaveCollision)) chavePegandoFlag = true;
@@ -464,12 +480,28 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                 if(diamanteTesouroNoBau){
                     DrawTextureEx(bauPreenchido3, (Vector2){900,270},0.0f, 4.0f,WHITE);
                 }
-                DrawTextureEx(botao1Off, (Vector2){130,350},0.0f, 4.0f,WHITE);
-                DrawTextureEx(botao1On, (Vector2){130,350},0.0f, 4.0f,WHITE);
-                DrawTextureEx(botao2Off, (Vector2){350,350},0.0f, 4.0f,WHITE);
-                DrawTextureEx(botao2On, (Vector2){350,360},0.0f, 4.0f,WHITE);
+                
+                // Botoes
+                /*
+                if(!botao1Pressionado){
+                    DrawTextureEx(botao1Off, (Vector2){130,350},0.0f, 4.0f,WHITE);
+                    
+                }else{
+                    DrawTextureEx(botao1On, (Vector2){130,350},0.0f, 4.0f,WHITE);
+                }
+                
+                if(!puzzle1Resolvido){
+                    botao1Pressionado = false;
+                }
+                
+                DrawTexture(puzzle1, 370, 100, WHITE);
+                
+                //Só pra conferir posição
+                //DrawRectangle(520, 310, 200, 60, RED);  // Alternativa 1
+                //DrawRectangle(520, 390, 200, 60, BLUE); // Alternativa 2
+                //DrawRectangle(520, 480, 200, 60, YELLOW); // Alternativa 3
+                //DrawRectangle(520, 570, 200, 60, PURPLE); // Alternativa 4*/
             }
-            
             //Verificacao chave
             if(chaveTesouroPegandoFlag && !pegando && !chaveTesouroNoBau){                                         //Verifica se deixou a chave cair 
                     chaveTesouroPegandoFlag = false;
@@ -486,7 +518,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                     diamanteTesouroSpawn = true;
                 }
             
-            //DrawRectangle(espadaTesouroCollision.x, espadaTesouroCollision.y, espadaTesouroCollision.width, espadaTesouroCollision.height, BLUE);
+            //DrawRectangle(botao1Collision.x, botao1Collision.y, botao1Collision.width, botao1Collision.height, BLUE);
             
             char text[10];
             sprintf(text, "X:%d Y:%d Mapa: %d", player.x, player.y, player.mapa);
@@ -604,8 +636,10 @@ int main(void) {
     Texture2D pegandoDiamanteDireita = LoadTexture("pegandoItens/personagemPegandoDiamanteDireita.png");
     Texture2D bauPreenchido3 = LoadTexture("tesouro/bauPreenchido3.png");
     
+    Texture2D puzzle1 = LoadTexture("botoes/puzzle1.png");
+    
     menu();
-    iniciarJogo(backgroundImage, personagemDireita, personagemEsquerda, personagemPegando, personagemPegandoEsquerda, chaveCenario, personagemPegandoChaveDireita, personagemPegandoChaveEsquerda, mapa1, mapa2, arena, mensagem1, menuBack, espadaTesouro, chaveTesouro , bau, bauPreenchido, botao1Off, botao1On, botao2Off, botao2On, pegandoChaveTesouroDireita, pegandoChaveTesouroEsquerda, pegandoEspadaEsquerda, pegandoEspadaDireita, bauPreenchido2, diamante, pegandoDiamanteEsquerda, pegandoDiamanteDireita, bauPreenchido3 );
+    iniciarJogo(backgroundImage, personagemDireita, personagemEsquerda, personagemPegando, personagemPegandoEsquerda, chaveCenario, personagemPegandoChaveDireita, personagemPegandoChaveEsquerda, mapa1, mapa2, arena, mensagem1, menuBack, espadaTesouro, chaveTesouro , bau, bauPreenchido, botao1Off, botao1On, botao2Off, botao2On, pegandoChaveTesouroDireita, pegandoChaveTesouroEsquerda, pegandoEspadaEsquerda, pegandoEspadaDireita, bauPreenchido2, diamante, pegandoDiamanteEsquerda, pegandoDiamanteDireita, bauPreenchido3, puzzle1 );
     
     UnloadTexture(backgroundImage);
     
@@ -651,7 +685,8 @@ int main(void) {
     UnloadTexture(pegandoChaveTesouroEsquerda);
     UnloadTexture(bauPreenchido3);
     
+    UnloadTexture(puzzle1);
+    
     CloseWindow();
     return 0;
 }
-
