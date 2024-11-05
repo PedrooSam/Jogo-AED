@@ -155,6 +155,7 @@ void menu() {
         
         // Verificar clique no botão
         if (CheckCollisionPointRec(GetMousePosition(), botaoIniciar) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            pausa = false;
             break;  
         }
         else if (CheckCollisionPointRec(GetMousePosition(), botaoSair) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
@@ -165,7 +166,7 @@ void menu() {
 }
 
 // Função principal do jogo
-void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture2D personagemEsquerda, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D personagemPegandoChaveEsquerda, Texture2D personagemPegandoChaveDireita, Texture2D mapa1, Texture2D mapa2, Texture2D arena) {
+void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture2D personagemEsquerda, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D personagemPegandoChaveEsquerda, Texture2D personagemPegandoChaveDireita, Texture2D mapa1, Texture2D mapa2, Texture2D arena, Texture2D mensagem1) {
     bool andandoDireita = true; // Direção inicial
     bool chavePegandoFlag = false;
     bool puzzleDesbloqueado = false;
@@ -279,6 +280,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             Rectangle pilarMapa3 = {600, 115, 120, 400};
             Rectangle pilarDirMapa3 = {1190, 115, 120, 400};
             Rectangle portaMapa3 = {500, 700, 300, 50};
+            
             
             if(player.mapa == 0) {
                 if(chaveSpawn && pegando && CollisionObject(playerCollision, chaveCollision)) chavePegandoFlag = true;
@@ -396,13 +398,29 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                 }
             }
             
+            if(CollisionObject(playerCollision, arenaCollision) && !chavePegandoFlag && player.mapa == 2){
+                    DrawTextureEx(mensagem1, (Vector2){player.x + 30, player.y - 300}, 0.0f, 3.0f, WHITE);
+                }
+                
             EndDrawing();
         }
-        
+                
         if (pausa) {
+            Rectangle botaoVoltarInicio = {500, 400, 250, 50};
             BeginDrawing();
+            DrawRectangleRec(botaoVoltarInicio, GRAY);
+            DrawText("Votar ao início", 510, 400, 30, GOLD);
             DrawText("PAUSE", 500, 290, 70, GOLD);
             EndDrawing();
+            
+            if (CheckCollisionPointRec(GetMousePosition(), botaoVoltarInicio)) {
+                BeginDrawing();
+                DrawText("Votar ao início", 510, 400, 30, RED);
+                EndDrawing();
+                if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                    menu();
+                }
+            }
         }
     }
 }
@@ -431,8 +449,10 @@ int main(void) {
     
     Texture2D arena = LoadTexture("cenario/arena.png");
     
+    Texture2D mensagem1 = LoadTexture("mensagens/mensagem1.png");
+    
     menu();
-    iniciarJogo(backgroundImage, personagemDireita, personagemEsquerda, personagemPegando, personagemPegandoEsquerda, chaveCenario, personagemPegandoChaveDireita, personagemPegandoChaveEsquerda, mapa1, mapa2, arena);
+    iniciarJogo(backgroundImage, personagemDireita, personagemEsquerda, personagemPegando, personagemPegandoEsquerda, chaveCenario, personagemPegandoChaveDireita, personagemPegandoChaveEsquerda, mapa1, mapa2, arena, mensagem1);
     
     UnloadTexture(backgroundImage);
     
@@ -452,6 +472,7 @@ int main(void) {
     
     UnloadTexture(arena);
     
+    UnloadTexture(mensagem1);
     CloseWindow();
     
     return 0;
