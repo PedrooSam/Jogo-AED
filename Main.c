@@ -1,13 +1,20 @@
 #include "raylib.h"
 #include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+	int n;
+	struct Node *prox;
+	struct Node *ant;
+	struct Node *mapaSecundario;
+} Node;
 
 typedef struct {
     int x;
     int y;
     int mapa;
-}Objeto;
+} Objeto;
 // Variáveis globais
-
 
 //Objetos
 
@@ -21,6 +28,7 @@ bool pegando = false; // Variável para verificar se o personagem está pegando 
 
     // Chave
 Objeto chave;
+bool chaveSpawn = true;
 
 //Colisão Universal, 
 bool CollisionObject(Rectangle playerCollision, Rectangle objeto) {
@@ -45,6 +53,87 @@ bool CollisionObject(Rectangle playerCollision, Rectangle objeto) {
         }
     }
     return false;
+}
+
+void inserirMapa(Node **head, Node **tail, int n, Node *mapaSec) {
+  Node *novo = (Node*)malloc(sizeof(Node));  
+  if (novo != NULL){
+    novo->n = n;    
+    novo->prox = NULL;
+    if(mapaSec != NULL) mapaSec->ant = novo;
+    novo->mapaSecundario = mapaSec;
+    
+
+    if(*head == NULL){
+      novo->ant=NULL;
+      *head=novo;
+      *tail=novo;
+    }else{        
+      (*tail)->prox=novo;
+      novo->ant =*tail;
+      *tail=novo;
+    }
+
+  }
+}
+
+void configurarMapaSecundario(Node **mapa, int n) {
+    Node *novo = (Node*)malloc(sizeof(Node));  
+    novo->n = n;
+    novo->prox = NULL;
+    novo->ant = NULL;
+    novo->mapaSecundario = NULL;
+    *mapa = novo;
+}
+
+int getNextMapaPrincipal(Node *head) {
+    Node *aux = head;
+    while(aux->prox != NULL && aux->n != player.mapa) {
+        aux = aux->prox;
+    }
+    if(aux->prox != NULL) {
+        return aux->prox->n;
+    }
+    
+    return aux->n;
+}
+
+int getAntMapaPrincipal(Node *head) {
+    Node *aux = head;
+    while(aux->prox != NULL && aux->n != player.mapa) {
+        aux = aux->prox;
+    }
+    if(aux->ant != NULL) {
+        return aux->ant->n;
+    }
+    
+    return aux->n;
+}
+
+int getMapaSecundario(Node *head) {
+    Node *aux = head;
+    while(aux->prox != NULL && aux->n != player.mapa) {
+        aux = aux->prox;
+    }
+    if(aux->mapaSecundario != NULL) {
+        return aux->mapaSecundario->n;
+    }
+    
+    return aux->n;
+}
+
+int getAntMapaSecundario(Node *head) {
+    Node *aux = head;
+    
+    while(aux->prox != NULL) {
+        if(aux->mapaSecundario != NULL && aux->mapaSecundario->n == player.mapa) {
+            return aux->mapaSecundario->ant->n;
+        }
+      
+        aux = aux->prox;
+    }
+    
+    return aux->n;
 }
 
 // Função do Menu
@@ -79,16 +168,34 @@ void menu() {
 void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture2D personagemEsquerda, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D personagemPegandoChaveEsquerda, Texture2D personagemPegandoChaveDireita, Texture2D mapa1, Texture2D mapa2, Texture2D arena) {
     bool andandoDireita = true; // Direção inicial
     bool chavePegandoFlag = false;
+    bool puzzleDesbloqueado = false;
+    
+    //configuração do mapa
+    Node *head = NULL; 
+    Node *tail = NULL;
+    Node *mapaSec0 = NULL;
+    
+    configurarMapaSecundario(&mapaSec0, -1);
+    
+    inserirMapa(&head, &tail, 0, NULL);
+    inserirMapa(&head, &tail, 1, NULL);
+    inserirMapa(&head, &tail, 2, mapaSec0);
+    
+    
     
     //posição jogador
     player.x = 800;
     player.y = 200;
     player.mapa = 0;
     
+
+    
     //posição de chave
     chave.x = 500;
     chave.y = 550;
     chave.mapa = 0;
+    
+    
     
     while (!WindowShouldClose()) {
         if (IsKeyPressed(KEY_P)) {
@@ -132,7 +239,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                 player.x = 0;
             }
             
-            if(player.mapa != 3){
+            if(player.mapa != -1){
                 
                 if (player.y < 325 + playerOffSet) {     // Limite teto
                     player.y = 325 + playerOffSet;
@@ -174,13 +281,13 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             Rectangle portaMapa3 = {500, 700, 300, 50};
             
             if(player.mapa == 0) {
-                if(pegando && CollisionObject(playerCollision, chaveCollision)) chavePegandoFlag = true;
+                if(chaveSpawn && pegando && CollisionObject(playerCollision, chaveCollision)) chavePegandoFlag = true;
                
                 CollisionObject(playerCollision, pilarMapa0);
                 CollisionObject(playerCollision, pilarEsqMapa0);
                 
                 if(CollisionObject(playerCollision, doorCollision)) {
-                    player.mapa = 1;
+                    player.mapa = getNextMapaPrincipal(head);
                     player.x = 200;
                     player.y = 540;
                 }
@@ -191,12 +298,12 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                 CollisionObject(playerCollision, mesaMapa1);
                 
                 if(CollisionObject(playerCollision, doorCollisionEsquerda)) {
-                    player.mapa = 0;
+                    player.mapa = getAntMapaPrincipal(head);
                     player.x = 920;
                     player.y = 540;
                 }
                 else if(CollisionObject(playerCollision, doorCollision)){
-                    player.mapa = 2;
+                    player.mapa = getNextMapaPrincipal(head);
                     player.x = 200;
                     player.y = 540;
             }
@@ -205,24 +312,31 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                 CollisionObject(playerCollision, mesaMapa2);
                 
                 if(CollisionObject(playerCollision, doorCollisionEsquerda)) {
-                    player.mapa = 1;
+                    player.mapa = getAntMapaPrincipal(head);
                     player.x = 920;
                     player.y = 540;
                 }
                 
-                if(CollisionObject(playerCollision, arenaCollision)){
-                    player.mapa = 3;
+                if(chavePegandoFlag && CollisionObject(playerCollision, arenaCollision)) {
+                    chaveSpawn = false;
+                    puzzleDesbloqueado = true;
+                    pegando = false;
+                    chavePegandoFlag = false;
+                }
+                
+                if(puzzleDesbloqueado && CollisionObject(playerCollision, arenaCollision)){
+                    player.mapa = getMapaSecundario(head);
                     player.x = 400;
                     player.y = 540;
                 }
             }
-            else if(player.mapa == 3){
+            else if(player.mapa == -1){
                 CollisionObject(playerCollision, pilarEsqMapa3);
                 CollisionObject(playerCollision, pilarMapa3);
                 CollisionObject(playerCollision, pilarDirMapa3);
                 
                 if(CollisionObject(playerCollision, portaMapa3)){
-                    player.mapa = 2;
+                    player.mapa = getAntMapaSecundario(head);
                     player.x = 400;
                     player.y = 540;
                 }
@@ -239,7 +353,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             if(player.mapa == 0) {
                 DrawTexture(backgroundImage, 0, 0, WHITE);
                 
-                if(chavePegandoFlag == false) {
+                if(chaveSpawn && chavePegandoFlag == false) {
                     DrawTextureEx(chaveCenario, (Vector2){chave.x, chave.y}, 0.0f, 1.0f, WHITE);
                 }
             }
@@ -251,7 +365,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                 DrawTexture(mapa2,0,0,WHITE);
             
             }
-            else if(player.mapa == 3){
+            else if(player.mapa == -1){
                 DrawTexture(arena,0,0,WHITE);
             
             }
@@ -259,7 +373,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             //DrawRectangle(portaMapa3.x, portaMapa3.y, portaMapa3.width, portaMapa3.height, BLUE);
             
             char text[10];
-            sprintf(text, "X:%d Y:%d", player.x, player.y);
+            sprintf(text, "X:%d Y:%d Mapa: %d", player.x, player.y, player.mapa);
             DrawText(text, 20, 20, 20, WHITE);
             
 
