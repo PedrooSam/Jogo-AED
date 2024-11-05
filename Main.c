@@ -208,7 +208,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
     //posição jogador
     player.x = 800;
     player.y = 200;
-    player.mapa = -1;
+    player.mapa = 0;
     
 
     
@@ -448,7 +448,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                 }
                 //Diamante 
                 
-                if(!diamanteTesouroNoBau){
+                if(!diamanteTesouroNoBau && espadaTesouroNoBau){
                     if(CollisionObject(playerCollision, diamanteTesouroCollision) && !diamanteTesouroPegandoFlag && pegando && !diamanteTesouroNoBau && espadaTesouroNoBau){  //Verifica se pode pegar
                         diamanteTesouroPegandoFlag = true;
                         diamanteTesouroSpawn = false;
