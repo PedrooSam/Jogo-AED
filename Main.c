@@ -169,69 +169,70 @@ void menu() {
 bool puzzleOrdenar(Texture2D puzzle1) {
     bool resultado = true;
     int lista[4] = {-1, -1, -1, -1};
-    long a = rand()%32766, b = rand()%32766, c = rand()%32766, d = rand()%32766;
+    long a = rand() % 32766, b = rand() % 32766, c = rand() % 32766, d = rand() % 32766, texto5[4], texto6[4],texto7[4],texto8[4];
     char texto1[5], texto2[5], texto3[5], texto4[5];
-    resultado = true;
-    sprintf(texto1, "%d", a);
-    sprintf(texto2, "%d", b);
-    sprintf(texto3, "%d", c);
-    sprintf(texto4, "%d", d);
     
+    // Converte os números para strings
+    sprintf(texto1, "%ld", a);
+    sprintf(texto2, "%ld", b);
+    sprintf(texto3, "%ld", c);
+    sprintf(texto4, "%ld", d);
+    
+    
+    // Define as áreas de colisão para os botões
     Rectangle alternativa1Collision = {520, 310, 200, 60};
     Rectangle alternativa2Collision = {520, 390, 200, 60};
     Rectangle alternativa3Collision = {520, 480, 200, 60};
     Rectangle alternativa4Collision = {520, 570, 200, 60};
     
-   
     int preenchidos = 0; // Contador de posições preenchidas em `lista`
     
     while (preenchidos < 4) {
+        sprintf(texto5, "%ld", lista[0]);
+        sprintf(texto6, "%ld", lista[1]);
+        sprintf(texto7, "%ld", lista[2]);
+        sprintf(texto8, "%ld", lista[3]);
         BeginDrawing();
+        ClearBackground(BLACK);
         DrawTexture(puzzle1, 370, 100, WHITE);
         
+        // Desenha os botões e os textos dos números gerados
         DrawRectangleRec(alternativa1Collision, BLUE);
         DrawRectangleRec(alternativa2Collision, BLACK);
         DrawRectangleRec(alternativa3Collision, LIME);
         DrawRectangleRec(alternativa4Collision, YELLOW);
+        
         DrawText(texto1, 550, 330, 20, GOLD);
         DrawText(texto2, 550, 415, 20, GOLD);
         DrawText(texto3, 550, 510, 20, GOLD);
         DrawText(texto4, 550, 590, 20, GOLD);
         
-        
+        // Verifica as colisões com o mouse para cada alternativa e armazena o número na lista
         if (CheckCollisionPointRec(GetMousePosition(), alternativa1Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            if (lista[preenchidos] == -1) {
-                BeginDrawing();
-                DrawText("SEXO", 550, 590, 20, GOLD);
-                EndDrawing();
-                lista[preenchidos] = a;
-                preenchidos++;
-            }
+            lista[preenchidos] = a;
+            preenchidos++;
         }
-        if (CheckCollisionPointRec(GetMousePosition(), alternativa2Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            if (lista[preenchidos] == -1) {
-                lista[preenchidos] = b;
-                preenchidos++;
-            }
+        if (CheckCollisionPointRec(GetMousePosition(), alternativa2Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) { 
+            lista[preenchidos] = b;
+            preenchidos++;
         }
         if (CheckCollisionPointRec(GetMousePosition(), alternativa3Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            if (lista[preenchidos] == -1) {
-                lista[preenchidos] = c;
-                preenchidos++;
-            }
+            lista[preenchidos] = c;
+            preenchidos++;
         }
-        if (CheckCollisionPointRec(GetMousePosition(), alternativa4Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            if (lista[preenchidos] == -1) {
-                lista[preenchidos] = d;
-                preenchidos++;
-                
-            }
+        if (CheckCollisionPointRec(GetMousePosition(), alternativa4Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) { 
+            lista[preenchidos] = d;
+            preenchidos++;
+           
         }
-
+        DrawText(texto5, 550, 100, 20, GOLD);
+        DrawText(texto6, 550, 110, 20, GOLD);
+        DrawText(texto7, 550, 120, 20, GOLD);
+        DrawText(texto8, 550, 130, 20, GOLD);
         EndDrawing();
     }
     
-    // Versão v2 do bubble sort
+    // Bubble Sort para ordenar a lista
     for (int i = 0; i < 4 - 1; i++) {
         bool trocou = false;
         for (int j = 0; j < 4 - i - 1; j++) {
@@ -243,10 +244,13 @@ bool puzzleOrdenar(Texture2D puzzle1) {
                 resultado = false;
             }
         }
+        // Se não houve troca, a lista já está ordenada
+        if (!trocou) break;
     }
     
-    return resultado; 
+    return resultado;
 }
+
 // Função principal do jogo
 void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture2D personagemEsquerda, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D personagemPegandoChaveEsquerda, Texture2D personagemPegandoChaveDireita, Texture2D mapa1, Texture2D mapa2, Texture2D arena, Texture2D mensagem1, Texture2D menuBack, Texture2D espadaTesouro, Texture2D chaveTesouro, Texture2D bau, Texture2D bauPreenchido, Texture2D botao1Off, Texture2D botao1On, Texture2D botao2Off, Texture2D botao2On, Texture2D pegandoChaveTesouroDireita, Texture2D pegandoChaveTesouroEsquerda, Texture2D pegandoEspadaEsquerda, Texture2D pegandoEspadaDireita, Texture2D bauPreenchido2, Texture2D diamante, Texture2D pegandoDiamanteEsquerda,Texture2D  pegandoDiamanteDireita, Texture2D bauPreenchido3, Texture2D puzzle1) {
     
@@ -322,6 +326,9 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             }
             if (IsKeyPressed(KEY_M)) {
                player.mapa = -1;
+            }
+            if (IsKeyPressed(KEY_B)) {
+               CloseWindow();
             }
                 
             
@@ -563,7 +570,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                     DrawTextureEx(bauPreenchido3, (Vector2){900,270},0.0f, 4.0f,WHITE);
                 }
                 
-                // Botoes
+                // Botao 1 vermelho
                 if (CheckCollisionPointRec(GetMousePosition(), botao1Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                             botao1Pressionado = !botao1Pressionado;
                     }
@@ -572,18 +579,20 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                    
                 }else if(botao1Pressionado){
                     DrawTextureEx(botao1On, (Vector2){130,350},0.0f, 4.0f,WHITE);
-                    puzzleOrdenar(puzzle1);
+                    puzzle1Resolvido = puzzleOrdenar(puzzle1);
                     botao1Pressionado = false;
                 }
                 
-                //botao 
+                //botao 2 verde
                 
-                
-                
-                
-                
-                
-                
+                if(puzzle1Resolvido){
+                   DrawTextureEx(botao2Off, (Vector2){200, 350}, 0.0f,4.0f, WHITE);
+                }
+                             
+       
+       
+       
+       
             }
             //Verificacao chave
             if(chaveTesouroPegandoFlag && !pegando && !chaveTesouroNoBau){                                         //Verifica se deixou a chave cair 
