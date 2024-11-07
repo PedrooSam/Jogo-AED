@@ -239,7 +239,7 @@ bool puzzleOrdenar(Texture2D puzzle1) {
             }
         }
         // Se não houve troca, a lista já está ordenada
-        if (!trocou) break;
+        if (resultado) break;
     }
     
     //verifica se a lista ta ordenada pq se tiver ai o puzzle acaba
@@ -251,7 +251,7 @@ bool puzzleOrdenar(Texture2D puzzle1) {
             DrawText("Agora, aperte ENTER para sair!",450, 350, 20, WHITE);
             EndDrawing();
         }
-        return true;
+        return resultado;
         
     }
     //se a lista que o usuario mandou nao tiver ordenada manda ele fazer o puzzle dnv
@@ -587,18 +587,20 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                 }
                 
                 // Botao 1 vermelho
-                if (CheckCollisionPointRec(GetMousePosition(), botao1Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-                            botao1Pressionado = !botao1Pressionado;
+                if(diamanteTesouroNoBau){
+                    if (CheckCollisionPointRec(GetMousePosition(), botao1Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                                botao1Pressionado = !botao1Pressionado;
                     }
-                if(!botao1Pressionado){
-                    DrawTextureEx(botao1Off, (Vector2){130,350},0.0f, 4.0f,WHITE);
-                   
-                }else if(botao1Pressionado){
-                    DrawTextureEx(botao1On, (Vector2){130,350},0.0f, 4.0f,WHITE);
-                    puzzle1Resolvido = puzzleOrdenar(puzzle1);
-                    botao1Pressionado = false;
+                    if(!botao1Pressionado){
+                        DrawTextureEx(botao1Off, (Vector2){130,350},0.0f, 4.0f,WHITE);
+                       
+                    }else if(botao1Pressionado){
+                        DrawTextureEx(botao1On, (Vector2){130,350},0.0f, 4.0f,WHITE);
+                        puzzle1Resolvido = puzzleOrdenar(puzzle1);
+                        botao1Pressionado = false;
+                    }
                 }
-                
+                        
                 //botao 2 verde
                 
                 if(puzzle1Resolvido){
