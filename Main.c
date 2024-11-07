@@ -169,14 +169,14 @@ void menu() {
 bool puzzleOrdenar(Texture2D puzzle1) {
     bool resultado = true;
     int lista[4] = {-1, -1, -1, -1};
-    long a = rand() % 32766, b = rand() % 32766, c = rand() % 32766, d = rand() % 32766;
-    char texto1[5], texto2[5], texto3[5], texto4[5];
+    int a = rand() % 32766, b = rand() % 32766, c = rand() % 32766, d = rand() % 32766;
+    char texto1[14], texto2[14], texto3[14], texto4[14];
     
     // Converte os números para strings
-    sprintf(texto1, "%ld", a);
-    sprintf(texto2, "%ld", b);
-    sprintf(texto3, "%ld", c);
-    sprintf(texto4, "%ld", d);
+    sprintf(texto1, "%d", a);
+    sprintf(texto2, "%d", b);
+    sprintf(texto3, "%d", c);
+    sprintf(texto4, "%d", d);
     
     
     // Define as áreas de colisão para os botões
@@ -193,10 +193,10 @@ bool puzzleOrdenar(Texture2D puzzle1) {
         DrawTexture(puzzle1, 370, 100, WHITE);
         
         // Desenha os botões e os textos dos números gerados
-        DrawRectangleRec(alternativa1Collision, BLUE);
-        DrawRectangleRec(alternativa2Collision, BLACK);
-        DrawRectangleRec(alternativa3Collision, LIME);
-        DrawRectangleRec(alternativa4Collision, YELLOW);
+        //DrawRectangleRec(alternativa1Collision, BLUE);
+        //DrawRectangleRec(alternativa2Collision, BLACK);
+        //DrawRectangleRec(alternativa3Collision, LIME);
+        //DrawRectangleRec(alternativa4Collision, YELLOW);
         
         DrawText(texto1, 550, 330, 20, GOLD);
         DrawText(texto2, 550, 415, 20, GOLD);
@@ -220,7 +220,7 @@ bool puzzleOrdenar(Texture2D puzzle1) {
             lista[preenchidos] = d;
             preenchidos++; 
         }
-        if(IsKeyPressed(KEY_ESCAPE))
+        if(IsKeyPressed(KEY_ESCAPE))//player nao quer mais fazer o puzzle
             return false;
         
         EndDrawing();
@@ -244,23 +244,26 @@ bool puzzleOrdenar(Texture2D puzzle1) {
     
     //verifica se a lista ta ordenada pq se tiver ai o puzzle acaba
     if(resultado){
-        while(!IsKeyPressed(KEY_ENTER)){
+        while(!IsKeyPressed(KEY_ENTER)){//esse while basicamente pra ter a mensagem de sucesso e ele so para se o usuario apertar enter, mesma coisa no proximo, mas ele mostra a de erro
             BeginDrawing();
             ClearBackground(BLACK);
-            DrawText("PARABENS! Puzzle concluido!",350, 300, 30, GREEN);
-            DrawText("Agora, aperte ENTER para sair!",370, 350, 20, WHITE);
+            DrawText("PARABENS! Puzzle concluido!",400, 310, 30, GREEN);
+            DrawText("Agora, aperte ENTER para sair!",450, 350, 20, WHITE);
             EndDrawing();
         }
         return true;
-    }else{
+        
+    }
+    //se a lista que o usuario mandou nao tiver ordenada manda ele fazer o puzzle dnv
+    else{
         while(!IsKeyPressed(KEY_ENTER)){
             BeginDrawing();
             ClearBackground(BLACK);
-            DrawText("ERRO! Puzzle não concluido!",310, 300, 30, RED);
-            DrawText("Agora, aperte ENTER para tentar novamente!",370, 350, 20, WHITE);
+            DrawText("ERRO! Puzzle não concluido!",400, 310, 30, RED);
+            DrawText("Agora, aperte ENTER para tentar novamente!",450, 350, 20, WHITE);
             EndDrawing();
         }
-        return puzzleOrdenar(puzzle1);
+        return puzzleOrdenar(puzzle1); //recursao para que o puzzle seja reiniciado
     }
 }
 
