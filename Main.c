@@ -169,9 +169,9 @@ void menu() {
 bool puzzleOrdenar(Texture2D puzzle1) {
     bool resultado = true;
     int lista[4] = {-1, -1, -1, -1};
-    int a = rand(), b = rand(), c = rand(), d = rand();
+    long a = rand()%32766, b = rand()%32766, c = rand()%32766, d = rand()%32766;
     char texto1[5], texto2[5], texto3[5], texto4[5];
-    
+    resultado = true;
     sprintf(texto1, "%d", a);
     sprintf(texto2, "%d", b);
     sprintf(texto3, "%d", c);
@@ -182,42 +182,49 @@ bool puzzleOrdenar(Texture2D puzzle1) {
     Rectangle alternativa3Collision = {520, 480, 200, 60};
     Rectangle alternativa4Collision = {520, 570, 200, 60};
     
+   
     int preenchidos = 0; // Contador de posições preenchidas em `lista`
     
     while (preenchidos < 4) {
         BeginDrawing();
-        ClearBackground(RAYWHITE); // Limpa o fundo da tela para nao ter sobreposição
         DrawTexture(puzzle1, 370, 100, WHITE);
         
-        
-        DrawText(texto1, 520, 310, 20, BLACK);
-        DrawText(texto2, 520, 390, 20, BLACK);
-        DrawText(texto3, 520, 480, 20, BLACK);
-        DrawText(texto4, 520, 570, 20, BLACK);
+        DrawRectangleRec(alternativa1Collision, BLUE);
+        DrawRectangleRec(alternativa2Collision, BLACK);
+        DrawRectangleRec(alternativa3Collision, LIME);
+        DrawRectangleRec(alternativa4Collision, YELLOW);
+        DrawText(texto1, 550, 330, 20, GOLD);
+        DrawText(texto2, 550, 415, 20, GOLD);
+        DrawText(texto3, 550, 510, 20, GOLD);
+        DrawText(texto4, 550, 590, 20, GOLD);
         
         
         if (CheckCollisionPointRec(GetMousePosition(), alternativa1Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            if (preenchidos < 4 && lista[preenchidos] == -1) {
+            if (lista[preenchidos] == -1) {
+                BeginDrawing();
+                DrawText("SEXO", 550, 590, 20, GOLD);
+                EndDrawing();
                 lista[preenchidos] = a;
                 preenchidos++;
             }
         }
         if (CheckCollisionPointRec(GetMousePosition(), alternativa2Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            if (preenchidos < 4 && lista[preenchidos] == -1) {
+            if (lista[preenchidos] == -1) {
                 lista[preenchidos] = b;
                 preenchidos++;
             }
         }
         if (CheckCollisionPointRec(GetMousePosition(), alternativa3Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            if (preenchidos < 4 && lista[preenchidos] == -1) {
+            if (lista[preenchidos] == -1) {
                 lista[preenchidos] = c;
                 preenchidos++;
             }
         }
         if (CheckCollisionPointRec(GetMousePosition(), alternativa4Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            if (preenchidos < 4 && lista[preenchidos] == -1) {
+            if (lista[preenchidos] == -1) {
                 lista[preenchidos] = d;
                 preenchidos++;
+                
             }
         }
 
@@ -233,23 +240,11 @@ bool puzzleOrdenar(Texture2D puzzle1) {
                 lista[j] = lista[j + 1];
                 lista[j + 1] = temp;
                 trocou = true;
+                resultado = false;
             }
-        }
-        // Se não houve troca, a lista já está ordenada
-        if (!trocou) {
-            break;
         }
     }
     
-    // Verificação de ordenação
-    resultado = true;
-    for (int i = 0; i < 3; i++) {
-        if (lista[i] > lista[i + 1]) {
-            resultado = false;
-            break;
-        }
-    }
-
     return resultado; 
 }
 // Função principal do jogo
