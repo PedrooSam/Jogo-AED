@@ -170,7 +170,7 @@ bool puzzleOrdenar(Texture2D puzzle1) {
     bool resultado = true;
     int lista[4] = {-1, -1, -1, -1};
     int a = rand() % 32766, b = rand() % 32766, c = rand() % 32766, d = rand() % 32766;
-    char texto1[14], texto2[14], texto3[14], texto4[14];
+    char texto1[6], texto2[6], texto3[6], texto4[6];
     
     // Converte os números para strings
     sprintf(texto1, "%d", a);
