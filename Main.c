@@ -259,8 +259,8 @@ bool puzzleOrdenar(Texture2D puzzle1) {
         while(!IsKeyPressed(KEY_ENTER)){
             BeginDrawing();
             ClearBackground(BLACK);
-            DrawText("ERRO! Puzzle não concluido!",400, 310, 30, RED);
-            DrawText("Agora, aperte ENTER para tentar novamente!",450, 350, 20, WHITE);
+            DrawText("ERRO! Puzzle não concluido!",445, 310, 30, RED);
+            DrawText("Aperte ENTER para tentar novamente!",460, 350, 20, WHITE);
             EndDrawing();
         }
         return puzzleOrdenar(puzzle1); //recursao para que o puzzle seja reiniciado
