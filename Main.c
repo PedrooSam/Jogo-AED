@@ -169,7 +169,7 @@ void menu() {
 bool puzzleOrdenar(Texture2D puzzle1) {
     bool resultado = true;
     int lista[4] = {-1, -1, -1, -1};
-    long a = rand() % 32766, b = rand() % 32766, c = rand() % 32766, d = rand() % 32766, texto5[4], texto6[4],texto7[4],texto8[4];
+    long a = rand() % 32766, b = rand() % 32766, c = rand() % 32766, d = rand() % 32766;
     char texto1[5], texto2[5], texto3[5], texto4[5];
     
     // Converte os números para strings
@@ -188,10 +188,6 @@ bool puzzleOrdenar(Texture2D puzzle1) {
     int preenchidos = 0; // Contador de posições preenchidas em `lista`
     
     while (preenchidos < 4) {
-        sprintf(texto5, "%ld", lista[0]);
-        sprintf(texto6, "%ld", lista[1]);
-        sprintf(texto7, "%ld", lista[2]);
-        sprintf(texto8, "%ld", lista[3]);
         BeginDrawing();
         ClearBackground(BLACK);
         DrawTexture(puzzle1, 370, 100, WHITE);
@@ -222,13 +218,11 @@ bool puzzleOrdenar(Texture2D puzzle1) {
         }
         if (CheckCollisionPointRec(GetMousePosition(), alternativa4Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) { 
             lista[preenchidos] = d;
-            preenchidos++;
-           
+            preenchidos++; 
         }
-        DrawText(texto5, 550, 100, 20, GOLD);
-        DrawText(texto6, 550, 110, 20, GOLD);
-        DrawText(texto7, 550, 120, 20, GOLD);
-        DrawText(texto8, 550, 130, 20, GOLD);
+        if(IsKeyPressed(KEY_ESCAPE))
+            return false;
+        
         EndDrawing();
     }
     
@@ -248,7 +242,26 @@ bool puzzleOrdenar(Texture2D puzzle1) {
         if (!trocou) break;
     }
     
-    return resultado;
+    //verifica se a lista ta ordenada pq se tiver ai o puzzle acaba
+    if(resultado){
+        while(!IsKeyPressed(KEY_ENTER)){
+            BeginDrawing();
+            ClearBackground(BLACK);
+            DrawText("PARABENS! Puzzle concluido!",350, 300, 30, GREEN);
+            DrawText("Agora, aperte ENTER para sair!",370, 350, 20, WHITE);
+            EndDrawing();
+        }
+        return true;
+    }else{
+        while(!IsKeyPressed(KEY_ENTER)){
+            BeginDrawing();
+            ClearBackground(BLACK);
+            DrawText("ERRO! Puzzle não concluido!",310, 300, 30, RED);
+            DrawText("Agora, aperte ENTER para tentar novamente!",370, 350, 20, WHITE);
+            EndDrawing();
+        }
+        return puzzleOrdenar(puzzle1);
+    }
 }
 
 // Função principal do jogo
