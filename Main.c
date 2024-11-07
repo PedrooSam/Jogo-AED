@@ -11,7 +11,7 @@ typedef struct Node {
 
 typedef struct {
     int x;
-    int y;
+    int y; 
     int mapa;
 } Objeto;
 // Variáveis globais
@@ -20,10 +20,10 @@ typedef struct {
 
     // Jogador
 Objeto player;
-int playerOffSet = 140;
-int velocidade = 10;
+int playerOffSet = 140; //hitbox do boneco
+int velocidade = 10; //velocidade do boneco
 float scale = 3.5f; // Fator de escala para o personagem
-bool pausa = false;
+bool pausa = false; //variavel que verifica se o jogo esta ou nao pausado
 bool pegando = false; // Variável para verificar se o personagem está pegando algo
 
 // Chave
@@ -166,6 +166,92 @@ void menu() {
     }
 }
 
+bool puzzleOrdenar(Texture2D puzzle1) {
+    bool resultado = true;
+    int lista[4] = {-1, -1, -1, -1};
+    int a = rand(), b = rand(), c = rand(), d = rand();
+    char texto1[5], texto2[5], texto3[5], texto4[5];
+    
+    sprintf(texto1, "%d", a);
+    sprintf(texto2, "%d", b);
+    sprintf(texto3, "%d", c);
+    sprintf(texto4, "%d", d);
+    
+    Rectangle alternativa1Collision = {520, 310, 200, 60};
+    Rectangle alternativa2Collision = {520, 390, 200, 60};
+    Rectangle alternativa3Collision = {520, 480, 200, 60};
+    Rectangle alternativa4Collision = {520, 570, 200, 60};
+    
+    int preenchidos = 0; // Contador de posições preenchidas em `lista`
+    
+    while (preenchidos < 4) {
+        BeginDrawing();
+        ClearBackground(RAYWHITE); // Limpa o fundo da tela para nao ter sobreposição
+        DrawTexture(puzzle1, 370, 100, WHITE);
+        
+        
+        DrawText(texto1, 520, 310, 20, BLACK);
+        DrawText(texto2, 520, 390, 20, BLACK);
+        DrawText(texto3, 520, 480, 20, BLACK);
+        DrawText(texto4, 520, 570, 20, BLACK);
+        
+        
+        if (CheckCollisionPointRec(GetMousePosition(), alternativa1Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            if (preenchidos < 4 && lista[preenchidos] == -1) {
+                lista[preenchidos] = a;
+                preenchidos++;
+            }
+        }
+        if (CheckCollisionPointRec(GetMousePosition(), alternativa2Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            if (preenchidos < 4 && lista[preenchidos] == -1) {
+                lista[preenchidos] = b;
+                preenchidos++;
+            }
+        }
+        if (CheckCollisionPointRec(GetMousePosition(), alternativa3Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            if (preenchidos < 4 && lista[preenchidos] == -1) {
+                lista[preenchidos] = c;
+                preenchidos++;
+            }
+        }
+        if (CheckCollisionPointRec(GetMousePosition(), alternativa4Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            if (preenchidos < 4 && lista[preenchidos] == -1) {
+                lista[preenchidos] = d;
+                preenchidos++;
+            }
+        }
+
+        EndDrawing();
+    }
+    
+    // Versão v2 do bubble sort
+    for (int i = 0; i < 4 - 1; i++) {
+        bool trocou = false;
+        for (int j = 0; j < 4 - i - 1; j++) {
+            if (lista[j] > lista[j + 1]) {
+                int temp = lista[j];
+                lista[j] = lista[j + 1];
+                lista[j + 1] = temp;
+                trocou = true;
+            }
+        }
+        // Se não houve troca, a lista já está ordenada
+        if (!trocou) {
+            break;
+        }
+    }
+    
+    // Verificação de ordenação
+    resultado = true;
+    for (int i = 0; i < 3; i++) {
+        if (lista[i] > lista[i + 1]) {
+            resultado = false;
+            break;
+        }
+    }
+
+    return resultado; 
+}
 // Função principal do jogo
 void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture2D personagemEsquerda, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D personagemPegandoChaveEsquerda, Texture2D personagemPegandoChaveDireita, Texture2D mapa1, Texture2D mapa2, Texture2D arena, Texture2D mensagem1, Texture2D menuBack, Texture2D espadaTesouro, Texture2D chaveTesouro, Texture2D bau, Texture2D bauPreenchido, Texture2D botao1Off, Texture2D botao1On, Texture2D botao2Off, Texture2D botao2On, Texture2D pegandoChaveTesouroDireita, Texture2D pegandoChaveTesouroEsquerda, Texture2D pegandoEspadaEsquerda, Texture2D pegandoEspadaDireita, Texture2D bauPreenchido2, Texture2D diamante, Texture2D pegandoDiamanteEsquerda,Texture2D  pegandoDiamanteDireita, Texture2D bauPreenchido3, Texture2D puzzle1) {
     
@@ -185,12 +271,12 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
     bool diamanteTesouroSpawn = true;
     bool diamanteTesouroNoBau = false;
     
-    /*bool puzzle1Resolvido = false;
-    bool puzzle2Resolvido = false;
+    bool puzzle1Resolvido = false;
+    //bool puzzle2Resolvido = false;
     bool botao1Pressionado = false;
-    bool botao2Pressionado = false;
+    //bool botao2Pressionado = false;
     
-    float vetorJogador[4] = {0};*/
+    //float vetorPuzzleOrdenar[4] = {0};
     
     //configuração do mapa
     Node *head = NULL; 
@@ -238,7 +324,11 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             
             if (IsKeyPressed(KEY_T)) {
                player.mapa = 0;
-            }   
+            }
+            if (IsKeyPressed(KEY_M)) {
+               player.mapa = -1;
+            }
+                
             
             // Movimento do jogador
             if (IsKeyDown(KEY_UP)) {
@@ -308,14 +398,11 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             Rectangle espadaTesouroCollision = {200, 200, 60 , 100};
             Rectangle diamanteTesouroCollision = {300, 400, 50, 50};
             
-            /*
-            Rectangle botao1Collision = {140,350,50,50};
-            Rectangle botao2Collision = {360,350,50,50};
             
-            Rectangle alternativa1Collision = {520, 310, 200, 60, WHITE};
-            Rectangle alternativa2Collision = {520, 390, 200, 60, WHITE};
-            Rectangle alternativa3Collision = {520, 480, 200, 60, WHITE};
-            Rectangle alternativa4Collision = {520, 570, 200, 60, WHITE};*/
+            Rectangle botao1Collision = {140,350,50,50};
+            //Rectangle botao2Collision = {360,350,50,50};
+            
+            
             
             if(player.mapa == 0) {
                 if(chaveSpawn && pegando && CollisionObject(playerCollision, chaveCollision)) chavePegandoFlag = true;
@@ -482,25 +569,26 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                 }
                 
                 // Botoes
-                /*
+                if (CheckCollisionPointRec(GetMousePosition(), botao1Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                            botao1Pressionado = !botao1Pressionado;
+                    }
                 if(!botao1Pressionado){
                     DrawTextureEx(botao1Off, (Vector2){130,350},0.0f, 4.0f,WHITE);
-                    
-                }else{
+                   
+                }else if(botao1Pressionado){
                     DrawTextureEx(botao1On, (Vector2){130,350},0.0f, 4.0f,WHITE);
-                }
-                
-                if(!puzzle1Resolvido){
+                    puzzleOrdenar(puzzle1);
                     botao1Pressionado = false;
                 }
                 
-                DrawTexture(puzzle1, 370, 100, WHITE);
+                //botao 
                 
-                //Só pra conferir posição
-                //DrawRectangle(520, 310, 200, 60, RED);  // Alternativa 1
-                //DrawRectangle(520, 390, 200, 60, BLUE); // Alternativa 2
-                //DrawRectangle(520, 480, 200, 60, YELLOW); // Alternativa 3
-                //DrawRectangle(520, 570, 200, 60, PURPLE); // Alternativa 4*/
+                
+                
+                
+                
+                
+                
             }
             //Verificacao chave
             if(chaveTesouroPegandoFlag && !pegando && !chaveTesouroNoBau){                                         //Verifica se deixou a chave cair 
