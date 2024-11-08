@@ -788,12 +788,12 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             sprintf(text, "X:%d Y:%d Mapa: %d", player.x, player.y, player.mapa);
             DrawText(text, 20, 20, 20, WHITE);
             
-            // Atualize a posição do projétil em cada frame se ele estiver ativo
+            // Atualiza a posição do projétil em cada frame se ele estiver ativo
             if (projetil.ativo) {
                 projetil.posicao.x += projetil.velocidade.x;
                 projetil.posicao.y += projetil.velocidade.y;
 
-                // Verifique se o projétil saiu da tela e desative-o se necessário
+                // Verifique se o projétil saiu da tela e desativa
                 if (projetil.posicao.x > GetScreenWidth() || projetil.posicao.x < 0 ||
                     projetil.posicao.y > GetScreenHeight() || projetil.posicao.y < 0) {
                     projetil.ativo = false;
