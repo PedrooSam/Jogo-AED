@@ -16,9 +16,18 @@ typedef struct {
 } Objeto;
 // Variáveis globais
 
+typedef struct {
+    Vector2 posicao;
+    Vector2 velocidade;
+    bool ativo;
+} Projetil;
+
 //Objetos
 Objeto player;
 Objeto lacaio;
+
+//Projeteis
+Projetil projetil;
 
 // lacaio
 bool lacaioParado = true;
@@ -273,7 +282,7 @@ bool puzzleOrdenar(Texture2D puzzle1) {
 }
 
 // Função principal do jogo
-void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D pegandoChaveEsquerda, Texture2D pegandoChaveDireita, Texture2D mapa1, Texture2D mapa2, Texture2D arena, Texture2D mensagem1, Texture2D menuBack, Texture2D espadaTesouro, Texture2D chaveTesouro, Texture2D bau, Texture2D bauPreenchido, Texture2D botao1Off, Texture2D botao1On, Texture2D botao2Off, Texture2D botao2On, Texture2D pegandoChaveTesouroDireita, Texture2D pegandoChaveTesouroEsquerda, Texture2D pegandoEspadaEsquerda, Texture2D pegandoEspadaDireita, Texture2D bauPreenchido2, Texture2D diamante, Texture2D pegandoDiamanteEsquerda,Texture2D  pegandoDiamanteDireita, Texture2D bauPreenchido3, Texture2D puzzle1, Texture2D spritesheet, Texture2D spritesheetRight, Texture2D spriteWalkLeft, Texture2D spriteWalkRight,Texture2D pegandoEsquerdaIdle, Texture2D pegandoDireitaIdle, Texture2D backgroundMenu,Texture2D pegandoChaveEsquerdaIdle,Texture2D pegandoChaveDireitaIdle, Texture2D pegandoChaveTesouroEsquerdaIdle, Texture2D pegandoChaveTesouroDireitaIdle, Texture2D pegandoEspadaEsquerdaIdle, Texture2D pegandoEspadaDireitaIdle, Texture2D pegandoDiamanteEsquerdaIdle, Texture2D pegandoDiamanteDireitaIdle, Texture2D lacaioIdleDireita) {
+void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D pegandoChaveEsquerda, Texture2D pegandoChaveDireita, Texture2D mapa1, Texture2D mapa2, Texture2D arena, Texture2D mensagem1, Texture2D menuBack, Texture2D espadaTesouro, Texture2D chaveTesouro, Texture2D bau, Texture2D bauPreenchido, Texture2D botao1Off, Texture2D botao1On, Texture2D botao2Off, Texture2D botao2On, Texture2D pegandoChaveTesouroDireita, Texture2D pegandoChaveTesouroEsquerda, Texture2D pegandoEspadaEsquerda, Texture2D pegandoEspadaDireita, Texture2D bauPreenchido2, Texture2D diamante, Texture2D pegandoDiamanteEsquerda,Texture2D  pegandoDiamanteDireita, Texture2D bauPreenchido3, Texture2D puzzle1, Texture2D spritesheet, Texture2D spritesheetRight, Texture2D spriteWalkLeft, Texture2D spriteWalkRight,Texture2D pegandoEsquerdaIdle, Texture2D pegandoDireitaIdle, Texture2D backgroundMenu,Texture2D pegandoChaveEsquerdaIdle,Texture2D pegandoChaveDireitaIdle, Texture2D pegandoChaveTesouroEsquerdaIdle, Texture2D pegandoChaveTesouroDireitaIdle, Texture2D pegandoEspadaEsquerdaIdle, Texture2D pegandoEspadaDireitaIdle, Texture2D pegandoDiamanteEsquerdaIdle, Texture2D pegandoDiamanteDireitaIdle, Texture2D lacaioIdleDireita, Texture2D bala) {
     
     bool andandoDireita = true;     // Direção inicial
     bool chavePegandoFlag = false;  // Verifica se tá pegando a chave
@@ -306,6 +315,9 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     inserirMapa(&head, &tail, 0, NULL);
     inserirMapa(&head, &tail, 1, NULL);
     inserirMapa(&head, &tail, 2, mapaSec0);
+    
+    //posicao bala 
+    projetil.ativo = false;
     
     //posição jogador
     player.x = 800;
@@ -368,32 +380,27 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     bool segurandoItem = false;
 
     while (!WindowShouldClose()) {
-        if (IsKeyPressed(KEY_P)) {
-            pausa = !pausa;
-        }
+            if (!pausa) {
+                if (IsKeyPressed(KEY_P)) {
+                pausa = !pausa;
+            }
         
-        if (!pausa) {
+            if (IsKeyPressed(KEY_Q) && !projetil.ativo) {
+                projetil.ativo = true;
+                projetil.posicao = (Vector2){ player.x, player.y - playerOffSet + 60 };
+                
+                if(andandoDireita) {
+                    projetil.velocidade = (Vector2){ 30.0f, 0.0f };  // Velocidade para a direita
+                }else{
+                    projetil.velocidade = (Vector2){ -30.0f, 0.0f };
+                }
+            }
+
             // Verificar se a tecla 'E' foi pressionada para pegar algo
             if (IsKeyPressed(KEY_E)) {
                 pegando = !pegando; // Alternar o estado de pegando
                 if(chavePegandoFlag) chavePegandoFlag = !chavePegandoFlag;
             }   
-            
-            //Teleporte de mapas
-            /*if (IsKeyPressed(KEY_R)) {
-               player.mapa = 1;
-            }   
-            
-            if (IsKeyPressed(KEY_T)) {
-               player.mapa = 0;
-            }
-            if (IsKeyPressed(KEY_M)) {
-               player.mapa = -1;
-            }
-            if (IsKeyPressed(KEY_B)) {
-               CloseWindow();
-            }*/
-            
             
             // Movimento do jogador            
             if(IsKeyDown(KEY_UP) && IsKeyDown(KEY_RIGHT)){ // Diagonal direita
@@ -780,7 +787,22 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             char text[10];
             sprintf(text, "X:%d Y:%d Mapa: %d", player.x, player.y, player.mapa);
             DrawText(text, 20, 20, 20, WHITE);
+            
+            // Atualize a posição do projétil em cada frame se ele estiver ativo
+            if (projetil.ativo) {
+                projetil.posicao.x += projetil.velocidade.x;
+                projetil.posicao.y += projetil.velocidade.y;
 
+                // Verifique se o projétil saiu da tela e desative-o se necessário
+                if (projetil.posicao.x > GetScreenWidth() || projetil.posicao.x < 0 ||
+                    projetil.posicao.y > GetScreenHeight() || projetil.posicao.y < 0) {
+                    projetil.ativo = false;
+                }
+
+                // Desenhe o projétil na posição atual
+                DrawTextureEx(bala, projetil.posicao, 0.0f, 0.5f, WHITE);  
+            }
+  
             // Verifica se o personagem está no estado de "pegando" e a direção em que ele está olhando
             if (pegando) {
                 
@@ -986,9 +1008,10 @@ int main(void) {
     
     Texture2D lacaioIdleDireita = LoadTexture("lacaio/Idle.png");
     
+    Texture2D bala = LoadTexture("Imagens/bala.png");
     menu(backgroundMenu);
     
-    iniciarJogo(backgroundImage, personagemPegando, personagemPegandoEsquerda, chaveCenario, pegandoChaveEsquerda, pegandoChaveDireita, mapa1, mapa2, arena, mensagem1, menuBack, espadaTesouro, chaveTesouro , bau, bauPreenchido, botao1Off, botao1On, botao2Off, botao2On, pegandoChaveTesouroDireita, pegandoChaveTesouroEsquerda, pegandoEspadaEsquerda, pegandoEspadaDireita, bauPreenchido2, diamante, pegandoDiamanteEsquerda, pegandoDiamanteDireita, bauPreenchido3, puzzle1, spritesheet, spritesheetRight, spriteWalkLeft, spriteWalkRight, pegandoEsquerdaIdle, pegandoDireitaIdle, backgroundMenu, pegandoChaveEsquerdaIdle, pegandoChaveDireitaIdle, pegandoChaveTesouroEsquerdaIdle, pegandoChaveTesouroDireitaIdle, pegandoEspadaEsquerdaIdle, pegandoEspadaDireitaIdle, pegandoDiamanteEsquerdaIdle, pegandoDiamanteDireitaIdle, lacaioIdleDireita);
+    iniciarJogo(backgroundImage, personagemPegando, personagemPegandoEsquerda, chaveCenario, pegandoChaveEsquerda, pegandoChaveDireita, mapa1, mapa2, arena, mensagem1, menuBack, espadaTesouro, chaveTesouro , bau, bauPreenchido, botao1Off, botao1On, botao2Off, botao2On, pegandoChaveTesouroDireita, pegandoChaveTesouroEsquerda, pegandoEspadaEsquerda, pegandoEspadaDireita, bauPreenchido2, diamante, pegandoDiamanteEsquerda, pegandoDiamanteDireita, bauPreenchido3, puzzle1, spritesheet, spritesheetRight, spriteWalkLeft, spriteWalkRight, pegandoEsquerdaIdle, pegandoDireitaIdle, backgroundMenu, pegandoChaveEsquerdaIdle, pegandoChaveDireitaIdle, pegandoChaveTesouroEsquerdaIdle, pegandoChaveTesouroDireitaIdle, pegandoEspadaEsquerdaIdle, pegandoEspadaDireitaIdle, pegandoDiamanteEsquerdaIdle, pegandoDiamanteDireitaIdle, lacaioIdleDireita, bala);
     
     CloseWindow();
     return 0;
