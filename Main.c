@@ -1,6 +1,7 @@
 #include "raylib.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 typedef struct Node {
 	int n;
@@ -42,6 +43,13 @@ float scale = 3.5f;     // Fator de escala para o personagem
 
 bool pausa = false;     //variavel que verifica se o jogo esta ou nao pausado
 bool pegando = false;   // Variável para verificar se o personagem está pegando algo
+
+//Distancia entre lacaio e player
+float distanciaX = 0;
+float distanciaY = 0;
+float intervalo = 200.0f;
+float timerAtaque = 0.0f;
+
 
 // Chave
 Objeto chave;
@@ -327,7 +335,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     player.y = 200;
     player.mapa = 0;
     player.vivo = true;
-    player.vida = 2;
+    player.vida = 1;
     
     //posição lacaio
     lacaio.x = 300;
@@ -401,7 +409,6 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             }
         
             if (IsKeyPressed(KEY_Q) && !projetil.ativo) {
-                puzzle2Resolvido = true;
                 projetil.ativo = true;
                 projetil.posicao = (Vector2){ player.x, player.y - playerOffSet + 70 };
                 
@@ -464,7 +471,41 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 personagemParado = true;
             }
             
+                        
             
+            float velocidadeLacaio = 150.0f * GetFrameTime();
+            // Atualize o timer do ataque
+            timerAtaque += 1;
+            // Movimento do lacaio
+            if (lacaio.vivo && lacaio.mapa == player.mapa) {
+                // Movimenta no eixo X em direção ao jogador
+                if (lacaio.x < player.x -200) {
+                    lacaio.x += velocidadeLacaio;
+                } else if (lacaio.x > player.x - 100) {
+                    lacaio.x -= velocidadeLacaio;
+                }
+
+                // Movimenta no eixo Y em direção ao jogador
+                if (lacaio.y < player.y - playerOffSet) {
+                    lacaio.y += velocidadeLacaio;
+                } else if (lacaio.y > player.y - playerOffSet) {
+                    lacaio.y -= velocidadeLacaio;
+                }
+
+                // Calcula a distância absoluta entre o lacaio e o jogador em cada eixo
+                distanciaX = fabsf((player.x - 200) - lacaio.x);
+                distanciaY = fabsf((player.y - playerOffSet) - lacaio.y);
+
+                // Verifica se o lacaio está dentro do alcance de ataque
+                if (distanciaX <= 50 && distanciaY <= 50 && timerAtaque >= intervalo) {
+                    player.vida -= 1;   // Reduz a vida do jogador
+                    timerAtaque = 0.0f; // Reinicia o tempo de recarga do ataque
+                }
+            }    
+            
+            if(player.vida <= 0){
+                player.vivo = false;
+            }
             //verifica se tá segurando algo
             if(!chavePegandoFlag && !chaveTesouroPegandoFlag && !espadaTesouroPegandoFlag && !diamanteTesouroPegandoFlag){
                 segurandoItem = false;
@@ -818,8 +859,9 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             //DrawRectangle(lacaio.x, lacaio.y, 200, 150, BLUE);
 
             char text[10];
-            sprintf(text, "X:%d Y:%d Mapa: %d", player.x, player.y, player.mapa);
+            sprintf(text, "X:%d Y:%d Mapa: %d Vidas: %d DistanciaX: %f DistanciaY %f", player.x, player.y, player.mapa, player.vida, distanciaX, distanciaY);
             DrawText(text, 20, 20, 20, WHITE);
+       
             
             // Atualiza a posição do projétil em cada frame se ele estiver ativo
             if (projetil.ativo) {
@@ -858,116 +900,117 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 }
             }
             
-            // Verifica se o personagem está no estado de "pegando" e a direção em que ele está olhando
-            if (pegando) {
-                
-                if(personagemParado && andandoDireita && !segurandoItem){   // Personagem totalmente parado
-                    Rectangle sourceRecIdle = { frameAtualIdle * larguraFrameIdle, 0, larguraFrameIdle, alturaFrameIdle};
-                    DrawTextureRec(pegandoDireitaIdle, sourceRecIdle, (Vector2){player.x, player.y - playerOffSet}, WHITE);
-                }else if(personagemParado && !segurandoItem){
-                    Rectangle sourceRecIdle = { frameAtualIdle * larguraFrameIdle, 0, larguraFrameIdle, alturaFrameIdle};
-                    DrawTextureRec(pegandoEsquerdaIdle, sourceRecIdle, (Vector2){player.x, player.y - playerOffSet}, WHITE);
-                }
-                
-                else if(chavePegandoFlag && andandoDireita) { // primeira chave
-                    if(personagemParado){
+            if(player.vivo){
+                // Verifica se o personagem está no estado de "pegando" e a direção em que ele está olhando
+                if (pegando) {
+                    
+                    if(personagemParado && andandoDireita && !segurandoItem){   // Personagem totalmente parado
                         Rectangle sourceRecIdle = { frameAtualIdle * larguraFrameIdle, 0, larguraFrameIdle, alturaFrameIdle};
-                        DrawTextureRec(pegandoChaveDireitaIdle, sourceRecIdle, (Vector2){player.x, player.y - playerOffSet}, WHITE);
-                    }else{
+                        DrawTextureRec(pegandoDireitaIdle, sourceRecIdle, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                    }else if(personagemParado && !segurandoItem){
+                        Rectangle sourceRecIdle = { frameAtualIdle * larguraFrameIdle, 0, larguraFrameIdle, alturaFrameIdle};
+                        DrawTextureRec(pegandoEsquerdaIdle, sourceRecIdle, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                    }
+                    
+                    else if(chavePegandoFlag && andandoDireita) { // primeira chave
+                        if(personagemParado){
+                            Rectangle sourceRecIdle = { frameAtualIdle * larguraFrameIdle, 0, larguraFrameIdle, alturaFrameIdle};
+                            DrawTextureRec(pegandoChaveDireitaIdle, sourceRecIdle, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                        }else{
+                            Rectangle sourceRecKey = { frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey };
+                            DrawTextureRec(pegandoChaveDireita, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                        }
+                    } else if(chavePegandoFlag) {               
+                        if(personagemParado){
+                            Rectangle sourceRecIdle = { frameAtualIdle * larguraFrameIdle, 0, larguraFrameIdle, alturaFrameIdle};
+                            DrawTextureRec(pegandoChaveEsquerdaIdle, sourceRecIdle, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                        }else{
+                            Rectangle sourceRecKey = {  frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey};
+                            DrawTextureRec(pegandoChaveEsquerda, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                        }
+                    }
+     
+                    else if(chaveTesouroPegandoFlag && andandoDireita) {    // Chave do tesouro
+                        if(personagemParado){
+                            Rectangle sourceRecIdle = { frameAtualIdle * larguraFrameIdle, 0, larguraFrameIdle, alturaFrameIdle};
+                            DrawTextureRec(pegandoChaveTesouroDireitaIdle, sourceRecIdle, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                        }else{
+                            Rectangle sourceRecKey = { frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey };
+                            DrawTextureRec(pegandoChaveTesouroDireita, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                        }
+                    } else if(chaveTesouroPegandoFlag) {
+                        if(personagemParado){
+                            Rectangle sourceRecIdle = { frameAtualIdle * larguraFrameIdle, 0, larguraFrameIdle, alturaFrameIdle};
+                            DrawTextureRec(pegandoChaveTesouroEsquerdaIdle, sourceRecIdle, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                        }else{
+                            Rectangle sourceRecKey = { frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey };
+                            DrawTextureRec(pegandoChaveTesouroEsquerda, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                        }
+                    }
+                    
+                    else if(espadaTesouroPegandoFlag && andandoDireita) {  // Espada
+                        if(personagemParado){
+                            Rectangle sourceRecIdle = { frameAtualIdle * larguraFrameIdle, 0, larguraFrameIdle, alturaFrameIdle};
+                            DrawTextureRec(pegandoEspadaDireitaIdle, sourceRecIdle, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                        }else{
+                            Rectangle sourceRecKey = { frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey };
+                            DrawTextureRec(pegandoEspadaDireita, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                        }
+                    } else if(espadaTesouroPegandoFlag) {
+                         if(personagemParado){
+                            Rectangle sourceRecIdle = { frameAtualIdle * larguraFrameIdle, 0, larguraFrameIdle, alturaFrameIdle};
+                            DrawTextureRec(pegandoEspadaEsquerdaIdle, sourceRecIdle, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                        }else{
+                            Rectangle sourceRecKey = { frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey };
+                            DrawTextureRec(pegandoEspadaEsquerda, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                        }
+                    } 
+                    
+                    else if(diamanteTesouroPegandoFlag && andandoDireita) { 
+                        if(personagemParado){
+                            Rectangle sourceRecIdle = { frameAtualIdle * larguraFrameIdle, 0, larguraFrameIdle, alturaFrameIdle};
+                            DrawTextureRec(pegandoDiamanteDireitaIdle, sourceRecIdle, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                        }else{
+                            Rectangle sourceRecKey = { frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey };
+                            DrawTextureRec(pegandoDiamanteDireita, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);  //Diamante tesouro
+                        }
+                    } else if(diamanteTesouroPegandoFlag) {
+                        if(personagemParado){
+                            Rectangle sourceRecIdle = { frameAtualIdle * larguraFrameIdle, 0, larguraFrameIdle, alturaFrameIdle};
+                            DrawTextureRec(pegandoDiamanteEsquerdaIdle, sourceRecIdle, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                        }else{
+                            Rectangle sourceRecKey = { frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey };
+                            DrawTextureRec(pegandoDiamanteEsquerda, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE); 
+                        }
+                    }
+                    
+                    else if (andandoDireita) {  // Andando e pegando normal 
                         Rectangle sourceRecKey = { frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey };
-                        DrawTextureRec(pegandoChaveDireita, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);
-                    }
-                } else if(chavePegandoFlag) {               
-                    if(personagemParado){
-                        Rectangle sourceRecIdle = { frameAtualIdle * larguraFrameIdle, 0, larguraFrameIdle, alturaFrameIdle};
-                        DrawTextureRec(pegandoChaveEsquerdaIdle, sourceRecIdle, (Vector2){player.x, player.y - playerOffSet}, WHITE);
-                    }else{
-                        Rectangle sourceRecKey = {  frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey};
-                        DrawTextureRec(pegandoChaveEsquerda, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);
-                    }
-                }
- 
-                else if(chaveTesouroPegandoFlag && andandoDireita) {    // Chave do tesouro
-                    if(personagemParado){
-                        Rectangle sourceRecIdle = { frameAtualIdle * larguraFrameIdle, 0, larguraFrameIdle, alturaFrameIdle};
-                        DrawTextureRec(pegandoChaveTesouroDireitaIdle, sourceRecIdle, (Vector2){player.x, player.y - playerOffSet}, WHITE);
-                    }else{
+                        DrawTextureRec(personagemPegando, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE); 
+                    } else {
                         Rectangle sourceRecKey = { frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey };
-                        DrawTextureRec(pegandoChaveTesouroDireita, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                        DrawTextureRec(personagemPegandoEsquerda, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE); 
                     }
-                } else if(chaveTesouroPegandoFlag) {
-                    if(personagemParado){
-                        Rectangle sourceRecIdle = { frameAtualIdle * larguraFrameIdle, 0, larguraFrameIdle, alturaFrameIdle};
-                        DrawTextureRec(pegandoChaveTesouroEsquerdaIdle, sourceRecIdle, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                    
+                    
+                } else if(!personagemParado) {  //Personagem andando normal
+                    if (andandoDireita) {
+                        Rectangle sourceRecWalk = { frameAtualWalk * larguraFrameWalk, 0, larguraFrameWalk, alturaFrameWalk };
+                        DrawTextureRec(spriteWalkRight, sourceRecWalk, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                    } else {
+                        Rectangle sourceRecWalk = { frameAtualWalk * larguraFrameWalk, 0, larguraFrameWalk, alturaFrameWalk };
+                        DrawTextureRec(spriteWalkLeft, sourceRecWalk, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                    }
+                } else {                        // Personagem parado 
+                    if(andandoDireita){         
+                        Rectangle sourceRec = { frameAtual * larguraFrame, 0, larguraFrame, alturaFrame };
+                        DrawTextureRec(spritesheetRight, sourceRec, (Vector2){player.x, player.y-playerOffSet}, WHITE);
                     }else{
-                        Rectangle sourceRecKey = { frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey };
-                        DrawTextureRec(pegandoChaveTesouroEsquerda, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);
-                    }
-                }
-                
-                else if(espadaTesouroPegandoFlag && andandoDireita) {  // Espada
-                    if(personagemParado){
-                        Rectangle sourceRecIdle = { frameAtualIdle * larguraFrameIdle, 0, larguraFrameIdle, alturaFrameIdle};
-                        DrawTextureRec(pegandoEspadaDireitaIdle, sourceRecIdle, (Vector2){player.x, player.y - playerOffSet}, WHITE);
-                    }else{
-                        Rectangle sourceRecKey = { frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey };
-                        DrawTextureRec(pegandoEspadaDireita, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);
-                    }
-                } else if(espadaTesouroPegandoFlag) {
-                     if(personagemParado){
-                        Rectangle sourceRecIdle = { frameAtualIdle * larguraFrameIdle, 0, larguraFrameIdle, alturaFrameIdle};
-                        DrawTextureRec(pegandoEspadaEsquerdaIdle, sourceRecIdle, (Vector2){player.x, player.y - playerOffSet}, WHITE);
-                    }else{
-                        Rectangle sourceRecKey = { frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey };
-                        DrawTextureRec(pegandoEspadaEsquerda, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);
-                    }
-                } 
-                
-                else if(diamanteTesouroPegandoFlag && andandoDireita) { 
-                    if(personagemParado){
-                        Rectangle sourceRecIdle = { frameAtualIdle * larguraFrameIdle, 0, larguraFrameIdle, alturaFrameIdle};
-                        DrawTextureRec(pegandoDiamanteDireitaIdle, sourceRecIdle, (Vector2){player.x, player.y - playerOffSet}, WHITE);
-                    }else{
-                        Rectangle sourceRecKey = { frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey };
-                        DrawTextureRec(pegandoDiamanteDireita, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);  //Diamante tesouro
-                    }
-                } else if(diamanteTesouroPegandoFlag) {
-                    if(personagemParado){
-                        Rectangle sourceRecIdle = { frameAtualIdle * larguraFrameIdle, 0, larguraFrameIdle, alturaFrameIdle};
-                        DrawTextureRec(pegandoDiamanteEsquerdaIdle, sourceRecIdle, (Vector2){player.x, player.y - playerOffSet}, WHITE);
-                    }else{
-                        Rectangle sourceRecKey = { frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey };
-                        DrawTextureRec(pegandoDiamanteEsquerda, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE); 
-                    }
-                }
-                
-                else if (andandoDireita) {  // Andando e pegando normal 
-                    Rectangle sourceRecKey = { frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey };
-                    DrawTextureRec(personagemPegando, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE); 
-                } else {
-                    Rectangle sourceRecKey = { frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey };
-                    DrawTextureRec(personagemPegandoEsquerda, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE); 
-                }
-                
-                
-            } else if(!personagemParado) {  //Personagem andando normal
-                if (andandoDireita) {
-                    Rectangle sourceRecWalk = { frameAtualWalk * larguraFrameWalk, 0, larguraFrameWalk, alturaFrameWalk };
-                    DrawTextureRec(spriteWalkRight, sourceRecWalk, (Vector2){player.x, player.y - playerOffSet}, WHITE);
-                } else {
-                    Rectangle sourceRecWalk = { frameAtualWalk * larguraFrameWalk, 0, larguraFrameWalk, alturaFrameWalk };
-                    DrawTextureRec(spriteWalkLeft, sourceRecWalk, (Vector2){player.x, player.y - playerOffSet}, WHITE);
-                }
-            } else {                        // Personagem parado 
-                if(andandoDireita){         
                     Rectangle sourceRec = { frameAtual * larguraFrame, 0, larguraFrame, alturaFrame };
-                    DrawTextureRec(spritesheetRight, sourceRec, (Vector2){player.x, player.y-playerOffSet}, WHITE);
-                }else{
-                Rectangle sourceRec = { frameAtual * larguraFrame, 0, larguraFrame, alturaFrame };
-                DrawTextureRec(spritesheet, sourceRec, (Vector2){player.x, player.y-playerOffSet}, WHITE);
+                    DrawTextureRec(spritesheet, sourceRec, (Vector2){player.x, player.y-playerOffSet}, WHITE);
+                    }
                 }
-            }
-                          
+            }    
             EndDrawing();
         }
                 
