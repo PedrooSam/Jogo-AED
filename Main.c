@@ -272,7 +272,7 @@ bool puzzleOrdenar(Texture2D puzzle1) {
 }
 
 // Função principal do jogo
-void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture2D personagemEsquerda, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D personagemPegandoChaveEsquerda, Texture2D personagemPegandoChaveDireita, Texture2D mapa1, Texture2D mapa2, Texture2D arena, Texture2D mensagem1, Texture2D menuBack, Texture2D espadaTesouro, Texture2D chaveTesouro, Texture2D bau, Texture2D bauPreenchido, Texture2D botao1Off, Texture2D botao1On, Texture2D botao2Off, Texture2D botao2On, Texture2D pegandoChaveTesouroDireita, Texture2D pegandoChaveTesouroEsquerda, Texture2D pegandoEspadaEsquerda, Texture2D pegandoEspadaDireita, Texture2D bauPreenchido2, Texture2D diamante, Texture2D pegandoDiamanteEsquerda,Texture2D  pegandoDiamanteDireita, Texture2D bauPreenchido3, Texture2D puzzle1, Texture2D spritesheet, Texture2D spritesheetRight, Texture2D spriteWalkLeft, Texture2D spriteWalkRight) {
+void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D personagemPegandoChaveEsquerda, Texture2D personagemPegandoChaveDireita, Texture2D mapa1, Texture2D mapa2, Texture2D arena, Texture2D mensagem1, Texture2D menuBack, Texture2D espadaTesouro, Texture2D chaveTesouro, Texture2D bau, Texture2D bauPreenchido, Texture2D botao1Off, Texture2D botao1On, Texture2D botao2Off, Texture2D botao2On, Texture2D pegandoChaveTesouroDireita, Texture2D pegandoChaveTesouroEsquerda, Texture2D pegandoEspadaEsquerda, Texture2D pegandoEspadaDireita, Texture2D bauPreenchido2, Texture2D diamante, Texture2D pegandoDiamanteEsquerda,Texture2D  pegandoDiamanteDireita, Texture2D bauPreenchido3, Texture2D puzzle1, Texture2D spritesheet, Texture2D spritesheetRight, Texture2D spriteWalkLeft, Texture2D spriteWalkRight,Texture2D pegandoEsquerdaIdle, Texture2D pegandoDireitaIdle) {
     
     bool andandoDireita = true; // Direção inicial
     bool chavePegandoFlag = false;
@@ -340,6 +340,14 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
     float timerKey = 0.0f;
     int larguraFrameKey = personagemPegandoChaveDireita.width / totalFramesKey;
     int alturaFrameKey = personagemPegandoChaveDireita.height;
+    
+    //animação pegando idle {Também conta pra boa parte das animações};
+    int totalFramesIdle = 4;
+    int frameAtualIdle = 0;
+    float tempoFrameIdle = 0.15f;
+    float timerIdle = 0.0f;
+    int larguraFrameIdle = pegandoDireitaIdle.width / totalFramesIdle;
+    int alturaFrameIdle = pegandoDireitaIdle.height;
     
     //animação andando
     while (!WindowShouldClose()) {
@@ -422,7 +430,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                 }
             }
             
-            //Atualização da animação pegando chave primaria andando
+            //Atualização da animação pegando andando
             if (!personagemParado) {  // Personagem andando
                 timerKey += GetFrameTime();
                 
@@ -431,6 +439,18 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                     frameAtualKey++;
                     
                     if (frameAtualKey >= totalFramesKey) frameAtualKey = 0;
+                }
+            }
+            
+            //Atualização da animação pegando parado
+            if (personagemParado) {  // Personagem andando
+                timerIdle += GetFrameTime();
+                
+                if (timerIdle >= tempoFrameIdle) {
+                    timerIdle = 0.0f;
+                    frameAtualIdle++;
+                    
+                    if (frameAtualIdle >= totalFramesIdle) frameAtualIdle = 0;
                 }
             }
             
@@ -484,10 +504,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
             
             Rectangle botao1Collision = {140,350,50,50};
             //Rectangle botao2Collision = {360,350,50,50};
-            
-            
-            
-            
+
             if(player.mapa == 0) {
                 if(chaveSpawn && pegando && CollisionObject(playerCollision, chaveCollision)) chavePegandoFlag = true;
                
@@ -601,7 +618,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                 // Espada
                 
                 if(!espadaTesouroNoBau){
-                    if(CollisionObject(playerCollision, espadaTesouroCollision) && !espadaTesouroPegandoFlag && pegando && !espadaTesouroNoBau && chaveTesouroNoBau){  //Verifica se pode pegar
+                    if(CollisionObject(playerCollision, espadaTesouroCollision) && !espadaTesouroPegandoFlag && pegando && !espadaTesouroNoBau && chaveTesouroNoBau && puzzle1Resolvido){  //Verifica se pode pegar
                         espadaTesouroPegandoFlag = true;
                         espadaTesouroSpawn = false;
                     }
@@ -620,7 +637,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                 //Diamante 
                 
                 if(!diamanteTesouroNoBau && espadaTesouroNoBau){
-                    if(CollisionObject(playerCollision, diamanteTesouroCollision) && !diamanteTesouroPegandoFlag && pegando && !diamanteTesouroNoBau && espadaTesouroNoBau){  //Verifica se pode pegar
+                    if(CollisionObject(playerCollision, diamanteTesouroCollision) && !diamanteTesouroPegandoFlag && pegando && !diamanteTesouroNoBau && espadaTesouroNoBau && puzzle2Resolvido){  //Verifica se pode pegar
                         diamanteTesouroPegandoFlag = true;
                         diamanteTesouroSpawn = false;
                     }
@@ -703,7 +720,17 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
 
             // Verifica se o personagem está no estado de "pegando" e a direção em que ele está olhando
             if (pegando) {
-                if(chavePegandoFlag && andandoDireita) { // primeira chave
+                
+                if(personagemParado && andandoDireita){
+                    
+                    Rectangle sourceRecIdle = { frameAtualIdle * larguraFrameIdle, 0, larguraFrameIdle, alturaFrameIdle};
+                    DrawTextureRec(pegandoDireitaIdle, sourceRecIdle, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                }else if(personagemParado){
+                    Rectangle sourceRecIdle = { frameAtualIdle * larguraFrameIdle, 0, larguraFrameIdle, alturaFrameIdle};
+                    DrawTextureRec(pegandoEsquerdaIdle, sourceRecIdle, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                }
+                
+                else if(chavePegandoFlag && andandoDireita) { // primeira chave
                     Rectangle sourceRecKey = { frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey };
                     DrawTextureRec(personagemPegandoChaveDireita, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);
                 } else if(chavePegandoFlag) {
@@ -792,10 +819,7 @@ int main(void) {
     SetTargetFPS(60);
     
     Texture2D backgroundImage = LoadTexture("cenario/background.png");
-    
-    Texture2D personagemDireita = LoadTexture("Imagens/personagemDireita.png");
-    Texture2D personagemEsquerda = LoadTexture("Imagens/personagemEsquerda.png");
-    
+
     Texture2D personagemPegando = LoadTexture("Imagens/personagemPegando.png");
     Texture2D personagemPegandoEsquerda = LoadTexture("Imagens/personagemPegandoEsquerda.png");
     
@@ -843,54 +867,14 @@ int main(void) {
     
     Texture2D spriteWalkLeft = LoadTexture("Imagens/spriteWalkLeft.png");
     Texture2D spriteWalkRight = LoadTexture("Imagens/spriteWalkRight.png");
+    
+    Texture2D pegandoEsquerdaIdle = LoadTexture("Imagens/personagemPegandoIdleEsquerda.png");
+    Texture2D pegandoDireitaIdle = LoadTexture("Imagens/personagemPegandoIdleDireita.png");
+    
+    
+    
     menu();
-    iniciarJogo(backgroundImage, personagemDireita, personagemEsquerda, personagemPegando, personagemPegandoEsquerda, chaveCenario, personagemPegandoChaveEsquerda, personagemPegandoChaveDireita, mapa1, mapa2, arena, mensagem1, menuBack, espadaTesouro, chaveTesouro , bau, bauPreenchido, botao1Off, botao1On, botao2Off, botao2On, pegandoChaveTesouroDireita, pegandoChaveTesouroEsquerda, pegandoEspadaEsquerda, pegandoEspadaDireita, bauPreenchido2, diamante, pegandoDiamanteEsquerda, pegandoDiamanteDireita, bauPreenchido3, puzzle1, spritesheet, spritesheetRight, spriteWalkLeft, spriteWalkRight );
-    
-    UnloadTexture(backgroundImage);
-    
-    UnloadTexture(personagemDireita);
-    UnloadTexture(personagemEsquerda);
-    
-    UnloadTexture(personagemPegando);
-    UnloadTexture(personagemPegandoEsquerda);
-    
-    UnloadTexture(chaveCenario);
-    
-    UnloadTexture(personagemPegandoChaveDireita);
-    UnloadTexture(personagemPegandoChaveEsquerda);
-    
-    UnloadTexture(mapa1);
-    UnloadTexture(mapa2);
-    
-    UnloadTexture(arena);
-    
-    UnloadTexture(mensagem1);
-    
-    UnloadTexture(menuBack);
-    
-    UnloadTexture(espadaTesouro);
-    UnloadTexture(chaveTesouro);
-    UnloadTexture(bau);
-    UnloadTexture(bauPreenchido);
-    
-    UnloadTexture(botao1Off);
-    UnloadTexture(botao1On);
-    UnloadTexture(botao2Off);
-    UnloadTexture(botao2On);
-
-    UnloadTexture(pegandoChaveTesouroEsquerda);
-    UnloadTexture(pegandoChaveTesouroDireita);
-    
-    UnloadTexture(pegandoEspadaEsquerda);
-    UnloadTexture(pegandoEspadaDireita);
-    UnloadTexture(bauPreenchido2);
-    UnloadTexture(diamante);
-    
-    UnloadTexture(pegandoDiamanteDireita);
-    UnloadTexture(pegandoChaveTesouroEsquerda);
-    UnloadTexture(bauPreenchido3);
-    
-    UnloadTexture(puzzle1);
+    iniciarJogo(backgroundImage, personagemPegando, personagemPegandoEsquerda, chaveCenario, personagemPegandoChaveEsquerda, personagemPegandoChaveDireita, mapa1, mapa2, arena, mensagem1, menuBack, espadaTesouro, chaveTesouro , bau, bauPreenchido, botao1Off, botao1On, botao2Off, botao2On, pegandoChaveTesouroDireita, pegandoChaveTesouroEsquerda, pegandoEspadaEsquerda, pegandoEspadaDireita, bauPreenchido2, diamante, pegandoDiamanteEsquerda, pegandoDiamanteDireita, bauPreenchido3, puzzle1, spritesheet, spritesheetRight, spriteWalkLeft, spriteWalkRight, pegandoEsquerdaIdle, pegandoDireitaIdle);
     
     CloseWindow();
     return 0;
