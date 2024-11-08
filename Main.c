@@ -346,8 +346,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     
     //segurando item
     bool segurandoItem = false;
-    
-    //animação andando
+
     while (!WindowShouldClose()) {
         if (IsKeyPressed(KEY_P)) {
             pausa = !pausa;
@@ -377,7 +376,32 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 
             
             // Movimento do jogador
-            if (IsKeyDown(KEY_UP)) {
+            
+            if(IsKeyDown(KEY_UP) && IsKeyDown(KEY_RIGHT)){ // Diagonal direita
+                player.y -= velocidade;
+                player.x += velocidade;
+                personagemParado = false;
+                andandoDireita = true;
+            }
+            else if(IsKeyDown(KEY_UP) && IsKeyDown(KEY_LEFT)){ // Diagonal esquerda
+                player.y -= velocidade;
+                player.x -= velocidade;
+                personagemParado = false;
+                andandoDireita = false;
+            }
+            else if(IsKeyDown(KEY_DOWN) && IsKeyDown(KEY_RIGHT)){ // Diagonal pra baixo direita
+                player.y += velocidade;
+                player.x += velocidade;
+                personagemParado = false;
+                andandoDireita = true;
+            }
+            else if(IsKeyDown(KEY_DOWN) && IsKeyDown(KEY_LEFT)){ // Diagonal pra baixo esquerda
+                player.y += velocidade;
+                player.x -= velocidade;
+                personagemParado = false;
+                andandoDireita = false;
+            }
+            else if (IsKeyDown(KEY_UP)) {
                 player.y -= velocidade;
                 personagemParado = false;
             }
