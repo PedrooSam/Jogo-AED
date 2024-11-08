@@ -50,6 +50,10 @@ float distanciaY = 0;
 float intervalo = 200.0f;
 float timerAtaque = 0.0f;
 
+//Cooldown do tiro 
+float intervaloTiro = 25.0f;
+float timerTiro = 0.0f;
+
 // Chave
 Objeto chave;
 bool chaveSpawn = true;
@@ -335,7 +339,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     player.y = 200;
     player.mapa = 0;
     player.vivo = true;
-    player.vida = 3;
+    player.vida = 5;
     
     //posição lacaio
     lacaio.x = 300;
@@ -414,8 +418,9 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 if (IsKeyPressed(KEY_P)) {
                 pausa = !pausa;
             }
-        
-            if (IsKeyPressed(KEY_Q) && !projetil.ativo && personagemParado && !segurandoItem) {       // Só pode atirar quando tiver parado 
+            
+            timerTiro += 1;
+            if (IsKeyPressed(KEY_SPACE) && !projetil.ativo && personagemParado && !segurandoItem && timerTiro >= intervaloTiro) {       // Só pode atirar quando tiver parado 
                 projetil.ativo = true;
                 atirou = true;
                 projetil.posicao = (Vector2){ player.x, player.y - playerOffSet + 60 };
@@ -434,44 +439,44 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             }   
             
             // Movimento do jogador            
-            if(IsKeyDown(KEY_UP) && IsKeyDown(KEY_RIGHT)){ // Diagonal direita
+            if(IsKeyDown(KEY_W) && IsKeyDown(KEY_D)){ // Diagonal direita
                 player.y -= velocidade;
                 player.x += velocidade;
                 personagemParado = false;
                 andandoDireita = true;
             }
-            else if(IsKeyDown(KEY_UP) && IsKeyDown(KEY_LEFT)){ // Diagonal esquerda
+            else if(IsKeyDown(KEY_W) && IsKeyDown(KEY_A)){ // Diagonal esquerda
                 player.y -= velocidade;
                 player.x -= velocidade;
                 personagemParado = false;
                 andandoDireita = false;
             }
-            else if(IsKeyDown(KEY_DOWN) && IsKeyDown(KEY_RIGHT)){ // Diagonal pra baixo direita
+            else if(IsKeyDown(KEY_S) && IsKeyDown(KEY_D)){ // Diagonal pra baixo direita
                 player.y += velocidade;
                 player.x += velocidade;
                 personagemParado = false;
                 andandoDireita = true;
             }
-            else if(IsKeyDown(KEY_DOWN) && IsKeyDown(KEY_LEFT)){ // Diagonal pra baixo esquerda
+            else if(IsKeyDown(KEY_S) && IsKeyDown(KEY_A)){ // Diagonal pra baixo esquerda
                 player.y += velocidade;
                 player.x -= velocidade;
                 personagemParado = false;
                 andandoDireita = false;
             }
-            else if (IsKeyDown(KEY_UP)) {
+            else if (IsKeyDown(KEY_W)) {
                 player.y -= velocidade;
                 personagemParado = false;
             }
-            else if (IsKeyDown(KEY_DOWN)) {
+            else if (IsKeyDown(KEY_S)) {
                 player.y += velocidade;
                 personagemParado = false;
             }
-            else if (IsKeyDown(KEY_RIGHT)) {
+            else if (IsKeyDown(KEY_D)) {
                 player.x += velocidade;
                 andandoDireita = true; // Personagem está indo para a direita
                 personagemParado = false;
             }
-            else if (IsKeyDown(KEY_LEFT)) {
+            else if (IsKeyDown(KEY_A)) {
                 player.x -= velocidade;
                 andandoDireita = false; // Personagem está indo para a esquerda
                 personagemParado = false;
@@ -479,12 +484,10 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 personagemParado = true;
             }
             
-                        
-            
+            // Movimento do lacaio
             float velocidadeLacaio = 150.0f * GetFrameTime();
             // Atualize o timer do ataque
             timerAtaque += 1;
-            // Movimento do lacaio
             if (lacaio.vivo && lacaio.mapa == player.mapa) {
                 // Movimenta no eixo X em direção ao jogador
                 if (lacaio.x < player.x -200) {
