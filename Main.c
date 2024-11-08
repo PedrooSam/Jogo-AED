@@ -30,6 +30,9 @@ bool pegando = false; // Variável para verificar se o personagem está pegando 
 Objeto chave;
 bool chaveSpawn = true;
 
+// Puzzle
+bool puzzle1Resolvido = false;
+bool puzzle2Resolvido = false;
 
 //Colisão Universal, 
 bool CollisionObject(Rectangle playerCollision, Rectangle objeto) {
@@ -250,6 +253,7 @@ bool puzzleOrdenar(Texture2D puzzle1) {
             DrawText("PARABENS! Puzzle concluido!",400, 310, 30, GREEN);
             DrawText("Agora, aperte ENTER para sair!",450, 350, 20, WHITE);
             EndDrawing();
+            puzzle1Resolvido = true;
         }
         return resultado;
         
@@ -285,9 +289,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
     bool diamanteTesouroPegandoFlag = false;
     bool diamanteTesouroSpawn = true;
     bool diamanteTesouroNoBau = false;
-    
-    bool puzzle1Resolvido = false;
-    //bool puzzle2Resolvido = false;
+
     bool botao1Pressionado = false;
     //bool botao2Pressionado = false;
     
@@ -307,7 +309,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
     //posição jogador
     player.x = 800;
     player.y = 200;
-    player.mapa = 0;
+    player.mapa = -1;
     
     //posição de chave
     chave.x = 500;
@@ -331,7 +333,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
     int larguraFrameWalk = spriteWalkLeft.width / totalFramesWalk;
     int alturaFrameWalk = spriteWalkLeft.height;
     
-    //animação pegando chave primária
+    //animação pegando chave primária {Conta pra maioria das animações};
     int totalFramesKey = 5;
     int frameAtualKey = 0;
     float tempoFrameKey = 0.1f;
@@ -611,7 +613,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                         pegando = false;
                     }
                     
-                    if(espadaTesouroSpawn && !espadaTesouroPegandoFlag && chaveTesouroNoBau){                                                   // Verifica se pode desenhar a espada
+                    if(espadaTesouroSpawn && !espadaTesouroPegandoFlag && chaveTesouroNoBau && puzzle1Resolvido){                                                   // Verifica se pode desenhar a espada
                         DrawTexture(espadaTesouro, 200, 200,WHITE);
                     }
                 }
@@ -630,7 +632,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                         pegando = false;
                     }
                     
-                    if(diamanteTesouroSpawn && !diamanteTesouroPegandoFlag && espadaTesouroNoBau){                                                   // Verifica se pode desenhar o diamante
+                    if(diamanteTesouroSpawn && !diamanteTesouroPegandoFlag && espadaTesouroNoBau && puzzle2Resolvido){                             // Verifica se pode desenhar o diamante
                         DrawTextureEx(diamante, (Vector2){300, 400},0.0f, 3.0f,WHITE);
                     }
                 }
@@ -651,7 +653,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                 }
                 
                 // Botao 1 vermelho
-                if(diamanteTesouroNoBau){
+                if(chaveTesouroNoBau){
                     if (CheckCollisionPointRec(GetMousePosition(), botao1Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                                 botao1Pressionado = !botao1Pressionado;
                     }
@@ -667,7 +669,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                         
                 //botao 2 verde
                 
-                if(puzzle1Resolvido){
+                if(espadaTesouroNoBau){
                    DrawTextureEx(botao2Off, (Vector2){200, 350}, 0.0f,4.0f, WHITE);
                 }
                              
@@ -710,23 +712,35 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                 }
  
                 else if(chaveTesouroPegandoFlag && andandoDireita) {
-                    DrawTextureEx(pegandoChaveTesouroDireita, (Vector2){player.x, player.y-playerOffSet}, 0.0f, scale, WHITE);  //Chave tesouro
+                    Rectangle sourceRecKey = { frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey };
+                    DrawTextureRec(pegandoChaveTesouroDireita, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);
                 } else if(chaveTesouroPegandoFlag) {
-                    DrawTextureEx(pegandoChaveTesouroEsquerda, (Vector2){player.x, player.y-playerOffSet}, 0.0f, scale, WHITE); 
+                    Rectangle sourceRecKey = { frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey };
+                    DrawTextureRec(pegandoChaveTesouroEsquerda, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);
                 }
+                
                 else if(espadaTesouroPegandoFlag && andandoDireita) {
-                    DrawTextureEx(pegandoEspadaDireita, (Vector2){player.x, player.y-playerOffSet}, 0.0f, scale, WHITE);  //Espada tesouro
+                    Rectangle sourceRecKey = { frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey };
+                    DrawTextureRec(pegandoEspadaDireita, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);
                 } else if(espadaTesouroPegandoFlag) {
-                    DrawTextureEx(pegandoEspadaEsquerda, (Vector2){player.x, player.y-playerOffSet}, 0.0f, scale, WHITE); 
+                    Rectangle sourceRecKey = { frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey };
+                    DrawTextureRec(pegandoEspadaEsquerda, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);
                 } 
+                
                 else if(diamanteTesouroPegandoFlag && andandoDireita) {
-                    DrawTextureEx(pegandoDiamanteDireita, (Vector2){player.x, player.y-playerOffSet}, 0.0f, scale, WHITE);  //Diamante tesouro
+                    Rectangle sourceRecKey = { frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey };
+                    DrawTextureRec(pegandoDiamanteDireita, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);  //Diamante tesouro
                 } else if(diamanteTesouroPegandoFlag) {
-                    DrawTextureEx(pegandoDiamanteEsquerda, (Vector2){player.x, player.y-playerOffSet}, 0.0f, scale, WHITE); 
-                } else if (andandoDireita) {
-                    DrawTextureEx(personagemPegando, (Vector2){player.x, player.y-playerOffSet}, 0.0f, scale, WHITE); 
+                    Rectangle sourceRecKey = { frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey };
+                    DrawTextureRec(pegandoDiamanteEsquerda, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE); 
+                }
+                
+                else if (andandoDireita) {
+                    Rectangle sourceRecKey = { frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey };
+                    DrawTextureRec(personagemPegando, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE); 
                 } else {
-                    DrawTextureEx(personagemPegandoEsquerda, (Vector2){player.x, player.y-playerOffSet}, 0.0f, scale, WHITE);
+                    Rectangle sourceRecKey = { frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey };
+                    DrawTextureRec(personagemPegandoEsquerda, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE); 
                 }
                 
                 
