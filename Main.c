@@ -304,7 +304,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     //posição jogador
     player.x = 800;
     player.y = 200;
-    player.mapa = -1;
+    player.mapa = 0;
     
     //posição de chave
     chave.x = 500;
