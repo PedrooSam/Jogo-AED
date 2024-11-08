@@ -335,14 +335,14 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     player.y = 200;
     player.mapa = 0;
     player.vivo = true;
-    player.vida = 1;
+    player.vida = 3;
     
     //posição lacaio
     lacaio.x = 300;
     lacaio.y = 400;
     lacaio.mapa = -1;
     lacaio.vivo = true;
-    lacaio.vida = 5;
+    lacaio.vida = 10;
     
     //posição de chave
     chave.x = 500;
@@ -497,7 +497,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 distanciaY = fabsf((player.y - playerOffSet) - lacaio.y);
 
                 // Verifica se o lacaio está dentro do alcance de ataque
-                if (distanciaX <= 50 && distanciaY <= 50 && timerAtaque >= intervalo) {
+                if (distanciaX <= 100 && distanciaY <= 50 && timerAtaque >= intervalo) {
                     player.vida -= 1;   // Reduz a vida do jogador
                     timerAtaque = 0.0f; // Reinicia o tempo de recarga do ataque
                 }
