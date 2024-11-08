@@ -13,6 +13,8 @@ typedef struct {
     int x;
     int y; 
     int mapa;
+    bool vivo;
+    int vida;
 } Objeto;
 // Variáveis globais
 
@@ -322,12 +324,16 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     //posição jogador
     player.x = 800;
     player.y = 200;
-    player.mapa = 0;
+    player.mapa = -1;
+    player.vivo = true;
+    player.vida = 2;
     
     //posição lacaio
     lacaio.x = 300;
     lacaio.y = 400;
     lacaio.mapa = -1;
+    lacaio.vivo = true;
+    lacaio.vida = 5;
     
     //posição de chave
     chave.x = 500;
@@ -573,6 +579,8 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             Rectangle botao1Collision = {140,350,50,50};
             //Rectangle botao2Collision = {360,350,50,50};
             
+            Rectangle lacaioCollision = {lacaio.x, lacaio.y, 200, 150};
+            
             //Verifica as colisões 
             if(player.mapa == 0) {
                 if(chaveSpawn && pegando && CollisionObject(playerCollision, chaveCollision)) chavePegandoFlag = true;
@@ -776,8 +784,10 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     diamanteTesouroSpawn = true;
                 }
             
-            //DrawRectangle(botao1Collision.x, botao1Collision.y, botao1Collision.width, botao1Collision.height, BLUE);
-            if(lacaio.mapa == player.mapa){
+                
+            //DrawRectangle(lacaio.x, lacaio.y, 200, 150, BLUE);
+            
+            if(lacaio.mapa == player.mapa && lacaio.vivo){
                 if(lacaioParado){
                 Rectangle sourceReclacaioIdle = { frameAtuallacaioIdle * larguraFramelacaioIdle, 0, larguraFramelacaioIdle, alturaFramelacaioIdle};
                 DrawTextureRec(lacaioIdleDireita, sourceReclacaioIdle, (Vector2){lacaio.x, lacaio.y}, WHITE);
@@ -798,7 +808,16 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     projetil.posicao.y > GetScreenHeight() || projetil.posicao.y < 0) {
                     projetil.ativo = false;
                 }
-
+                
+                if ((projetil.posicao.x > lacaio.x && projetil.posicao.x < lacaio.x + 200) && (projetil.posicao.y > lacaio.y && projetil.posicao.y < lacaio.y + 150) && lacaio.vivo) {
+                    projetil.ativo = false;
+                    lacaio.vida -= 1;
+                    
+                        if(lacaio.vida == 0){
+                            lacaio.vivo = false;
+                        }
+                }
+                
                 // Desenhe o projétil na posição atual
                 DrawTextureEx(bala, projetil.posicao, 0.0f, 0.5f, WHITE);  
             }
