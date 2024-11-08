@@ -21,7 +21,7 @@ typedef struct {
     // Jogador
 Objeto player;
 int playerOffSet = 140; //hitbox do boneco
-int velocidade = 10; //velocidade do boneco
+int velocidade = 7; //velocidade do boneco
 float scale = 3.5f; // Fator de escala para o personagem
 bool pausa = false; //variavel que verifica se o jogo esta ou nao pausado
 bool pegando = false; // Variável para verificar se o personagem está pegando algo
@@ -268,7 +268,7 @@ bool puzzleOrdenar(Texture2D puzzle1) {
 }
 
 // Função principal do jogo
-void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture2D personagemEsquerda, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D personagemPegandoChaveEsquerda, Texture2D personagemPegandoChaveDireita, Texture2D mapa1, Texture2D mapa2, Texture2D arena, Texture2D mensagem1, Texture2D menuBack, Texture2D espadaTesouro, Texture2D chaveTesouro, Texture2D bau, Texture2D bauPreenchido, Texture2D botao1Off, Texture2D botao1On, Texture2D botao2Off, Texture2D botao2On, Texture2D pegandoChaveTesouroDireita, Texture2D pegandoChaveTesouroEsquerda, Texture2D pegandoEspadaEsquerda, Texture2D pegandoEspadaDireita, Texture2D bauPreenchido2, Texture2D diamante, Texture2D pegandoDiamanteEsquerda,Texture2D  pegandoDiamanteDireita, Texture2D bauPreenchido3, Texture2D puzzle1, Texture2D spritesheet, Texture2D spritesheetRight) {
+void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture2D personagemEsquerda, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D personagemPegandoChaveEsquerda, Texture2D personagemPegandoChaveDireita, Texture2D mapa1, Texture2D mapa2, Texture2D arena, Texture2D mensagem1, Texture2D menuBack, Texture2D espadaTesouro, Texture2D chaveTesouro, Texture2D bau, Texture2D bauPreenchido, Texture2D botao1Off, Texture2D botao1On, Texture2D botao2Off, Texture2D botao2On, Texture2D pegandoChaveTesouroDireita, Texture2D pegandoChaveTesouroEsquerda, Texture2D pegandoEspadaEsquerda, Texture2D pegandoEspadaDireita, Texture2D bauPreenchido2, Texture2D diamante, Texture2D pegandoDiamanteEsquerda,Texture2D  pegandoDiamanteDireita, Texture2D bauPreenchido3, Texture2D puzzle1, Texture2D spritesheet, Texture2D spritesheetRight, Texture2D spriteWalkLeft, Texture2D spriteWalkRight) {
     
     bool andandoDireita = true; // Direção inicial
     bool chavePegandoFlag = false;
@@ -322,6 +322,14 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
     int larguraFrame = spritesheet.width / totalFrames;
     int alturaFrame = spritesheet.height;
     bool personagemParado = true;
+    
+    //animação walk
+    int totalFramesWalk = 5;
+    int frameAtualWalk = 0;
+    float tempoFrameWalk = 0.15f;
+    float timerWalk = 0.0f;
+    int larguraFrameWalk = spriteWalkLeft.width / totalFramesWalk;
+    int alturaFrameWalk = spriteWalkLeft.height;
     
     //animação andando
     while (!WindowShouldClose()) {
@@ -389,6 +397,18 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                     frameAtual++;
                     
                     if (frameAtual >= totalFrames) frameAtual = 0;
+                }
+            }
+            
+            //Atualização da animação walk
+            if (!personagemParado) {  // Personagem andando
+                timerWalk += GetFrameTime();
+                
+                if (timerWalk >= tempoFrameWalk) {
+                    timerWalk = 0.0f;
+                    frameAtualWalk++;
+                    
+                    if (frameAtualWalk >= totalFramesWalk) frameAtualWalk = 0;
                 }
             }
             
@@ -688,14 +708,16 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
                 }
                 
                 
-            } else if(!personagemParado) {
+            } else if(!personagemParado) {  //Personagem andando normal
                 if (andandoDireita) {
-                    DrawTextureEx(personagemDireita, (Vector2){player.x, player.y-playerOffSet}, 0.0f, scale, WHITE);
+                    Rectangle sourceRecWalk = { frameAtualWalk * larguraFrameWalk, 0, larguraFrameWalk, alturaFrameWalk };
+                    DrawTextureRec(spriteWalkRight, sourceRecWalk, (Vector2){player.x, player.y - playerOffSet}, WHITE);
                 } else {
-                    DrawTextureEx(personagemEsquerda, (Vector2){player.x, player.y-playerOffSet}, 0.0f, scale, WHITE);
+                    Rectangle sourceRecWalk = { frameAtualWalk * larguraFrameWalk, 0, larguraFrameWalk, alturaFrameWalk };
+                    DrawTextureRec(spriteWalkLeft, sourceRecWalk, (Vector2){player.x, player.y - playerOffSet}, WHITE);
                 }
-            } else {
-                if(andandoDireita){
+            } else {                        // Personagem parado 
+                if(andandoDireita){         
                     Rectangle sourceRec = { frameAtual * larguraFrame, 0, larguraFrame, alturaFrame };
                     DrawTextureRec(spritesheetRight, sourceRec, (Vector2){player.x, player.y-playerOffSet}, WHITE);
                 }else{
@@ -783,8 +805,10 @@ int main(void) {
     Texture2D spritesheet = LoadTexture("Imagens/spritesheet.png");
     Texture2D spritesheetRight = LoadTexture("Imagens/spritesheetRight.png");
     
+    Texture2D spriteWalkLeft = LoadTexture("Imagens/spriteWalkLeft.png");
+    Texture2D spriteWalkRight = LoadTexture("Imagens/spriteWalkRight.png");
     menu();
-    iniciarJogo(backgroundImage, personagemDireita, personagemEsquerda, personagemPegando, personagemPegandoEsquerda, chaveCenario, personagemPegandoChaveDireita, personagemPegandoChaveEsquerda, mapa1, mapa2, arena, mensagem1, menuBack, espadaTesouro, chaveTesouro , bau, bauPreenchido, botao1Off, botao1On, botao2Off, botao2On, pegandoChaveTesouroDireita, pegandoChaveTesouroEsquerda, pegandoEspadaEsquerda, pegandoEspadaDireita, bauPreenchido2, diamante, pegandoDiamanteEsquerda, pegandoDiamanteDireita, bauPreenchido3, puzzle1, spritesheet, spritesheetRight );
+    iniciarJogo(backgroundImage, personagemDireita, personagemEsquerda, personagemPegando, personagemPegandoEsquerda, chaveCenario, personagemPegandoChaveDireita, personagemPegandoChaveEsquerda, mapa1, mapa2, arena, mensagem1, menuBack, espadaTesouro, chaveTesouro , bau, bauPreenchido, botao1Off, botao1On, botao2Off, botao2On, pegandoChaveTesouroDireita, pegandoChaveTesouroEsquerda, pegandoEspadaEsquerda, pegandoEspadaDireita, bauPreenchido2, diamante, pegandoDiamanteEsquerda, pegandoDiamanteDireita, bauPreenchido3, puzzle1, spritesheet, spritesheetRight, spriteWalkLeft, spriteWalkRight );
     
     UnloadTexture(backgroundImage);
     
