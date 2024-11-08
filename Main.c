@@ -326,7 +326,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemDireita, Texture
     //animação walk
     int totalFramesWalk = 5;
     int frameAtualWalk = 0;
-    float tempoFrameWalk = 0.15f;
+    float tempoFrameWalk = 0.1f;
     float timerWalk = 0.0f;
     int larguraFrameWalk = spriteWalkLeft.width / totalFramesWalk;
     int alturaFrameWalk = spriteWalkLeft.height;
