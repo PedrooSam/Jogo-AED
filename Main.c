@@ -193,6 +193,87 @@ void menu(Texture2D backgroundMenu) {
         }           
     }
 }
+//função puzzle 2
+
+bool puzzleIcons(Texture puzzle2){
+    bool resultado = true;
+    int lista[3] = {-1, -1, -1};
+       
+    // Define as áreas de colisão para os botões
+    Rectangle alternativa1Collision = {420, 390, 125, 125};
+    Rectangle alternativa2Collision = {560, 390, 125, 125};
+    Rectangle alternativa3Collision = {700, 390, 125, 125};
+    int preenchidos = 0; // Contador de posições preenchidas em `lista`
+    
+    while (preenchidos < 3) {
+        BeginDrawing();
+        ClearBackground(BLACK);
+        DrawTexture(puzzle2, 370, 100, WHITE);
+        
+        // Desenha os botões e os textos dos números gerados
+        //DrawRectangleRec(alternativa1Collision, BLUE);
+        //DrawRectangleRec(alternativa2Collision, BLACK);
+        //DrawRectangleRec(alternativa3Collision, LIME);
+        
+        // Verifica as colisões com o mouse para cada alternativa e armazena o número na lista
+        if (CheckCollisionPointRec(GetMousePosition(), alternativa1Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            lista[preenchidos] = 1;
+            preenchidos++;
+        }
+        if (CheckCollisionPointRec(GetMousePosition(), alternativa2Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) { 
+            lista[preenchidos] = 3;
+            preenchidos++;
+        }
+        if (CheckCollisionPointRec(GetMousePosition(), alternativa3Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            lista[preenchidos] = 2;
+            preenchidos++;
+        }
+        if(IsKeyPressed(KEY_ESCAPE))//player nao quer mais fazer o puzzle
+            return false;
+        
+        EndDrawing();
+    }
+    // Bubble Sort para ordenar e verificar o resultado, se tiver troca, ta errado!
+    for (int i = 0; i < 3 - 1; i++) {
+        bool trocou = false;
+        for (int j = 0; j < 3 - i - 1; j++) {
+            if (lista[j] >= lista[j + 1]) {
+                int temp = lista[j];
+                lista[j] = lista[j + 1];
+                lista[j + 1] = temp;
+                trocou = true;
+                resultado = false;
+            }
+        }
+        // Se não houve troca, a lista já está ordenada
+        if (resultado) break;
+    }
+    
+    //verifica se a lista ta ordenada pq se tiver ai o puzzle acaba
+    if(resultado){
+        while(!IsKeyPressed(KEY_ENTER)){//esse while basicamente pra ter a mensagem de sucesso e ele so para se o usuario apertar enter, mesma coisa no proximo, mas ele mostra a de erro
+            BeginDrawing();
+            ClearBackground(BLACK);
+            DrawText("PARABENS! Puzzle concluido!",400, 310, 30, GREEN);
+            DrawText("Agora, aperte ENTER para sair!",450, 350, 20, WHITE);
+            EndDrawing();
+            puzzle1Resolvido = true;
+        }
+        return resultado;
+        
+    }
+    //se a lista que o usuario mandou nao tiver ordenada manda ele fazer o puzzle dnv
+    else{
+        while(!IsKeyPressed(KEY_ENTER)){
+            BeginDrawing();
+            ClearBackground(BLACK);
+            DrawText("ERRO! Puzzle não concluido!",445, 310, 30, RED);
+            DrawText("Aperte ENTER para tentar novamente!",460, 350, 20, WHITE);
+            EndDrawing();
+        }
+        return puzzleIcons(puzzle2); //recursao para que o puzzle seja reiniciado
+    }
+}
 
 // Função puzzle 1
 bool puzzleOrdenar(Texture2D puzzle1) {
@@ -259,7 +340,7 @@ bool puzzleOrdenar(Texture2D puzzle1) {
     for (int i = 0; i < 4 - 1; i++) {
         bool trocou = false;
         for (int j = 0; j < 4 - i - 1; j++) {
-            if (lista[j] > lista[j + 1]) {
+            if (lista[j] >= lista[j + 1]) {
                 int temp = lista[j];
                 lista[j] = lista[j + 1];
                 lista[j + 1] = temp;
@@ -298,7 +379,7 @@ bool puzzleOrdenar(Texture2D puzzle1) {
 }
 
 // Função principal do jogo
-void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D pegandoChaveEsquerda, Texture2D pegandoChaveDireita, Texture2D mapa1, Texture2D mapa2, Texture2D arena, Texture2D mensagem1, Texture2D menuBack, Texture2D espadaTesouro, Texture2D chaveTesouro, Texture2D bau, Texture2D bauPreenchido, Texture2D botao1Off, Texture2D botao1On, Texture2D botao2Off, Texture2D botao2On, Texture2D pegandoChaveTesouroDireita, Texture2D pegandoChaveTesouroEsquerda, Texture2D pegandoEspadaEsquerda, Texture2D pegandoEspadaDireita, Texture2D bauPreenchido2, Texture2D diamante, Texture2D pegandoDiamanteEsquerda,Texture2D  pegandoDiamanteDireita, Texture2D bauPreenchido3, Texture2D puzzle1, Texture2D spritesheet, Texture2D spritesheetRight, Texture2D spriteWalkLeft, Texture2D spriteWalkRight,Texture2D pegandoEsquerdaIdle, Texture2D pegandoDireitaIdle, Texture2D backgroundMenu,Texture2D pegandoChaveEsquerdaIdle,Texture2D pegandoChaveDireitaIdle, Texture2D pegandoChaveTesouroEsquerdaIdle, Texture2D pegandoChaveTesouroDireitaIdle, Texture2D pegandoEspadaEsquerdaIdle, Texture2D pegandoEspadaDireitaIdle, Texture2D pegandoDiamanteEsquerdaIdle, Texture2D pegandoDiamanteDireitaIdle, Texture2D bala,Texture2D danoLacaioEsquerda ,Texture2D danoLacaioDireita, Texture2D diamanteFree, Texture2D atirandoEsquerda, Texture2D atirandoDireita, Texture2D lacaioDireita, Texture2D lacaioEsquerda, Texture2D lacaioAtaqueEsquerda, Texture2D lacaioAtaqueDireita, Texture2D levandoDano, Texture2D mensagem2) {
+void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D pegandoChaveEsquerda, Texture2D pegandoChaveDireita, Texture2D mapa1, Texture2D mapa2, Texture2D arena, Texture2D mensagem1, Texture2D menuBack, Texture2D espadaTesouro, Texture2D chaveTesouro, Texture2D bau, Texture2D bauPreenchido, Texture2D botao1Off, Texture2D botao1On, Texture2D botao2Off, Texture2D botao2On, Texture2D pegandoChaveTesouroDireita, Texture2D pegandoChaveTesouroEsquerda, Texture2D pegandoEspadaEsquerda, Texture2D pegandoEspadaDireita, Texture2D bauPreenchido2, Texture2D diamante, Texture2D pegandoDiamanteEsquerda,Texture2D  pegandoDiamanteDireita, Texture2D bauPreenchido3, Texture2D puzzle1, Texture2D spritesheet, Texture2D spritesheetRight, Texture2D spriteWalkLeft, Texture2D spriteWalkRight,Texture2D pegandoEsquerdaIdle, Texture2D pegandoDireitaIdle, Texture2D backgroundMenu,Texture2D pegandoChaveEsquerdaIdle,Texture2D pegandoChaveDireitaIdle, Texture2D pegandoChaveTesouroEsquerdaIdle, Texture2D pegandoChaveTesouroDireitaIdle, Texture2D pegandoEspadaEsquerdaIdle, Texture2D pegandoEspadaDireitaIdle, Texture2D pegandoDiamanteEsquerdaIdle, Texture2D pegandoDiamanteDireitaIdle, Texture2D bala,Texture2D danoLacaioEsquerda ,Texture2D danoLacaioDireita, Texture2D diamanteFree, Texture2D atirandoEsquerda, Texture2D atirandoDireita, Texture2D lacaioDireita, Texture2D lacaioEsquerda, Texture2D lacaioAtaqueEsquerda, Texture2D lacaioAtaqueDireita, Texture2D levandoDano, Texture2D mensagem2, Texture2D puzzle2) {
     
     bool andandoDireita = true;     // Direção inicial
     bool chavePegandoFlag = false;  // Verifica se tá pegando a chave
@@ -317,7 +398,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     bool diamanteTesouroNoBau = false;      //Verifica se o diamante está no baú
 
     bool botao1Pressionado = false;
-    //bool botao2Pressionado = false;
+    bool botao2Pressionado = false;
     
     //float vetorPuzzleOrdenar[4] = {0};
     
@@ -348,7 +429,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     lacaio.y = 400;
     lacaio.mapa = -1;
     lacaio.vivo = true;
-    lacaio.vida = 10;
+    lacaio.vida = 10; //VIDA LACAIO
     bool lacaioIndoDireita;
     
     //posição de chave
@@ -726,7 +807,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             
             
             Rectangle botao1Collision = {140,350,50,50};
-            //Rectangle botao2Collision = {360,350,50,50};  
+            Rectangle botao2Collision = {400,350,50,50};  
             
             Rectangle lacaioCollision = {lacaio.x, lacaio.y, 200, 150};
             
@@ -911,7 +992,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     if (CheckCollisionPointRec(GetMousePosition(), botao1Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                         botao1Pressionado = !botao1Pressionado;
                     }
-                    if(!botao1Pressionado){
+                    if(!botao1Pressionado && !puzzle1Resolvido){
                         DrawTextureEx(botao1Off, (Vector2){130,350},0.0f, 4.0f,WHITE);
                        
                     }else if(botao1Pressionado){
@@ -920,11 +1001,19 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                         botao1Pressionado = false;
                     }
                 }
-                        
-                //botao 2 verde
-                
-                if(espadaTesouroNoBau){
-                   DrawTextureEx(botao2Off, (Vector2){200, 350}, 0.0f,4.0f, WHITE);
+                 
+                //botao verde
+                if (espadaTesouroNoBau) {
+                    if (CheckCollisionPointRec(GetMousePosition(), botao2Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                        botao2Pressionado = !botao2Pressionado; 
+                    }
+                    if (!botao2Pressionado && !puzzle2Resolvido) {
+                        DrawTextureEx(botao2Off, (Vector2){400, 350}, 0.0f, 4.0f, WHITE);
+                    } else if (botao2Pressionado) {
+                        DrawTextureEx(botao2On, (Vector2){400, 350}, 0.0f, 4.0f, WHITE);
+                        puzzle2Resolvido = puzzleIcons(puzzle2); //tem que implementar a funçaõ do puzzle dois
+                        botao2Pressionado = false;
+                    }
                 }
                              
             }
@@ -1205,6 +1294,7 @@ int main(void) {
     Texture2D bauPreenchido3 = LoadTexture("tesouro/bauPreenchido3.png");
     
     Texture2D puzzle1 = LoadTexture("botoes/puzzle1.png");
+    Texture2D puzzle2 = LoadTexture("botoes/puzzle2.png");
     
     Texture2D spritesheet = LoadTexture("Imagens/spritesheet.png");
     Texture2D spritesheetRight = LoadTexture("Imagens/spritesheetRight.png");
@@ -1248,7 +1338,7 @@ int main(void) {
     
     menu(backgroundMenu);
     
-    iniciarJogo(backgroundImage, personagemPegando, personagemPegandoEsquerda, chaveCenario, pegandoChaveEsquerda, pegandoChaveDireita, mapa1, mapa2, arena, mensagem1, menuBack, espadaTesouro, chaveTesouro , bau, bauPreenchido, botao1Off, botao1On, botao2Off, botao2On, pegandoChaveTesouroDireita, pegandoChaveTesouroEsquerda, pegandoEspadaEsquerda, pegandoEspadaDireita, bauPreenchido2, diamante, pegandoDiamanteEsquerda, pegandoDiamanteDireita, bauPreenchido3, puzzle1, spritesheet, spritesheetRight, spriteWalkLeft, spriteWalkRight, pegandoEsquerdaIdle, pegandoDireitaIdle, backgroundMenu, pegandoChaveEsquerdaIdle, pegandoChaveDireitaIdle, pegandoChaveTesouroEsquerdaIdle, pegandoChaveTesouroDireitaIdle, pegandoEspadaEsquerdaIdle, pegandoEspadaDireitaIdle, pegandoDiamanteEsquerdaIdle, pegandoDiamanteDireitaIdle, bala,danoLacaioEsquerda, danoLacaioDireita, diamanteFree, atirandoEsquerda, atirandoDireita, lacaioDireita, lacaioEsquerda, lacaioAtaqueEsquerda, lacaioAtaqueDireita, levandoDano, mensagem2);
+    iniciarJogo(backgroundImage, personagemPegando, personagemPegandoEsquerda, chaveCenario, pegandoChaveEsquerda, pegandoChaveDireita, mapa1, mapa2, arena, mensagem1, menuBack, espadaTesouro, chaveTesouro , bau, bauPreenchido, botao1Off, botao1On, botao2Off, botao2On, pegandoChaveTesouroDireita, pegandoChaveTesouroEsquerda, pegandoEspadaEsquerda, pegandoEspadaDireita, bauPreenchido2, diamante, pegandoDiamanteEsquerda, pegandoDiamanteDireita, bauPreenchido3, puzzle1, spritesheet, spritesheetRight, spriteWalkLeft, spriteWalkRight, pegandoEsquerdaIdle, pegandoDireitaIdle, backgroundMenu, pegandoChaveEsquerdaIdle, pegandoChaveDireitaIdle, pegandoChaveTesouroEsquerdaIdle, pegandoChaveTesouroDireitaIdle, pegandoEspadaEsquerdaIdle, pegandoEspadaDireitaIdle, pegandoDiamanteEsquerdaIdle, pegandoDiamanteDireitaIdle, bala,danoLacaioEsquerda, danoLacaioDireita, diamanteFree, atirandoEsquerda, atirandoDireita, lacaioDireita, lacaioEsquerda, lacaioAtaqueEsquerda, lacaioAtaqueDireita, levandoDano, mensagem2, puzzle2);
     
     CloseWindow();
     return 0;
