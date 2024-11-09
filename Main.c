@@ -420,7 +420,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     //posição jogador
     player.x = 800;
     player.y = 200;
-    player.mapa = 0;
+    player.mapa = 0; //player spawn
     player.vivo = true;
     player.vida = 5;
     
@@ -481,7 +481,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     // Animação de atirar
     int totalFramesTiro = 4;
     int frameAtualTiro = 0;
-    float tempoFrameTiro = 0.5f;
+    float tempoFrameTiro = 5.0f;
     float timerTiro = 0.0f;
     int larguraFrameTiro = atirandoEsquerda.width / totalFramesTiro;
     int alturaFrameTiro = atirandoEsquerda.height;
@@ -801,7 +801,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             
             Rectangle chaveTesouroCollision = {300, 400, 50, 50};
             Rectangle bauTesouroCollision = {925, 250, 100, 150};
-            
+
             Rectangle espadaTesouroCollision = {200, 200, 60 , 100};
             Rectangle diamanteTesouroCollision = {900, 450, 100, 50};
             
@@ -897,6 +897,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     }
                     
                     if(CollisionObject(playerCollision, bauTesouroCollision) && diamanteTesouroPegandoFlag){    // Verifica se colocou o diamante no bau
+                  
                         diamanteTesouroSpawn = false;
                         diamanteTesouroNoBau = true;
                         diamanteTesouroPegandoFlag = false;
@@ -1224,6 +1225,25 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             }    
             EndDrawing();
         }
+        //tela abse de vitoria do jogo
+        if(!lacaio.vivo){ //aqui tem que ser se o diamante estiver no bau botei essa so pra testar
+            while(!IsKeyPressed(KEY_ENTER)){
+                 BeginDrawing();
+                ClearBackground(BLACK);
+                DrawText("PARABENS! Jogo completo!",445, 310, 30, GREEN);
+                EndDrawing();
+            }
+            CloseWindow();
+        }//tela abse de gameover
+        if(!player.vivo){
+            while(!IsKeyPressed(KEY_ENTER)){
+                 BeginDrawing();
+                ClearBackground(BLACK);
+                DrawText("GAMEOVER!",550, 310, 30, RED);
+                EndDrawing();
+            }
+            CloseWindow();
+        }
                 
         if (pausa) {
             Rectangle botaoVoltarInicio = {500, 400, 250, 50};
@@ -1250,6 +1270,9 @@ int main(void) {
         
     InitWindow(larguraTela, alturaTela, "Um dia no Castelo");
     SetTargetFPS(60);
+    
+    //InitAudioDevice();
+    //Music LinkPark = LoadMusicStream("caminho/para/sua/musica.mp3");
     
     Texture2D backgroundImage = LoadTexture("cenario/background.png");
 
