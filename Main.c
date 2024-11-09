@@ -896,14 +896,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                         diamanteTesouroSpawn = false;
                     }
                     
-                    if(CollisionObject(playerCollision, bauTesouroCollision) && diamanteTesouroPegandoFlag){    // Verifica se colocou o diamante no bau
-                  
-                        diamanteTesouroSpawn = false;
-                        diamanteTesouroNoBau = true;
-                        diamanteTesouroPegandoFlag = false;
-                        pegando = false;
-                    }
-                    
+
                     if(diamanteTesouroSpawn && !diamanteTesouroPegandoFlag){                             // Verifica se pode desenhar o diamante
                         if(!puzzle2Resolvido){
                         DrawTextureEx(diamante, (Vector2){900, 460},0.0f, 3.0f,WHITE);
@@ -971,7 +964,15 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                         DrawTexture(espadaTesouro, 200, 200,WHITE);
                     }
                 }
-
+                
+                 if(CollisionObject(playerCollision, bauTesouroCollision) && diamanteTesouroPegandoFlag && puzzle2Resolvido){    // Verifica se colocou o diamante no bau
+              
+                    diamanteTesouroSpawn = false;
+                    diamanteTesouroNoBau = true;
+                    diamanteTesouroPegandoFlag = false;
+                    pegando = false;
+                }
+                    
                 
                 //Bau
                 if(!chaveTesouroNoBau){
@@ -1226,7 +1227,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             EndDrawing();
         }
         //tela abse de vitoria do jogo
-        if(!lacaio.vivo){ //aqui tem que ser se o diamante estiver no bau botei essa so pra testar
+        if(diamanteTesouroNoBau){ //aqui tem que ser se o diamante estiver no bau botei essa so pra testar
             while(!IsKeyPressed(KEY_ENTER)){
                  BeginDrawing();
                 ClearBackground(BLACK);
