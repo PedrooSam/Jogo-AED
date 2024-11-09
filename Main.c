@@ -831,6 +831,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                         }
                     }
                     
+                    //Precisando resolver isso, a mensagem fica piscando
                     if(CollisionObject(playerCollision, diamanteTesouroCollision) && !puzzle2Resolvido){
                         DrawTextureEx(mensagem2, (Vector2){player.x + 30, player.y - 300}, 0.0f, 1.0f, WHITE);
                     }
