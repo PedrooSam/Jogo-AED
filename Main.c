@@ -398,7 +398,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     // Animação de atirar
     int totalFramesTiro = 4;
     int frameAtualTiro = 0;
-    float tempoFrameTiro = 0.05f;
+    float tempoFrameTiro = 0.5f;
     float timerTiro = 0.0f;
     int larguraFrameTiro = atirandoEsquerda.width / totalFramesTiro;
     int alturaFrameTiro = atirandoEsquerda.height;
@@ -908,7 +908,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     projetil.ativo = false;
                 }
                 
-                if ((projetil.posicao.x > lacaio.x && projetil.posicao.x < lacaio.x + 200) && (projetil.posicao.y > lacaio.y && projetil.posicao.y < lacaio.y + 150) && lacaio.vivo) {
+                if ((projetil.posicao.x > lacaio.x && projetil.posicao.x < lacaio.x + 200) && (projetil.posicao.y > lacaio.y && projetil.posicao.y < lacaio.y + 150) && lacaio.vivo && lacaio.mapa == player.mapa) {
                     projetil.ativo = false;
                     lacaio.vida -= 1;
                     lacaioAtingido = true;
