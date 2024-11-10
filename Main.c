@@ -36,7 +36,6 @@ Projetil projetil;
 bool lacaioParado = true;
 bool lacaioAtingido = false;
 bool lacaioAtacando = false;
-int contagemLacaios = 0;
 bool lacaio2Adicionado = false;
 bool lacaio3Adicionado = false;
 
@@ -47,11 +46,13 @@ float scale = 3.5f;     // Fator de escala para o personagem
 
 bool pausa = false;     //variavel que verifica se o jogo esta ou nao pausado
 bool pegando = false;   // Variável para verificar se o personagem está pegando algo
-bool levandoDanoFlag = false;
+bool levandoDanoFlag = false;    
 
 //Distancia entre lacaio e player
 float distanciaX = 0;
 float distanciaY = 0;
+
+//Intervalo de ataque do lacaio
 float intervalo = 200.0f;
 float timerAtaque = 0.0f;
 
@@ -202,8 +203,8 @@ void menu(Texture2D backgroundMenu) {
         }           
     }
 }
-//função puzzle 2
 
+//função puzzle 2
 bool puzzleIcons(Texture puzzle2){
     bool resultado = true;
     int lista[3] = {-1, -1, -1};
@@ -242,6 +243,7 @@ bool puzzleIcons(Texture puzzle2){
 
         EndDrawing();
     }
+    
     // Bubble Sort para ordenar e verificar o resultado, se tiver troca, ta errado!'
     for (int i = 0; i < 3 - 1; i++) {
         bool trocou = false;
@@ -269,8 +271,8 @@ bool puzzleIcons(Texture puzzle2){
             puzzle2Resolvido = true;
         }
         return resultado;
-        
     }
+    
     //se a lista que o usuario mandou nao tiver ordenada manda ele fazer o puzzle dnv
     else{
         while(!IsKeyPressed(KEY_ENTER)){
@@ -387,12 +389,30 @@ bool puzzleOrdenar(Texture2D puzzle1) {
     }
 }
 
+// Função de pegar o frame certo
+int getFrame(float timer, float tempoFrame, int totalFrames, int frameAtual) {
+    if (timer >= tempoFrame) {
+        frameAtual++; // Incrementa o frame
+        
+        if (frameAtual >= totalFrames) {
+            frameAtual = 0; // Reinicia o frame se exceder o total
+        }
+    }
+    return frameAtual; // Retorna o frame atual (ou o incrementado)
+}
+
+// Função para gerenciar o timer de cada frame
+float getTime(float timer) {
+    timer += GetFrameTime();  // Atualiza o timer com o tempo decorrido desde o último quadro
+    return timer;  // Retorna o timer atualizado
+}
+    
 // Função principal do jogo
 void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D pegandoChaveEsquerda, Texture2D pegandoChaveDireita, Texture2D mapa1, Texture2D mapa2, Texture2D arena, Texture2D mensagem1, Texture2D menuBack, Texture2D espadaTesouro, Texture2D chaveTesouro, Texture2D bau, Texture2D bauPreenchido, Texture2D botao1Off, Texture2D botao1On, Texture2D botao2Off, Texture2D botao2On, Texture2D pegandoChaveTesouroDireita, Texture2D pegandoChaveTesouroEsquerda, Texture2D pegandoEspadaEsquerda, Texture2D pegandoEspadaDireita, Texture2D bauPreenchido2, Texture2D diamante, Texture2D pegandoDiamanteEsquerda,Texture2D  pegandoDiamanteDireita, Texture2D bauPreenchido3, Texture2D puzzle1, Texture2D spritesheet, Texture2D spritesheetRight, Texture2D spriteWalkLeft, Texture2D spriteWalkRight,Texture2D pegandoEsquerdaIdle, Texture2D pegandoDireitaIdle, Texture2D backgroundMenu,Texture2D pegandoChaveEsquerdaIdle,Texture2D pegandoChaveDireitaIdle, Texture2D pegandoChaveTesouroEsquerdaIdle, Texture2D pegandoChaveTesouroDireitaIdle, Texture2D pegandoEspadaEsquerdaIdle, Texture2D pegandoEspadaDireitaIdle, Texture2D pegandoDiamanteEsquerdaIdle, Texture2D pegandoDiamanteDireitaIdle, Texture2D bala,Texture2D danoLacaioEsquerda ,Texture2D danoLacaioDireita, Texture2D diamanteFree, Texture2D atirandoEsquerda, Texture2D atirandoDireita, Texture2D lacaioDireita, Texture2D lacaioEsquerda, Texture2D lacaioAtaqueEsquerda, Texture2D lacaioAtaqueDireita, Texture2D levandoDano, Texture2D mensagem2, Texture2D puzzle2, Texture2D mapa1Bloqueado, Texture2D mapa2Bloqueado) {
     
-    bool andandoDireita = true;     // Direção inicial
-    bool chavePegandoFlag = false;  // Verifica se tá pegando a chave
-    bool puzzleDesbloqueado = false;// Verifica se pode acessar a sala do puzzle 
+    bool andandoDireita = true;             // Direção inicial
+    bool chavePegandoFlag = false;          // Verifica se tá pegando a chave
+    bool puzzleDesbloqueado = false;        // Verifica se pode acessar a sala do puzzle 
     
     bool chaveTesouroPegandoFlag = false;   //Verifica se tá pegando a chave do tesouro
     bool chaveTesouroSpawn = true;          //Verifica se a chave do tesouro pode spawnar
@@ -408,8 +428,6 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
 
     bool botao1Pressionado = false;
     bool botao2Pressionado = false;
-    
-    //float vetorPuzzleOrdenar[4] = {0};
     
     //configuração do mapa
     Node *head = NULL; 
@@ -429,7 +447,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     //posição jogador
     player.x = 800;
     player.y = 200;
-    player.mapa = 0; //player spawn
+    player.mapa = 0; 
     player.vivo = true;
     player.vida = 5;
     
@@ -531,7 +549,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             }
             
             timerTiro += 1;
-            if (IsKeyPressed(KEY_SPACE) && !projetil.ativo && personagemParado && !segurandoItem && timerTiro >= intervaloTiro) {       // Só pode atirar quando tiver parado 
+            if (IsKeyPressed(KEY_SPACE) && !projetil.ativo && personagemParado && !segurandoItem && timerTiro >= intervaloTiro && !pegando) {       // Só pode atirar quando tiver parado 
                 projetil.ativo = true;
                 atirou = true;
                 projetil.posicao = (Vector2){ player.x, player.y - playerOffSet + 60 };
@@ -629,6 +647,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 }
             }    
             
+            //Verifica se o player morreu
             if(player.vida <= 0){
                 player.vivo = false;
             }
@@ -639,131 +658,86 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             }else{
                 segurandoItem = true;
             }
- 
-            // Atualização da animação idle
+
+            //ANIMAÇÕES
+            // Atualizacao idle 
+            if(personagemParado){ 
+            timer = getTime(timer);            
+            frameAtual = getFrame(timer, tempoFrame, totalFrames, frameAtual);
+            if(timer >= tempoFrame) timer = 0.0f;
+            }
+            
+            if (!personagemParado) {
+            timerWalk = getTime(timerWalk);  // Incrementa timerWalk com o tempo do frame atual
+            frameAtualWalk = getFrame(timerWalk, tempoFrameWalk, totalFramesWalk, frameAtualWalk);
+            if (timerWalk >= tempoFrameWalk) timerWalk = 0.0f;  // Reseta timerWalk se exceder tempoFrameWalk
+            }
+            
+            // Atualização pegando andando
+            if (!personagemParado) {
+                timerKey = getTime(timerKey);  // Incrementa timerKey
+                frameAtualKey = getFrame(timerKey, tempoFrameKey, totalFramesKey, frameAtualKey);
+                if (timerKey >= tempoFrameKey) timerKey = 0.0f;  // Reseta timerKey
+            }
+
+            // Atualização pegando parado
             if (personagemParado) {
-                timer += GetFrameTime();
-                
-                if (timer >= tempoFrame) {
-                    timer = 0.0f;
-                    frameAtual++;
-                    
-                    if (frameAtual >= totalFrames) frameAtual = 0;
-                }
+                timerIdle = getTime(timerIdle);  // Incrementa timerIdle
+                frameAtualIdle = getFrame(timerIdle, tempoFrameIdle, totalFramesIdle, frameAtualIdle);
+                if (timerIdle >= tempoFrameIdle) timerIdle = 0.0f;  // Reseta timerIdle
             }
-            
-            //Atualização da animação walk
-            if (!personagemParado) {  // Personagem andando
-                timerWalk += GetFrameTime();
-                
-                if (timerWalk >= tempoFrameWalk) {
-                    timerWalk = 0.0f;
-                    frameAtualWalk++;
-                    
-                    if (frameAtualWalk >= totalFramesWalk) frameAtualWalk = 0;
-                }
-            }
-            
-            //Atualização da animação pegando andando
-            if (!personagemParado) {  // Personagem andando
-                timerKey += GetFrameTime();
-                
-                if (timerKey >= tempoFrameKey) {
-                    timerKey = 0.0f;
-                    frameAtualKey++;
-                    
-                    if (frameAtualKey >= totalFramesKey){ 
-                    frameAtualKey = 0;
-                    }
-                }
-            }
-            
-            //Atualização da animação pegando parado
-            if (personagemParado) { 
-                timerIdle += GetFrameTime();
-                
-                if (timerIdle >= tempoFrameIdle) {
-                    timerIdle = 0.0f;
-                    frameAtualIdle++;
-                    
-                    if (frameAtualIdle >= totalFramesIdle) {
-                        frameAtualIdle = 0;
-                        }
+
+            // Atualização lacaio levando dano
+            if (lacaioAtingido) {
+                timerlacaioDano = getTime(timerlacaioDano);  // Incrementa timerlacaioDano
+                frameAtuallacaioDano = getFrame(timerlacaioDano, tempoFramelacaioDano, totalFrameslacaioDano, frameAtuallacaioDano);
+                if (timerlacaioDano >= tempoFramelacaioDano) {
+                    timerlacaioDano = 0.0f;  // Reseta timerlacaioDano
+                    lacaioAtingido = false;
                 }
             }
 
-            //Lacaio levando chumbo
-            if (lacaioAtingido) {
-                timerlacaioDano += GetFrameTime();
-                
-                if (timerlacaioDano >= tempoFramelacaioDano) {
-                    timerlacaioDano = 0.0f; //reseta o temporizador
-                    frameAtuallacaioDano++;
-                    
-                    if (frameAtuallacaioDano >= totalFrameslacaioDano)  {
-                        frameAtuallacaioDano = 0;
-                        lacaioAtingido = false;}
-                }
-            }
-    
-            //Atualização da animação de tiro 
-            if (atirou) { 
-                timerTiro += GetFrameTime();
-                
+            // Atualização de tiro
+            if (atirou) {
+                timerTiro += GetFrameTime();  // Incrementa timerTiro diretamente com o tempo do frame
                 if (timerTiro >= tempoFrameTiro) {
-                    timerTiro = 0.0f;
-                    frameAtualTiro++;
+                    frameAtualTiro++; // Passa para o próximo frame
+                    timerTiro = 0.0f; // Reseta o timer para o próximo frame
                     
                     if (frameAtualTiro >= totalFramesTiro) {
-                        frameAtualTiro = 0;
-                        atirou = false;
-                        }
+                        frameAtualTiro = 0;  // Reseta o frame de tiro após completar a animação
+                        atirou = false;  // Desativa 'atirou' após concluir todos os frames
+                    }
                 }
             }
-            //Atualização da animação de lacaio andando 
-            if (lacaio.vivo && lacaio.mapa == player.mapa) { 
-                timerlacaioWalk += GetFrameTime();
-                
-                if (timerlacaioWalk >= tempoFramelacaioWalk) {
-                    timerlacaioWalk = 0.0f;
-                    frameAtuallacaioWalk++;
-                    
-                    if (frameAtuallacaioWalk >= totalFrameslacaioWalk) {
-                        frameAtuallacaioWalk = 0;
-                        }
-                }
+
+            // Atualização lacaio andando
+            if (lacaio.vivo && lacaio.mapa == player.mapa) {
+                timerlacaioWalk = getTime(timerlacaioWalk);  // Incrementa timerlacaioWalk
+                frameAtuallacaioWalk = getFrame(timerlacaioWalk, tempoFramelacaioWalk, totalFrameslacaioWalk, frameAtuallacaioWalk);
+                if (timerlacaioWalk >= tempoFramelacaioWalk) timerlacaioWalk = 0.0f;  // Reseta timerlacaioWalk
             }
-            
-            //Atualização da animação de lacaio atacando
-            if (lacaio.vivo && lacaio.mapa == player.mapa) { 
-                timerlacaioAtaque += GetFrameTime();
-                
+
+            // Atualização lacaio atacando
+            if (lacaio.vivo && lacaio.mapa == player.mapa) {
+                timerlacaioAtaque = getTime(timerlacaioAtaque);  // Incrementa timerlacaioAtaque
+                frameAtuallacaioAtaque = getFrame(timerlacaioAtaque, tempoFramelacaioAtaque, totalFrameslacaioAtaque, frameAtuallacaioAtaque);
                 if (timerlacaioAtaque >= tempoFramelacaioAtaque) {
-                    timerlacaioAtaque = 0.0f;
-                    frameAtuallacaioAtaque++;
-                    
-                    if (frameAtuallacaioAtaque >= totalFrameslacaioAtaque) {
-                        frameAtuallacaioAtaque = 0;
-                        lacaioAtacando = false;
-                        }
+                    timerlacaioAtaque = 0.0f;  // Reseta timerlacaioAtaque
+                    lacaioAtacando = false;
                 }
             }
-            
-             //Atualização da animação de personagem levando dano
-            if (lacaio.vivo && lacaio.mapa == player.mapa) { 
-                timerLevandoDano += GetFrameTime();
-                
+
+            // Atualização personagem levando dano
+            if (lacaio.vivo && lacaio.mapa == player.mapa) {
+                timerLevandoDano = getTime(timerLevandoDano);  // Incrementa timerLevandoDano
+                frameAtualLevandoDano = getFrame(timerLevandoDano, tempoFrameLevandoDano, totalFramesLevandoDano, frameAtualLevandoDano);
                 if (timerLevandoDano >= tempoFrameLevandoDano) {
-                    timerLevandoDano = 0.0f;
-                    frameAtualLevandoDano++;
-                    
-                    if (frameAtualLevandoDano >= totalFramesLevandoDano) {
-                        frameAtualLevandoDano = 0;
-                        levandoDanoFlag = false;
-                        }
+                    timerLevandoDano = 0.0f;  // Reseta timerLevandoDano
+                    levandoDanoFlag = false;
                 }
             }
-            
+
             // Restringir o jogador para não sair da tela
             if (player.x < 0) {     // Lado esquerdo
                 player.x = 0;
@@ -1091,7 +1065,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             //DrawRectangle(lacaio.x, lacaio.y, 200, 150, BLUE);
 
             char text[10];
-            sprintf(text, "X:%d Y:%d Mapa: %d Vidas: %d DistanciaX: %f DistanciaY %f VidaLacaio: %d Pontuacao: %d", player.x, player.y, player.mapa, player.vida, distanciaX, distanciaY, lacaio.vida, pontuacao);
+            sprintf(text, "Vidas: %d timerTiro: %f frameAtualTiro: %d VidaLacaio: %d", player.vida,timerTiro, frameAtualTiro, lacaio.vida);
             DrawText(text, 20, 20, 20, WHITE);
        
             
@@ -1113,7 +1087,6 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                         
                         if(lacaio.vida == 0){
                             lacaio.vivo = false;
-                            contagemLacaios += 1;
                         }
                 }
                 
@@ -1279,8 +1252,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             }    
             EndDrawing();
         }
-    
-        diamanteTesouroNoBau = true;
+ 
         //tela abse de vitoria do jogo
         if(diamanteTesouroNoBau){ //aqui tem que ser se o diamante estiver no bau botei essa so pra testar
       
