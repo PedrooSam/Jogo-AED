@@ -70,6 +70,9 @@ bool puzzle2Resolvido = false;
 //mapas
 bool mapaBloqueado = false;
 
+// Pontacao 
+int pontuacao = 0;
+
 //Colisão Universal, 
 bool CollisionObject(Rectangle playerCollision, Rectangle objeto) {
     if (CheckCollisionRecs(playerCollision, objeto)) {
@@ -520,6 +523,8 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     bool segurandoItem = false;
 
     while (!WindowShouldClose()) {
+            pontuacao += 1;
+            
             if (!pausa) {
                 if (IsKeyPressed(KEY_P)) {
                 pausa = !pausa;
@@ -1086,7 +1091,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             //DrawRectangle(lacaio.x, lacaio.y, 200, 150, BLUE);
 
             char text[10];
-            sprintf(text, "X:%d Y:%d Mapa: %d Vidas: %d DistanciaX: %f DistanciaY %f VidaLacaio: %d", player.x, player.y, player.mapa, player.vida, distanciaX, distanciaY, lacaio.vida);
+            sprintf(text, "X:%d Y:%d Mapa: %d Vidas: %d DistanciaX: %f DistanciaY %f VidaLacaio: %d Pontuacao: %d", player.x, player.y, player.mapa, player.vida, distanciaX, distanciaY, lacaio.vida, pontuacao);
             DrawText(text, 20, 20, 20, WHITE);
        
             
@@ -1274,14 +1279,50 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             }    
             EndDrawing();
         }
+    
+        diamanteTesouroNoBau = true;
         //tela abse de vitoria do jogo
         if(diamanteTesouroNoBau){ //aqui tem que ser se o diamante estiver no bau botei essa so pra testar
+      
             while(!IsKeyPressed(KEY_ENTER)){
                  BeginDrawing();
                 ClearBackground(BLACK);
-                DrawText("PARABENS! Jogo completo!",445, 310, 30, GREEN);
+                DrawText("OBRIGADO POR JOGAR!",445, 40, 30, GREEN);
+                
+                char pontuacaoTexto[100];
+                sprintf(pontuacaoTexto, "TEMPO: %d SERKS", pontuacao);
+
+                DrawText(pontuacaoTexto,1050, 40, 20, GREEN);
+                
+                DrawText("PROGRAMAÇÃO E DESIGN:",200, 100, 20, GREEN);
+                DrawText("FELIPE MATIAS: ",320, 150, 20, YELLOW);
+                DrawText("PERSONAGENS, ANIMAÇÕES, CENÁRIOS, ITENS ",515, 150, 20, GREEN);
+                DrawText("SISTEMA DE LUTA E INTELIGENCIA DOS INIMIGOS ",515, 200, 20, GREEN);
+                DrawText("IMPLEMENTAÇÃO E INTEGRAÇÃO DAS MECÂNICAS DO JOGO",515, 250, 20, GREEN);
+                
+                DrawText("IMPLEMENTAÇÃO DE FUNCIONALIDADES E COLISÃO: ",200, 310, 20, GREEN);
+                
+                DrawText("LUCAS FERREIRA: ",320, 360, 20, YELLOW);
+                DrawText("LÓGICA DOS MAPAS COM LISTA DUPLAMENTE ENCADEADA",515, 360, 20, GREEN);
+                
+                DrawText("PEDRO SAMPAIO: ",320, 410 , 20, YELLOW);   
+                DrawText("DESENVOLVIMENTO DOS PUZZLES E MENU",515, 410, 20, GREEN);
+                
+                DrawText("GABRIEL LANDIM: ",320, 460, 20, YELLOW);
+                DrawText("DESENVOLVIMENTO DOS PUZZLES E MENU",515, 460, 20, GREEN); 
+                
+                DrawText("DESIGN DE ÁUDIO: ",200, 510, 20, GREEN);
+                
+                DrawText("FELIPE FRANÇA: ",320, 560, 20, YELLOW);
+                DrawText("EFEITOS SONOROS E MÚSICA: ",515, 560, 20, GREEN);
+                
+                DrawText("APOIO E COLABORAÇÃO",200, 610, 20, GREEN);
+                
+                DrawText("LUIS GUSTAVO: ",320, 660, 20, YELLOW);
+                DrawText("APOIO AO TIME E FEEDBACK DURANTE O DESENVOLVIMENTO",515, 660, 20, GREEN);
                 EndDrawing();
             }
+            
             CloseWindow();
         }//tela abse de gameover
         if(!player.vivo){
