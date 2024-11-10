@@ -17,13 +17,16 @@ typedef struct {
     bool vivo;
     int vida;
 } Objeto;
-// Variáveis globais
 
 typedef struct {
     Vector2 posicao;
     Vector2 velocidade;
     bool ativo;
 } Projetil;
+
+// ############################
+// 	Variáveis globais	
+// ############################
 
 //Objetos
 Objeto player;
@@ -48,12 +51,12 @@ bool pausa = false;     //variavel que verifica se o jogo esta ou nao pausado
 bool pegando = false;   // Variável para verificar se o personagem está pegando algo
 bool levandoDanoFlag = false;    
 
-//Distancia entre lacaio e player
-float distanciaX = 0;
+//Lacaio
+
+float distanciaX = 0; //Distancia entre lacaio e player
 float distanciaY = 0;
 
-//Intervalo de ataque do lacaio
-float intervalo = 200.0f;
+float intervalo = 200.0f; //Intervalo de ataque do lacaio
 float timerAtaque = 0.0f;
 
 //Cooldown do tiro 
@@ -74,7 +77,7 @@ bool mapaBloqueado = false;
 // Pontacao 
 int pontuacao = 0;
 
-//Colisão Universal, 
+//Colisão Universal
 bool CollisionObject(Rectangle playerCollision, Rectangle objeto) {
     if (CheckCollisionRecs(playerCollision, objeto)) {
         float penetracaoEsquerda = (playerCollision.x + playerCollision.width) - objeto.x;
@@ -409,7 +412,9 @@ float getTime(float timer) {
     
 // Função principal do jogo
 void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D pegandoChaveEsquerda, Texture2D pegandoChaveDireita, Texture2D mapa1, Texture2D mapa2, Texture2D arena, Texture2D mensagem1, Texture2D menuBack, Texture2D espadaTesouro, Texture2D chaveTesouro, Texture2D bau, Texture2D bauPreenchido, Texture2D botao1Off, Texture2D botao1On, Texture2D botao2Off, Texture2D botao2On, Texture2D pegandoChaveTesouroDireita, Texture2D pegandoChaveTesouroEsquerda, Texture2D pegandoEspadaEsquerda, Texture2D pegandoEspadaDireita, Texture2D bauPreenchido2, Texture2D diamante, Texture2D pegandoDiamanteEsquerda,Texture2D  pegandoDiamanteDireita, Texture2D bauPreenchido3, Texture2D puzzle1, Texture2D spritesheet, Texture2D spritesheetRight, Texture2D spriteWalkLeft, Texture2D spriteWalkRight,Texture2D pegandoEsquerdaIdle, Texture2D pegandoDireitaIdle, Texture2D backgroundMenu,Texture2D pegandoChaveEsquerdaIdle,Texture2D pegandoChaveDireitaIdle, Texture2D pegandoChaveTesouroEsquerdaIdle, Texture2D pegandoChaveTesouroDireitaIdle, Texture2D pegandoEspadaEsquerdaIdle, Texture2D pegandoEspadaDireitaIdle, Texture2D pegandoDiamanteEsquerdaIdle, Texture2D pegandoDiamanteDireitaIdle, Texture2D bala,Texture2D danoLacaioEsquerda ,Texture2D danoLacaioDireita, Texture2D diamanteFree, Texture2D atirandoEsquerda, Texture2D atirandoDireita, Texture2D lacaioDireita, Texture2D lacaioEsquerda, Texture2D lacaioAtaqueEsquerda, Texture2D lacaioAtaqueDireita, Texture2D levandoDano, Texture2D mensagem2, Texture2D puzzle2, Texture2D mapa1Bloqueado, Texture2D mapa2Bloqueado, Texture2D vida1,Texture2D vida2,Texture2D vida3,Texture2D vida4,Texture2D vida5,   Texture2D lacaioVida1,Texture2D lacaioVida2,Texture2D lacaioVida3,Texture2D lacaioVida4,Texture2D lacaioVida5,Texture2D lacaioVida6,Texture2D lacaioVida7,Texture2D lacaioVida8, Texture2D lacaioVida9,Texture2D lacaioVida10) {
-    
+    // ############################
+    // FLAGS	
+    // ############################
     bool andandoDireita = true;             // Direção inicial
     bool chavePegandoFlag = false;          // Verifica se tá pegando a chave
     bool puzzleDesbloqueado = false;        // Verifica se pode acessar a sala do puzzle 
@@ -428,8 +433,12 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
 
     bool botao1Pressionado = false;
     bool botao2Pressionado = false;
+
+    bool segurandoItem = false;
     
-    //configuração do mapa
+    // ############################
+    // 	CONFIG DE MAPA	
+    // ############################
     Node *head = NULL; 
     Node *tail = NULL;
     Node *mapaSec0 = NULL;
@@ -463,7 +472,11 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     chave.x = 500;
     chave.y = 550;
     chave.mapa = 0;
-    
+
+    // ############################
+    // 	CONFIG DE ANIMAÇÃO	
+    // ############################
+	
     //animação idle
     int totalFrames = 4;
     int frameAtual = 0;
@@ -537,8 +550,8 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     int larguraFrameLevandoDano = levandoDano.width / totalFramesLevandoDano;
     int alturaFrameLevandoDano = levandoDano.height;
     
-    //segurando item
-    bool segurandoItem = false;
+
+    
 
     while (!WindowShouldClose()) {
             pontuacao += 1;
@@ -547,6 +560,10 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 if (IsKeyPressed(KEY_P)) {
                 pausa = !pausa;
             }
+
+            // ############################
+            // 	JOGADOR
+            // ############################
             
             timerTiro += 1;
             if (IsKeyPressed(KEY_SPACE) && !projetil.ativo && personagemParado && !segurandoItem && timerTiro >= intervaloTiro && !pegando) {       // Só pode atirar quando tiver parado 
@@ -613,7 +630,9 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 personagemParado = true;
             }
             
-            // Movimento do lacaio
+            // ############################
+            // 	LACAIO
+            // ############################
             float velocidadeLacaio = 150.0f * GetFrameTime();
             // Atualize o timer do ataque
             timerAtaque += 1;
@@ -659,7 +678,10 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 segurandoItem = true;
             }
 
-            //ANIMAÇÕES
+            // ############################
+            // 	ANIMAÇÃO
+            // ############################
+
             // Atualizacao idle 
             if(personagemParado){ 
             timer = getTime(timer);            
@@ -764,7 +786,9 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 player.y = GetScreenHeight() - playerOffSet + 60;
             }
             
-            //colisões
+            // ############################
+            // 	COLISÕES
+            // ############################
             Rectangle playerCollision = {player.x, player.y, 83, 83};
             Rectangle chaveCollision = {chave.x, chave.y, 28, 18};
             
@@ -893,7 +917,9 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 
             }
             
-            // Desenho do jogo
+            // ############################
+            //  DESENHO DAS TEXTURAS/IMAGENS
+            // ############################
             BeginDrawing();
             ClearBackground(RAYWHITE);
             
@@ -1240,7 +1266,9 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 }
             }    
             
-            //UI
+            // ############################
+            //  UI/Interface
+            // ############################
             if(player.vida == 5) DrawTextureEx(vida5, (Vector2){20,20}, 0.0f, 5.0f, WHITE);
             else if(player.vida == 4) DrawTextureEx(vida4, (Vector2){20,20}, 0.0f, 5.0f, WHITE);
             else if(player.vida == 3) DrawTextureEx(vida3, (Vector2){20,20}, 0.0f, 5.0f, WHITE);
