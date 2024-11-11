@@ -1409,15 +1409,20 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
         }
                 
         if (pausa) {
-            Rectangle botaoVoltarInicio = {500, 400, 250, 50};
+            Rectangle retomar = {500, 400, 250, 50};
+            Rectangle sair = {500, 450, 250, 50};
             BeginDrawing();
             DrawTexture(menuBack, 10, 50 , WHITE );
-            DrawText("Voltar ao início", 510, 400, 30, GOLD);
-            DrawText("Retomar", 510, 450, 30, GOLD);
+            DrawText("Retomar", 510, 400, 30, GOLD);
+            DrawText("Sair do jogo", 510, 450, 30, GOLD);
             DrawText("PAUSE", 500, 290, 70, GOLD);
             EndDrawing();
             
-            if (CheckCollisionPointRec(GetMousePosition(), botaoVoltarInicio) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            if (CheckCollisionPointRec(GetMousePosition(), retomar) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                  pausa = false;
+            }
+            
+            if (CheckCollisionPointRec(GetMousePosition(), sair) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                   menu(backgroundMenu);
             }
         }
@@ -1430,7 +1435,7 @@ int main(void) {
     InitWindow(larguraTela, alturaTela, "Um dia no Castelo");
     SetTargetFPS(60);
     
-    ToggleFullscreen();
+    //ToggleFullscreen();
     InitAudioDevice();
     //Music LinkPark = LoadMusicStream("caminho/para/sua/musica.mp3");
     
