@@ -560,7 +560,8 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
 
     while (!WindowShouldClose()) {
             pontuacao += 1;
-
+            
+        
             if (!pausa) {
                 if (IsKeyPressed(KEY_P)) {
                 pausa = !pausa;
@@ -902,6 +903,12 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                         player.x = 920;
                         player.y = 540;
                     }
+                    
+                    if(puzzleDesbloqueado && CollisionObject(playerCollision, arenaCollision)){
+                        player.mapa = getMapaSecundario(head);
+                        player.x = 400;
+                        player.y = 540;
+                }
                 }
                 
                 if(puzzle2Resolvido && !lacaio2Adicionado){   //Vai aparecer o lacaio no mapa 2
@@ -919,11 +926,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     chavePegandoFlag = false;
                 }
                 
-                if(puzzleDesbloqueado && CollisionObject(playerCollision, arenaCollision)){
-                    player.mapa = getMapaSecundario(head);
-                    player.x = 400;
-                    player.y = 540;
-                }
+
                 
 
             }
