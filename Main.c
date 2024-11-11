@@ -25,7 +25,7 @@ typedef struct {
 } Projetil;
 
 // ############################
-// 	Variáveis globais	
+// 	VARIAVEÍS GLOBAIS	
 // ############################
 
 //Objetos
@@ -699,6 +699,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             // ############################
             // 	LACAIO
             // ############################
+            
             float velocidadeLacaio = 150.0f * GetFrameTime();
             // Atualize o timer do ataque
             timerAtaque += 1;
@@ -892,6 +893,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             // ############################
             // 	COLISÕES
             // ############################
+            
             Rectangle playerCollision = {player.x, player.y, 83, 83};
             Rectangle chaveCollision = {chave.x, chave.y, 50, 50};
             
@@ -938,6 +940,26 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     player.y = 540;
                 }
                 
+                if(CollisionObject(playerCollision, diamanteTesouroCollision) && !puzzle2Resolvido){
+                        colidiu = true;
+                }
+                
+                if(CollisionObject(playerCollision, diamanteTesouroCollision) && !diamanteTesouroPegandoFlag && pegando && !diamanteTesouroNoBau && puzzle2Resolvido){  //Verifica se pode pegar
+                        PlaySound(pegandoItem);
+                        diamanteTesouroPegandoFlag = true;
+                        diamanteTesouroSpawn = false;
+                }
+                    
+                if(colidiu){
+                     timerBalao += GetFrameTime();
+                     DrawTextureEx(mensagem2, (Vector2){player.x + 30, player.y - 300}, 0.0f, 1.0f, WHITE);
+                     
+                     if(timerBalao >= 3){
+                         timerBalao = 0.0f;
+                         colidiu = false;
+                     }
+                }
+            
                 
             } else if(player.mapa == 1) {
                 
@@ -993,7 +1015,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 
                 if(puzzle1Resolvido && !puzzle2Resolvido && CollisionObject(playerCollision, doorCollision)){
                     player.x = 100;
-                    player.mapa = 3;
+                    player.mapa = getNextMapaPrincipal(head);
                 }
                                
                 if(CollisionObject(playerCollision, arenaCollision)){
@@ -1027,95 +1049,43 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     lacaio2Adicionado = true;
                 }
                 
-
-            }
-            else if(player.mapa == -1){
-                CollisionObject(playerCollision, pilarEsqMapa3);
-                CollisionObject(playerCollision, pilarMapa3);
-                CollisionObject(playerCollision, pilarDirMapa3);
-                
-                if(CollisionObject(playerCollision, portaMapa3)){
-                    
-                    player.mapa = getAntMapaSecundario(head);
-                    player.x = 400;
-                    player.y = 540;
-
-                }
-                
-            } 
-            
-            // ############################
-            //  DESENHO DAS TEXTURAS/IMAGENS
-            // ############################
-            BeginDrawing();
-            ClearBackground(RAYWHITE);
-            
-            // Só vai desenhar o item se estiver no mapa dele
-            if(player.mapa == 0) {
-                DrawTexture(backgroundImage, 0, 0, WHITE);
-                
-                if(chaveSpawn && chavePegandoFlag == false) {
-                    DrawTextureEx(chaveCenario, (Vector2){chave.x, chave.y}, 0.0f, 1.0f, WHITE);
-                }
-                
-                //Diamante                 
-                if(!diamanteTesouroNoBau){
-                    if(CollisionObject(playerCollision, diamanteTesouroCollision) && !diamanteTesouroPegandoFlag && pegando && !diamanteTesouroNoBau && puzzle2Resolvido){  //Verifica se pode pegar
-                        PlaySound(pegandoItem);
-                        diamanteTesouroPegandoFlag = true;
-                        diamanteTesouroSpawn = false;
-                    }
-                    
-
-                    if(diamanteTesouroSpawn && !diamanteTesouroPegandoFlag){                             // Verifica se pode desenhar o diamante
-                        if(!puzzle2Resolvido){
-                        DrawTextureEx(diamante, (Vector2){60, 500},0.0f, 3.0f,WHITE);
-                        }
-                        else{
-                        DrawTextureEx(diamanteFree, (Vector2){100, 500},0.0f, 3.0f,WHITE);    
-                        }
-                    }
-                    
-                    if(CollisionObject(playerCollision, diamanteTesouroCollision) && !puzzle2Resolvido){
-                        colidiu = true;
-                       
-                    }
-                    
-                    if(colidiu){
-                         timerBalao += GetFrameTime();
-                         DrawTextureEx(mensagem2, (Vector2){player.x + 30, player.y - 300}, 0.0f, 1.0f, WHITE);
-                         
-                         if(timerBalao >= 3){
-                             timerBalao = 0.0f;
-                             colidiu = false;
-                         }
-                    }
-                }
-            }
-            else if(player.mapa == 1){
-                DrawTexture(mapa1, 0, 0, WHITE);          
-            }
-            else if(player.mapa == 2){
-                DrawTexture(mapa2, 0, 0, WHITE);
-                
                 if(CollisionObject(playerCollision, arenaCollision) && !chavePegandoFlag && !puzzleDesbloqueado ){
                     colidiu1 = true;
                 }
                 
                 if(colidiu1){
-                         timerBalao += GetFrameTime();
-                         DrawTextureEx(mensagem1, (Vector2){player.x + 30, player.y - 300}, 0.0f, 3.0f, WHITE);
-                         
-                         if(timerBalao >= 3){
-                             timerBalao = 0.0f;
-                             colidiu1 = false;
-                         }
-                    }
-            
-            }
-            else if(player.mapa == -1){
-                DrawTexture(arena,0,0,WHITE);
-                //Chave do tesouro 
+                     timerBalao += GetFrameTime();
+                     DrawTextureEx(mensagem1, (Vector2){player.x + 30, player.y - 300}, 0.0f, 3.0f, WHITE);
+                     
+                     if(timerBalao >= 3){
+                         timerBalao = 0.0f;
+                         colidiu1 = false;
+                     }
+                }
+                
+
+            } else if(player.mapa == 3) {
+                if(CollisionObject(playerCollision, doorCollisionEsquerda)) {
+                    player.mapa = 2;
+                    player.x = 920;
+                    player.y = 540;
+                }
+                
+                if(!glockDourada && glockDouradaSpawn && CollisionObject(playerCollision, glockDouradaCollision)){
+                    PlaySound(getGlock);
+                    glockDourada = true;
+                    glockDouradaSpawn = false;
+                }
+            } else if(player.mapa == -1){
+                CollisionObject(playerCollision, pilarEsqMapa3);
+                CollisionObject(playerCollision, pilarMapa3);
+                CollisionObject(playerCollision, pilarDirMapa3);
+                
+                if(CollisionObject(playerCollision, portaMapa3)){
+                    player.mapa = getAntMapaSecundario(head);
+                    player.x = 400;
+                    player.y = 540;
+                }
                 
                 if(!chaveTesouroNoBau){
                     if(!chaveTesouroPegandoFlag && pegando && !chaveTesouroNoBau && CollisionObject(playerCollision, chaveTesouroCollision)){  //Verifica se pode pegar
@@ -1130,10 +1100,6 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                         chaveTesouroNoBau = true;
                         chaveTesouroPegandoFlag = false;
                         pegando = false;
-                    }
-                    
-                    if(chaveTesouroSpawn && !chavePegandoFlag){                                                                                 // Verifica se pode desenhar a chave
-                        DrawTexture(chaveTesouro, 300, 400, WHITE);
                     }
                 }
                 // Espada
@@ -1152,21 +1118,90 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                         espadaTesouroPegandoFlag = false;
                         pegando = false;
                     }
-                    
-                    if(espadaTesouroSpawn && !espadaTesouroPegandoFlag && chaveTesouroNoBau && puzzle1Resolvido){                               // Verifica se pode desenhar a espada
-                        DrawTexture(espadaTesouro, 200, 200,WHITE);
-                    }
                 }
                 
-                 if(CollisionObject(playerCollision, bauTesouroCollision) && diamanteTesouroPegandoFlag && puzzle2Resolvido){    // Verifica se colocou o diamante no bau
+                if(CollisionObject(playerCollision, bauTesouroCollision) && diamanteTesouroPegandoFlag && puzzle2Resolvido){    // Verifica se colocou o diamante no bau
                     StopSound(andando);
                     diamanteTesouroSpawn = false;
                     diamanteTesouroNoBau = true;
                     diamanteTesouroPegandoFlag = false;
                     pegando = false;
+               }
+                
+               if(CollisionObject(playerCollision, bauTesouroCollision) && diamanteTesouroPegandoFlag && puzzle2Resolvido){    // Verifica se colocou o diamante no bau
+                    StopSound(andando);
+                    diamanteTesouroSpawn = false;
+                    diamanteTesouroNoBau = true;
+                    diamanteTesouroPegandoFlag = false;
+                    pegando = false;
+               }
+                
+            
+                
+            } 
+            
+            // ############################
+            //  DESENHO DAS TEXTURAS/IMAGENS
+            // ############################
+            
+            BeginDrawing();
+            ClearBackground(RAYWHITE);
+            
+            // Só vai desenhar o item se estiver no mapa dele
+            if(player.mapa == 0) {
+                DrawTexture(backgroundImage, 0, 0, WHITE);
+                
+                if(chaveSpawn && chavePegandoFlag == false) {
+                    DrawTextureEx(chaveCenario, (Vector2){chave.x, chave.y}, 0.0f, 1.0f, WHITE);
                 }
+                
+                //Diamante                 
+                if(!diamanteTesouroNoBau){
                     
-
+                    if(diamanteTesouroSpawn && !diamanteTesouroPegandoFlag){                             // Verifica se pode desenhar o diamante
+                        if(!puzzle2Resolvido){
+                        DrawTextureEx(diamante, (Vector2){60, 500},0.0f, 3.0f,WHITE);
+                        }
+                        else{
+                        DrawTextureEx(diamanteFree, (Vector2){100, 500},0.0f, 3.0f,WHITE);    
+                        }
+                    }
+                    
+                }
+            }
+            else if(player.mapa == 1){
+                DrawTexture(mapa1, 0, 0, WHITE);          
+            }
+            else if(player.mapa == 2){
+                DrawTexture(mapa2, 0, 0, WHITE);
+            
+            } else if(player.mapa == 3){
+                //DrawTexture(secret, 0,0, WHITE);
+                Rectangle secretRec = { frameAtualSecret * larguraSecret, 0, larguraSecret, alturaFrameSecret};
+                DrawTextureRec(secret, secretRec, (Vector2){0,0}, WHITE);
+                                
+                if(glockDouradaSpawn){
+                    DrawTextureEx(glock, (Vector2){700, 570}, 0.0f, 1.0f, WHITE);
+                }
+              
+            } else if(player.mapa == -1){
+                DrawTexture(arena,0,0,WHITE);
+                //Chave do tesouro 
+                
+                if(!chaveTesouroNoBau){
+                    
+                    if(chaveTesouroSpawn && !chavePegandoFlag){                                                                                 // Verifica se pode desenhar a chave
+                        DrawTexture(chaveTesouro, 300, 400, WHITE);
+                    }
+                }
+                // Espada
+                
+                if(!espadaTesouroNoBau){
+                    if(espadaTesouroSpawn && !espadaTesouroPegandoFlag && chaveTesouroNoBau && puzzle1Resolvido){                               // Verifica se pode desenhar a espada
+                        DrawTexture(espadaTesouro, 200, 200,WHITE);
+                    }
+                }
+                
                 //Bau
                 if(!chaveTesouroNoBau){
                     DrawTextureEx(bau, (Vector2){900,270},0.0f, 4.0f,WHITE);
@@ -1212,6 +1247,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 }
                              
             }
+            
             //Verificacao chave
             if(chaveTesouroPegandoFlag && !pegando && !chaveTesouroNoBau){                                         //Verifica se deixou a chave cair 
                     chaveTesouroPegandoFlag = false;
@@ -1263,32 +1299,6 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     DrawTextureEx(bala, projetil.posicao, 0.0f, 0.25f, WHITE);  
                 }
             }
-            
-                //MAPA 3
-                
-                if(player.mapa == 3){
-                    //DrawTexture(secret, 0,0, WHITE);
-                    Rectangle secretRec = { frameAtualSecret * larguraSecret, 0, larguraSecret, alturaFrameSecret};
-                    DrawTextureRec(secret, secretRec, (Vector2){0,0}, WHITE);
-                    
-                    if(CollisionObject(playerCollision, doorCollisionEsquerda)) {
-                        player.mapa = 2;
-                        player.x = 920;
-                        player.y = 540;
-                    }
-                    
-                    if(!glockDourada && glockDouradaSpawn && CollisionObject(playerCollision, glockDouradaCollision)){
-                        PlaySound(getGlock);
-                        glockDourada = true;
-                        glockDouradaSpawn = false;
-                    }
-                                    
-                    if(glockDouradaSpawn){
-                        DrawTextureEx(glock, (Vector2){700, 570}, 0.0f, 1.0f, WHITE);
-                    }
-                  
-                }
-                
                 
             //lacaio
             if(lacaio.mapa == player.mapa && lacaio.vivo){
