@@ -561,6 +561,10 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     while (!WindowShouldClose()) {
             pontuacao += 1;
             
+            if (IsKeyPressed(KEY_F11)) {
+            ToggleFullscreen();
+            }
+        
             if (!pausa) {
                 if (IsKeyPressed(KEY_P)) {
                 pausa = !pausa;
