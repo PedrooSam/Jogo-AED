@@ -1,11 +1,17 @@
-#Um dia no Museu
+# Um dia no museu
 
-Este é um jogo envolvendo diversos temas como RPG,puzzle,mistério e ação e referenciando o ponto turístico de Pernambuco o Instituto Ricardo Brennan,também conhecido como Castelo de Brennand, o jogo foi desenvolvido em C usando a biblioteca Raylib. O jogo pode ser executado diretamente no Notepad++ utilizando a tecla F6.
+Este é um jogo envolvendo diversos temas como RPG,puzzle,mistério e ação e referenciando o ponto turístico de Pernambuco o Instituto Ricardo Brennan,também conhecido como Castelo de Brennand, o jogo foi desenvolvido em C usando a biblioteca [Raylib](https://www.raylib.com/). O jogo pode ser executado diretamente no Notepad++ utilizando a tecla **F6**.
 
-##Pré-requisitos
--1 Instale a biblioteca Raylib.
-- [Guia de instalação da Raylib](https://www.raylib.com/)
--2 Tenha o compilador GCC instalado.
-- [MinGW para Windows ](https://www.mingw.org/) ou GCC para Linux
+## Pré-requisitos
 
-“Como Rodar o Jogo no Notepad++”
+1. Instale a biblioteca Raylib.
+   - [Guia de instalação da Raylib](https://www.raylib.com/)
+2. Tenha o compilador GCC instalado.
+   - [MinGW para Windows](http://www.mingw.org/) ou [GCC para Linux](https://gcc.gnu.org/)
+3. Instale o editor [Notepad++](https://notepad-plus-plus.org/), ou outro editor com suporte à execução de comandos personalizados.
+
+## Como Rodar o Jogo no Notepad++
+
+1. Abra o arquivo `Jogo-AED` em abrir pasta como área de trabalho na aba de ficheiro no **Notepad++**.
+2. Pressione **F6** para abrir a janela de execução de scripts.
+3. Escolha a opção raylib_compile_execute e rode o jogo.
