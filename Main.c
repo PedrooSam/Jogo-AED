@@ -417,7 +417,7 @@ float getTime(float timer) {
 }
     
 // Função principal do jogo
-void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D pegandoChaveEsquerda, Texture2D pegandoChaveDireita, Texture2D mapa1, Texture2D mapa2, Texture2D arena, Texture2D mensagem1, Texture2D menuBack, Texture2D espadaTesouro, Texture2D chaveTesouro, Texture2D bau, Texture2D bauPreenchido, Texture2D botao1Off, Texture2D botao1On, Texture2D botao2Off, Texture2D botao2On, Texture2D pegandoChaveTesouroDireita, Texture2D pegandoChaveTesouroEsquerda, Texture2D pegandoEspadaEsquerda, Texture2D pegandoEspadaDireita, Texture2D bauPreenchido2, Texture2D diamante, Texture2D pegandoDiamanteEsquerda,Texture2D  pegandoDiamanteDireita, Texture2D bauPreenchido3, Texture2D puzzle1, Texture2D spritesheet, Texture2D spritesheetRight, Texture2D spriteWalkLeft, Texture2D spriteWalkRight,Texture2D pegandoEsquerdaIdle, Texture2D pegandoDireitaIdle, Texture2D backgroundMenu,Texture2D pegandoChaveEsquerdaIdle,Texture2D pegandoChaveDireitaIdle, Texture2D pegandoChaveTesouroEsquerdaIdle, Texture2D pegandoChaveTesouroDireitaIdle, Texture2D pegandoEspadaEsquerdaIdle, Texture2D pegandoEspadaDireitaIdle, Texture2D pegandoDiamanteEsquerdaIdle, Texture2D pegandoDiamanteDireitaIdle, Texture2D bala,Texture2D danoLacaioEsquerda ,Texture2D danoLacaioDireita, Texture2D diamanteFree, Texture2D atirandoEsquerda, Texture2D atirandoDireita, Texture2D lacaioDireita, Texture2D lacaioEsquerda, Texture2D lacaioAtaqueEsquerda, Texture2D lacaioAtaqueDireita, Texture2D levandoDano, Texture2D mensagem2, Texture2D puzzle2, Texture2D vida1,Texture2D vida2,Texture2D vida3,Texture2D vida4,Texture2D vida5,   Texture2D lacaioVida1,Texture2D lacaioVida2,Texture2D lacaioVida3,Texture2D lacaioVida4,Texture2D lacaioVida5,Texture2D lacaioVida6,Texture2D lacaioVida7,Texture2D lacaioVida8, Texture2D lacaioVida9,Texture2D lacaioVida10, Texture2D fogo,Texture2D procuraChave,Texture2D procuraEspadas,Texture2D procuraDiamante,Texture2D achouChave,Texture2D achouEspadas,Texture2D achouDiamante, Texture2D potion, Sound andando,Sound tiro, Sound uhr, Sound lacaioSom, Sound abrindoPorta,Sound destrancandoPorta,Sound portaTrancada,Sound pegandoItem, Sound end) {
+void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D pegandoChaveEsquerda, Texture2D pegandoChaveDireita, Texture2D mapa1, Texture2D mapa2, Texture2D arena, Texture2D mensagem1, Texture2D menuBack, Texture2D espadaTesouro, Texture2D chaveTesouro, Texture2D bau, Texture2D bauPreenchido, Texture2D botao1Off, Texture2D botao1On, Texture2D botao2Off, Texture2D botao2On, Texture2D pegandoChaveTesouroDireita, Texture2D pegandoChaveTesouroEsquerda, Texture2D pegandoEspadaEsquerda, Texture2D pegandoEspadaDireita, Texture2D bauPreenchido2, Texture2D diamante, Texture2D pegandoDiamanteEsquerda,Texture2D  pegandoDiamanteDireita, Texture2D bauPreenchido3, Texture2D puzzle1, Texture2D spritesheet, Texture2D spritesheetRight, Texture2D spriteWalkLeft, Texture2D spriteWalkRight,Texture2D pegandoEsquerdaIdle, Texture2D pegandoDireitaIdle, Texture2D backgroundMenu,Texture2D pegandoChaveEsquerdaIdle,Texture2D pegandoChaveDireitaIdle, Texture2D pegandoChaveTesouroEsquerdaIdle, Texture2D pegandoChaveTesouroDireitaIdle, Texture2D pegandoEspadaEsquerdaIdle, Texture2D pegandoEspadaDireitaIdle, Texture2D pegandoDiamanteEsquerdaIdle, Texture2D pegandoDiamanteDireitaIdle, Texture2D bala,Texture2D danoLacaioEsquerda ,Texture2D danoLacaioDireita, Texture2D diamanteFree, Texture2D atirandoEsquerda, Texture2D atirandoDireita, Texture2D lacaioDireita, Texture2D lacaioEsquerda, Texture2D lacaioAtaqueEsquerda, Texture2D lacaioAtaqueDireita, Texture2D levandoDano, Texture2D mensagem2, Texture2D puzzle2, Texture2D vida1,Texture2D vida2,Texture2D vida3,Texture2D vida4,Texture2D vida5,   Texture2D lacaioVida1,Texture2D lacaioVida2,Texture2D lacaioVida3,Texture2D lacaioVida4,Texture2D lacaioVida5,Texture2D lacaioVida6,Texture2D lacaioVida7,Texture2D lacaioVida8, Texture2D lacaioVida9,Texture2D lacaioVida10, Texture2D fogo,Texture2D procuraChave,Texture2D procuraEspadas,Texture2D procuraDiamante,Texture2D achouChave,Texture2D achouEspadas,Texture2D achouDiamante, Texture2D potion, Texture2D secret,Texture2D atirandoEsquerdaDourado,Texture2D atirandoDireitaDourado, Texture2D glock, Sound andando,Sound tiro, Sound uhr, Sound lacaioSom, Sound abrindoPorta,Sound destrancandoPorta,Sound portaTrancada,Sound pegandoItem, Sound end) {
     // ############################
     // FLAGS	
     // ############################
@@ -442,6 +442,8 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
 
     bool segurandoItem = false;
     bool personagemParado = true;
+    
+    bool glockDourada = false;
     // ############################
     // 	CONFIG DE MAPA	
     // ############################
@@ -454,6 +456,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     inserirMapa(&head, &tail, 0, NULL);
     inserirMapa(&head, &tail, 1, NULL);
     inserirMapa(&head, &tail, 2, mapaSec0);
+    inserirMapa(&head, &tail, 3, NULL);
     
     //posicao bala 
     projetil.ativo = false;
@@ -570,6 +573,14 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     float timerPotion = 0.0f;
     int larguraPotion = potion.width / totalFramesPotion;
     int alturaFramePotion = potion.height;
+    
+    //Animação secret room
+    int totalFramesSecret = 4;
+    int frameAtualSecret = 0;
+    float tempoFrameSecret = 0.1f;
+    float timerSecret = 0.0f;
+    int larguraSecret = secret.width / totalFramesSecret;
+    int alturaFrameSecret = secret.height;
     
     while (!WindowShouldClose()) {
             pontuacao += 1;
@@ -799,6 +810,15 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     }
                 }
             }
+            
+            // Atualização secret room
+            if(player.mapa == 3){
+                timerSecret = getTime(timerSecret);
+                frameAtualSecret = getFrame(timerSecret, tempoFrameSecret, totalFramesSecret, frameAtualSecret);
+                if(timerSecret > tempoFrameSecret){
+                    timerSecret = 0.0f;
+                }
+            }
 
             
             // Atualização fogo 
@@ -871,10 +891,12 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             Rectangle bauTesouroCollision = {925, 250, 100, 150};
 
             Rectangle espadaTesouroCollision = {200, 200, 60 , 100};
-            Rectangle diamanteTesouroCollision = {900, 450, 100, 50};
+            Rectangle diamanteTesouroCollision = {50, 500, 100, 50};
             
             Rectangle botao1Collision = {140,350,50,50};
             Rectangle botao2Collision = {400,350,50,50};  
+            
+            Rectangle glockDouradaCollision = {700, 575, 50, 50};
             
             //Verifica as colisões 
             if(player.mapa == 0) {
@@ -944,6 +966,11 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     }
 
                 }
+                
+                if(puzzle1Resolvido && !puzzle2Resolvido && CollisionObject(playerCollision, doorCollision)){
+                    player.x = 100;
+                    player.mapa = 3;
+                }
                                
                 if(CollisionObject(playerCollision, arenaCollision)){
                      if(chavePegandoFlag) {     //Destrancou
@@ -991,7 +1018,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
 
                 }
                 
-            }
+            } 
             
             // ############################
             //  DESENHO DAS TEXTURAS/IMAGENS
@@ -1018,10 +1045,10 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
 
                     if(diamanteTesouroSpawn && !diamanteTesouroPegandoFlag){                             // Verifica se pode desenhar o diamante
                         if(!puzzle2Resolvido){
-                        DrawTextureEx(diamante, (Vector2){900, 460},0.0f, 3.0f,WHITE);
+                        DrawTextureEx(diamante, (Vector2){60, 500},0.0f, 3.0f,WHITE);
                         }
                         else{
-                        DrawTextureEx(diamanteFree, (Vector2){900, 460},0.0f, 3.0f,WHITE);    
+                        DrawTextureEx(diamanteFree, (Vector2){100, 500},0.0f, 3.0f,WHITE);    
                         }
                     }
                     
@@ -1113,7 +1140,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     pegando = false;
                 }
                     
-                
+
                 //Bau
                 if(!chaveTesouroNoBau){
                     DrawTextureEx(bau, (Vector2){900,270},0.0f, 4.0f,WHITE);
@@ -1187,19 +1214,42 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 }
                 
                 if ((projetil.posicao.x > lacaio.x && projetil.posicao.x < lacaio.x + 200) && (projetil.posicao.y > lacaio.y && projetil.posicao.y < lacaio.y + 150) && lacaio.vivo && lacaio.mapa == player.mapa) {
+                    
+                    
                     projetil.ativo = false;
-                    lacaio.vida -= 1;
                     lacaioAtingido = true;
+                    
+                    if(glockDourada){
+                        lacaio.vida -= 5;
+                    }else{
+                        lacaio.vida -= 1;
+                    }
                         
-                        if(lacaio.vida == 0){
-                            lacaio.vivo = false;
-                        }
+                    if(lacaio.vida == 0){
+                        lacaio.vivo = false;
+                    }
                 }
                 
                 // Desenhe o projétil na posição atual
                 DrawTextureEx(bala, projetil.posicao, 0.0f, 0.25f, WHITE);  
             }
-
+            
+            
+                //MAPA 3
+                
+                if(player.mapa == 3){
+                    //DrawTexture(secret, 0,0, WHITE);
+                    Rectangle secretRec = { frameAtualSecret * larguraSecret, 0, larguraSecret, alturaFrameSecret};
+                    DrawTextureRec(secret, secretRec, (Vector2){0,0}, WHITE);
+                    
+                    if(CollisionObject(playerCollision, doorCollisionEsquerda)) {
+                        player.mapa = 2;
+                        player.x = 920;
+                        player.y = 540;
+                    }
+                }
+                
+                
             //lacaio
             if(lacaio.mapa == player.mapa && lacaio.vivo){
                 if(lacaioAtingido){
@@ -1353,16 +1403,26 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 } else {                        // Personagem parado 
                     if(andandoDireita){      
                         if(atirou && !segurandoItem && !pegando){
-                            Rectangle sourceRecKey = { frameAtualTiro * larguraFrameTiro, 0, larguraFrameTiro, alturaFrameTiro };
-                            DrawTextureRec(atirandoDireita, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                            if(glockDourada){
+                                Rectangle sourceRecKey = { frameAtualTiro * larguraFrameTiro, 0, larguraFrameTiro, alturaFrameTiro };
+                                DrawTextureRec(atirandoDireitaDourado, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                            }else{
+                                Rectangle sourceRecKey = { frameAtualTiro * larguraFrameTiro, 0, larguraFrameTiro, alturaFrameTiro };
+                                DrawTextureRec(atirandoDireita, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                            }
                         }else{
                             Rectangle sourceRec = { frameAtual * larguraFrame, 0, larguraFrame, alturaFrame };
                             DrawTextureRec(spritesheetRight, sourceRec, (Vector2){player.x, player.y-playerOffSet}, WHITE);
                         }
                     }else{
                         if(atirou && !segurandoItem && !pegando){
-                            Rectangle sourceRecKey = { frameAtualTiro * larguraFrameTiro, 0, larguraFrameTiro, alturaFrameTiro };
-                            DrawTextureRec(atirandoEsquerda, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                            if(glockDourada){
+                                Rectangle sourceRecKey = { frameAtualTiro * larguraFrameTiro, 0, larguraFrameTiro, alturaFrameTiro };
+                                DrawTextureRec(atirandoEsquerdaDourado, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                            }else{
+                                Rectangle sourceRecKey = { frameAtualTiro * larguraFrameTiro, 0, larguraFrameTiro, alturaFrameTiro };
+                                DrawTextureRec(atirandoEsquerda, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                            }
                         }else{
                             Rectangle sourceRec = { frameAtual * larguraFrame, 0, larguraFrame, alturaFrame };
                             DrawTextureRec(spritesheet, sourceRec, (Vector2){player.x, player.y-playerOffSet}, WHITE);
@@ -1422,6 +1482,8 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             sprintf(text, "Timer: %f, Frame: %d, levandoDano: %s", timerLevandoDano, frameAtualLevandoDano, levandoDanoFlag ? "true" : "false");
             DrawText(text, 500,500,30,WHITE);
             */
+            player.mapa = 3;
+            DrawRectangle(glockDouradaCollision.x, glockDouradaCollision.y, glockDouradaCollision.width, glockDouradaCollision.height, WHITE);
             
             EndDrawing();
         }
@@ -1624,6 +1686,12 @@ int main(void) {
     Texture2D achouDiamante = LoadTexture("ui/achouDiamante.png");
     
     Texture2D potion = LoadTexture("cenario/potion.png");
+    
+    Texture2D secret = LoadTexture("cenario/secret.png");
+    
+    Texture2D atirandoEsquerdaDourado = LoadTexture("Imagens/atirandoSuperEsquerda.png");
+    Texture2D atirandoDireitaDourado = LoadTexture("Imagens/atirandoSuperDireita.png");
+    Texture2D glock = LoadTexture("Imagens/glockDourada.png");
     // SONS
     
     Sound andando = LoadSound("audios/andando.mp3");
@@ -1636,9 +1704,10 @@ int main(void) {
     Sound pegandoItem = LoadSound("audios/pegandoItem.mp3");
     Sound end = LoadSound("audios/linkinPark.mp3");
     
+    
     menu(backgroundMenu);
     
-    iniciarJogo(backgroundImage, personagemPegando, personagemPegandoEsquerda, chaveCenario, pegandoChaveEsquerda, pegandoChaveDireita, mapa1, mapa2, arena, mensagem1, menuBack, espadaTesouro, chaveTesouro , bau, bauPreenchido, botao1Off, botao1On, botao2Off, botao2On, pegandoChaveTesouroDireita, pegandoChaveTesouroEsquerda, pegandoEspadaEsquerda, pegandoEspadaDireita, bauPreenchido2, diamante, pegandoDiamanteEsquerda, pegandoDiamanteDireita, bauPreenchido3, puzzle1, spritesheet, spritesheetRight, spriteWalkLeft, spriteWalkRight, pegandoEsquerdaIdle, pegandoDireitaIdle, backgroundMenu, pegandoChaveEsquerdaIdle, pegandoChaveDireitaIdle, pegandoChaveTesouroEsquerdaIdle, pegandoChaveTesouroDireitaIdle, pegandoEspadaEsquerdaIdle, pegandoEspadaDireitaIdle, pegandoDiamanteEsquerdaIdle, pegandoDiamanteDireitaIdle, bala,danoLacaioEsquerda, danoLacaioDireita, diamanteFree, atirandoEsquerda, atirandoDireita, lacaioDireita, lacaioEsquerda, lacaioAtaqueEsquerda, lacaioAtaqueDireita, levandoDano, mensagem2, puzzle2, vida1, vida2, vida3, vida4, vida5, lacaioVida1, lacaioVida2, lacaioVida3, lacaioVida4, lacaioVida5, lacaioVida6, lacaioVida7, lacaioVida8, lacaioVida9, lacaioVida10, fogo, procuraChave, procuraEspadas, procuraDiamante, achouChave, achouEspadas, achouDiamante, potion, andando, tiro, uhr, lacaioSom, abrindoPorta, destrancandoPorta, portaTrancada, pegandoItem, end);
+    iniciarJogo(backgroundImage, personagemPegando, personagemPegandoEsquerda, chaveCenario, pegandoChaveEsquerda, pegandoChaveDireita, mapa1, mapa2, arena, mensagem1, menuBack, espadaTesouro, chaveTesouro , bau, bauPreenchido, botao1Off, botao1On, botao2Off, botao2On, pegandoChaveTesouroDireita, pegandoChaveTesouroEsquerda, pegandoEspadaEsquerda, pegandoEspadaDireita, bauPreenchido2, diamante, pegandoDiamanteEsquerda, pegandoDiamanteDireita, bauPreenchido3, puzzle1, spritesheet, spritesheetRight, spriteWalkLeft, spriteWalkRight, pegandoEsquerdaIdle, pegandoDireitaIdle, backgroundMenu, pegandoChaveEsquerdaIdle, pegandoChaveDireitaIdle, pegandoChaveTesouroEsquerdaIdle, pegandoChaveTesouroDireitaIdle, pegandoEspadaEsquerdaIdle, pegandoEspadaDireitaIdle, pegandoDiamanteEsquerdaIdle, pegandoDiamanteDireitaIdle, bala,danoLacaioEsquerda, danoLacaioDireita, diamanteFree, atirandoEsquerda, atirandoDireita, lacaioDireita, lacaioEsquerda, lacaioAtaqueEsquerda, lacaioAtaqueDireita, levandoDano, mensagem2, puzzle2, vida1, vida2, vida3, vida4, vida5, lacaioVida1, lacaioVida2, lacaioVida3, lacaioVida4, lacaioVida5, lacaioVida6, lacaioVida7, lacaioVida8, lacaioVida9, lacaioVida10, fogo, procuraChave, procuraEspadas, procuraDiamante, achouChave, achouEspadas, achouDiamante,potion,secret, atirandoEsquerdaDourado, atirandoDireitaDourado, glock, andando, tiro, uhr, lacaioSom, abrindoPorta, destrancandoPorta, portaTrancada, pegandoItem, end);
     
     CloseWindow();
     return 0;
