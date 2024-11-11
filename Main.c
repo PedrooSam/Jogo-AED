@@ -77,6 +77,7 @@ bool mapaBloqueado = false;
 // Pontacao 
 int pontuacao = 0;
 
+
 //Colisão Universal
 bool CollisionObject(Rectangle playerCollision, Rectangle objeto) {
     if (CheckCollisionRecs(playerCollision, objeto)) {
@@ -411,7 +412,7 @@ float getTime(float timer) {
 }
     
 // Função principal do jogo
-void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D pegandoChaveEsquerda, Texture2D pegandoChaveDireita, Texture2D mapa1, Texture2D mapa2, Texture2D arena, Texture2D mensagem1, Texture2D menuBack, Texture2D espadaTesouro, Texture2D chaveTesouro, Texture2D bau, Texture2D bauPreenchido, Texture2D botao1Off, Texture2D botao1On, Texture2D botao2Off, Texture2D botao2On, Texture2D pegandoChaveTesouroDireita, Texture2D pegandoChaveTesouroEsquerda, Texture2D pegandoEspadaEsquerda, Texture2D pegandoEspadaDireita, Texture2D bauPreenchido2, Texture2D diamante, Texture2D pegandoDiamanteEsquerda,Texture2D  pegandoDiamanteDireita, Texture2D bauPreenchido3, Texture2D puzzle1, Texture2D spritesheet, Texture2D spritesheetRight, Texture2D spriteWalkLeft, Texture2D spriteWalkRight,Texture2D pegandoEsquerdaIdle, Texture2D pegandoDireitaIdle, Texture2D backgroundMenu,Texture2D pegandoChaveEsquerdaIdle,Texture2D pegandoChaveDireitaIdle, Texture2D pegandoChaveTesouroEsquerdaIdle, Texture2D pegandoChaveTesouroDireitaIdle, Texture2D pegandoEspadaEsquerdaIdle, Texture2D pegandoEspadaDireitaIdle, Texture2D pegandoDiamanteEsquerdaIdle, Texture2D pegandoDiamanteDireitaIdle, Texture2D bala,Texture2D danoLacaioEsquerda ,Texture2D danoLacaioDireita, Texture2D diamanteFree, Texture2D atirandoEsquerda, Texture2D atirandoDireita, Texture2D lacaioDireita, Texture2D lacaioEsquerda, Texture2D lacaioAtaqueEsquerda, Texture2D lacaioAtaqueDireita, Texture2D levandoDano, Texture2D mensagem2, Texture2D puzzle2, Texture2D mapa1Bloqueado, Texture2D mapa2Bloqueado, Texture2D vida1,Texture2D vida2,Texture2D vida3,Texture2D vida4,Texture2D vida5,   Texture2D lacaioVida1,Texture2D lacaioVida2,Texture2D lacaioVida3,Texture2D lacaioVida4,Texture2D lacaioVida5,Texture2D lacaioVida6,Texture2D lacaioVida7,Texture2D lacaioVida8, Texture2D lacaioVida9,Texture2D lacaioVida10) {
+void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D pegandoChaveEsquerda, Texture2D pegandoChaveDireita, Texture2D mapa1, Texture2D mapa2, Texture2D arena, Texture2D mensagem1, Texture2D menuBack, Texture2D espadaTesouro, Texture2D chaveTesouro, Texture2D bau, Texture2D bauPreenchido, Texture2D botao1Off, Texture2D botao1On, Texture2D botao2Off, Texture2D botao2On, Texture2D pegandoChaveTesouroDireita, Texture2D pegandoChaveTesouroEsquerda, Texture2D pegandoEspadaEsquerda, Texture2D pegandoEspadaDireita, Texture2D bauPreenchido2, Texture2D diamante, Texture2D pegandoDiamanteEsquerda,Texture2D  pegandoDiamanteDireita, Texture2D bauPreenchido3, Texture2D puzzle1, Texture2D spritesheet, Texture2D spritesheetRight, Texture2D spriteWalkLeft, Texture2D spriteWalkRight,Texture2D pegandoEsquerdaIdle, Texture2D pegandoDireitaIdle, Texture2D backgroundMenu,Texture2D pegandoChaveEsquerdaIdle,Texture2D pegandoChaveDireitaIdle, Texture2D pegandoChaveTesouroEsquerdaIdle, Texture2D pegandoChaveTesouroDireitaIdle, Texture2D pegandoEspadaEsquerdaIdle, Texture2D pegandoEspadaDireitaIdle, Texture2D pegandoDiamanteEsquerdaIdle, Texture2D pegandoDiamanteDireitaIdle, Texture2D bala,Texture2D danoLacaioEsquerda ,Texture2D danoLacaioDireita, Texture2D diamanteFree, Texture2D atirandoEsquerda, Texture2D atirandoDireita, Texture2D lacaioDireita, Texture2D lacaioEsquerda, Texture2D lacaioAtaqueEsquerda, Texture2D lacaioAtaqueDireita, Texture2D levandoDano, Texture2D mensagem2, Texture2D puzzle2, Texture2D vida1,Texture2D vida2,Texture2D vida3,Texture2D vida4,Texture2D vida5,   Texture2D lacaioVida1,Texture2D lacaioVida2,Texture2D lacaioVida3,Texture2D lacaioVida4,Texture2D lacaioVida5,Texture2D lacaioVida6,Texture2D lacaioVida7,Texture2D lacaioVida8, Texture2D lacaioVida9,Texture2D lacaioVida10, Texture2D fogo) {
     // ############################
     // FLAGS	
     // ############################
@@ -435,7 +436,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     bool botao2Pressionado = false;
 
     bool segurandoItem = false;
-    
+    bool personagemParado = true;
     // ############################
     // 	CONFIG DE MAPA	
     // ############################
@@ -484,7 +485,6 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     float timer = 0.0f;
     int larguraFrame = spritesheet.width / totalFrames;
     int alturaFrame = spritesheet.height;
-    bool personagemParado = true;
     
     //animação walk
     int totalFramesWalk = 5;
@@ -513,7 +513,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
    // (lacaio) animacao dano
     int totalFrameslacaioDano = 4;
     int frameAtuallacaioDano = 0;
-    float tempoFramelacaioDano = 0.2f;
+    float tempoFramelacaioDano = 0.05f;
     float timerlacaioDano = 0.0f;
     int larguraFramelacaioDano = danoLacaioDireita.width / totalFrameslacaioDano;
     int alturaFramelacaioDano = danoLacaioDireita.height;
@@ -545,13 +545,18 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     // Personagem levando dano
     int totalFramesLevandoDano = 4;
     int frameAtualLevandoDano = 0;
-    float tempoFrameLevandoDano = 0.2f;
+    float tempoFrameLevandoDano = 0.05f;
     float timerLevandoDano = 0.0f;
     int larguraFrameLevandoDano = levandoDano.width / totalFramesLevandoDano;
     int alturaFrameLevandoDano = levandoDano.height;
     
-
-    
+    // Animação fogo
+    int totalFramesFogo = 4;
+    int frameAtualFogo = 0;
+    float tempoFrameFogo = 0.1f;
+    float timerFogo = 0.0f;
+    int larguraFogo = fogo.width / totalFramesFogo;
+    int alturaFrameFogo = fogo.height;
 
     while (!WindowShouldClose()) {
             pontuacao += 1;
@@ -711,11 +716,15 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
 
             // Atualização lacaio levando dano
             if (lacaioAtingido) {
-                timerlacaioDano = getTime(timerlacaioDano);  // Incrementa timerlacaioDano
-                frameAtuallacaioDano = getFrame(timerlacaioDano, tempoFramelacaioDano, totalFrameslacaioDano, frameAtuallacaioDano);
+                timerlacaioDano += GetFrameTime();  // Incrementa timerlacaioDano
                 if (timerlacaioDano >= tempoFramelacaioDano) {
+                    frameAtuallacaioDano++;
                     timerlacaioDano = 0.0f;  // Reseta timerlacaioDano
-                    lacaioAtingido = false;
+                    
+                    if(frameAtuallacaioDano >= totalFramesLevandoDano){
+                        frameAtuallacaioDano = 0;
+                        lacaioAtingido = false;
+                    }
                 }
             }
 
@@ -751,12 +760,26 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             }
 
             // Atualização personagem levando dano
-            if (lacaio.vivo && lacaio.mapa == player.mapa) {
-                timerLevandoDano = getTime(timerLevandoDano);  // Incrementa timerLevandoDano
-                frameAtualLevandoDano = getFrame(timerLevandoDano, tempoFrameLevandoDano, totalFramesLevandoDano, frameAtualLevandoDano);
+            if (levandoDanoFlag) {
+                timerLevandoDano += GetFrameTime();  // Incrementa timerLevandoDano
                 if (timerLevandoDano >= tempoFrameLevandoDano) {
+                    frameAtualLevandoDano++;
                     timerLevandoDano = 0.0f;  // Reseta timerLevandoDano
-                    levandoDanoFlag = false;
+                    
+                    if(frameAtualLevandoDano > totalFramesLevandoDano){
+                        frameAtualLevandoDano = 0;
+                        levandoDanoFlag = false;
+                    }
+                }
+            }
+
+            
+            // Atualização fogo 
+            if(mapaBloqueado){
+                timerFogo = getTime(timerFogo);
+                frameAtualFogo = getFrame(timerFogo, tempoFrameFogo, totalFramesFogo, frameAtualFogo);
+                if(timerFogo > tempoFrameFogo){
+                    timerFogo = 0.0f;
                 }
             }
 
@@ -955,18 +978,10 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 }
             }
             else if(player.mapa == 1){
-                if(mapaBloqueado){
-                    DrawTexture(mapa1Bloqueado, 0, 0, WHITE);
-                }else{
-                    DrawTexture(mapa1, 0, 0, WHITE);
-                }            
+                DrawTexture(mapa1, 0, 0, WHITE);          
             }
             else if(player.mapa == 2){
-                if(mapaBloqueado){
-                    DrawTexture(mapa2Bloqueado, 0, 0, WHITE);
-                }else{
-                    DrawTexture(mapa2, 0, 0, WHITE);
-                }  
+                DrawTexture(mapa2, 0, 0, WHITE);
                 
                 if(CollisionObject(playerCollision, arenaCollision) && !chavePegandoFlag){
                     DrawTextureEx(mensagem1, (Vector2){player.x + 30, player.y - 300}, 0.0f, 3.0f, WHITE);
@@ -1265,6 +1280,13 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     }
                 }
             }    
+  
+            //Fogo
+            if(mapaBloqueado){
+                Rectangle sourceFogo = { frameAtualFogo * larguraFogo, 0, larguraFogo, alturaFrameFogo};
+                DrawTextureRec(fogo, sourceFogo, (Vector2){-50, 480}, WHITE);
+                DrawTextureRec(fogo, sourceFogo, (Vector2){1180, 480}, WHITE);
+            }
             
             // ############################
             //  UI/Interface
@@ -1288,6 +1310,12 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             else if(lacaio.vida == 2) DrawTextureEx(lacaioVida2, (Vector2){700, 20}, 0.0f, 5.0f, WHITE);
             else if(lacaio.vida == 1) DrawTextureEx(lacaioVida1, (Vector2){700, 20}, 0.0f, 5.0f, WHITE);
             }
+            
+            /*           
+            char text[20];
+            sprintf(text, "Timer: %f, Frame: %d, levandoDano: %s", timerLevandoDano, frameAtualLevandoDano, levandoDanoFlag ? "true" : "false");
+            DrawText(text, 500,500,30,WHITE);
+            */
             
             EndDrawing();
         }
@@ -1333,6 +1361,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 DrawText("APOIO AO TIME E FEEDBACK DURANTE O DESENVOLVIMENTO",515, 660, 20, GREEN);
                 EndDrawing();
             }
+
             
             CloseWindow();
         }//tela abse de gameover
@@ -1460,9 +1489,6 @@ int main(void) {
     
     Texture2D mensagem2 = LoadTexture("mensagens/mensagem2.png");
     
-    Texture2D mapa1Bloqueado = LoadTexture("cenario/mapa1Bloqueado.png");
-    Texture2D mapa2Bloqueado = LoadTexture("cenario/mapa2Bloqueado.png");
-    
     Texture2D vida1 = LoadTexture("ui/vida1.png");
     Texture2D vida2 = LoadTexture("ui/vida2.png");
     Texture2D vida3 = LoadTexture("ui/vida3.png");
@@ -1480,10 +1506,11 @@ int main(void) {
     Texture2D lacaioVida9 = LoadTexture("ui/lacaioVida9.png");
     Texture2D lacaioVida10 = LoadTexture("ui/lacaioVida10.png");
     
+    Texture2D fogo = LoadTexture("Imagens/fogo.png");
     
     menu(backgroundMenu);
     
-    iniciarJogo(backgroundImage, personagemPegando, personagemPegandoEsquerda, chaveCenario, pegandoChaveEsquerda, pegandoChaveDireita, mapa1, mapa2, arena, mensagem1, menuBack, espadaTesouro, chaveTesouro , bau, bauPreenchido, botao1Off, botao1On, botao2Off, botao2On, pegandoChaveTesouroDireita, pegandoChaveTesouroEsquerda, pegandoEspadaEsquerda, pegandoEspadaDireita, bauPreenchido2, diamante, pegandoDiamanteEsquerda, pegandoDiamanteDireita, bauPreenchido3, puzzle1, spritesheet, spritesheetRight, spriteWalkLeft, spriteWalkRight, pegandoEsquerdaIdle, pegandoDireitaIdle, backgroundMenu, pegandoChaveEsquerdaIdle, pegandoChaveDireitaIdle, pegandoChaveTesouroEsquerdaIdle, pegandoChaveTesouroDireitaIdle, pegandoEspadaEsquerdaIdle, pegandoEspadaDireitaIdle, pegandoDiamanteEsquerdaIdle, pegandoDiamanteDireitaIdle, bala,danoLacaioEsquerda, danoLacaioDireita, diamanteFree, atirandoEsquerda, atirandoDireita, lacaioDireita, lacaioEsquerda, lacaioAtaqueEsquerda, lacaioAtaqueDireita, levandoDano, mensagem2, puzzle2, mapa1Bloqueado, mapa2Bloqueado, vida1, vida2, vida3, vida4, vida5, lacaioVida1, lacaioVida2, lacaioVida3, lacaioVida4, lacaioVida5, lacaioVida6, lacaioVida7, lacaioVida8, lacaioVida9, lacaioVida10);
+    iniciarJogo(backgroundImage, personagemPegando, personagemPegandoEsquerda, chaveCenario, pegandoChaveEsquerda, pegandoChaveDireita, mapa1, mapa2, arena, mensagem1, menuBack, espadaTesouro, chaveTesouro , bau, bauPreenchido, botao1Off, botao1On, botao2Off, botao2On, pegandoChaveTesouroDireita, pegandoChaveTesouroEsquerda, pegandoEspadaEsquerda, pegandoEspadaDireita, bauPreenchido2, diamante, pegandoDiamanteEsquerda, pegandoDiamanteDireita, bauPreenchido3, puzzle1, spritesheet, spritesheetRight, spriteWalkLeft, spriteWalkRight, pegandoEsquerdaIdle, pegandoDireitaIdle, backgroundMenu, pegandoChaveEsquerdaIdle, pegandoChaveDireitaIdle, pegandoChaveTesouroEsquerdaIdle, pegandoChaveTesouroDireitaIdle, pegandoEspadaEsquerdaIdle, pegandoEspadaDireitaIdle, pegandoDiamanteEsquerdaIdle, pegandoDiamanteDireitaIdle, bala,danoLacaioEsquerda, danoLacaioDireita, diamanteFree, atirandoEsquerda, atirandoDireita, lacaioDireita, lacaioEsquerda, lacaioAtaqueEsquerda, lacaioAtaqueDireita, levandoDano, mensagem2, puzzle2, vida1, vida2, vida3, vida4, vida5, lacaioVida1, lacaioVida2, lacaioVida3, lacaioVida4, lacaioVida5, lacaioVida6, lacaioVida7, lacaioVida8, lacaioVida9, lacaioVida10, fogo);
     
     CloseWindow();
     return 0;
