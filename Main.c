@@ -1577,12 +1577,12 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             
             CloseWindow();
         }//tela abse de gameover
-        if (!player.vivo) {
+        if (player.vivo) {
             // Exibe a tela de "Game Over" e aguarda o jogador pressionar Enter
             while (!IsKeyPressed(KEY_ENTER)) {
                 BeginDrawing();
                 ClearBackground(BLACK);
-                DrawText("GAME OVER!", 600, 310, 30, RED);
+                DrawText("GAME OVER!", 520, 310, 30, RED);
                 DrawText("Pressione ENTER para reiniciar", 450, 350, 20, WHITE);
                 EndDrawing();
             }
