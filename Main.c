@@ -1620,6 +1620,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             curou = false;
             pontuacao = 0;
             mapaBloqueado = false;
+            levandoDanoFlag = false;
     }
                 
         if (pausa) {
