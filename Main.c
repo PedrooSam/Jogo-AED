@@ -1567,15 +1567,50 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             
             CloseWindow();
         }//tela abse de gameover
-        if(!player.vivo){
-            while(!IsKeyPressed(KEY_ENTER)){
-                 BeginDrawing();
+        if (!player.vivo) {
+            // Exibe a tela de "Game Over" e aguarda o jogador pressionar Enter
+            while (!IsKeyPressed(KEY_ENTER)) {
+                BeginDrawing();
                 ClearBackground(BLACK);
-                DrawText("GAMEOVER!",550, 310, 30, RED);
+                DrawText("GAME OVER!", 600, 310, 30, RED);
+                DrawText("Pressione ENTER para reiniciar", 450, 350, 20, WHITE);
                 EndDrawing();
             }
-            CloseWindow();
-        }
+
+            // Após pressionar Enter, redefine as variáveis e o estado do jogo
+            player.vivo = true;
+            player.vida = 5;
+            player.mapa = 0;
+            player.x = 800;
+            player.y = 200;
+
+            lacaio.x = 100;
+            lacaio.y = 200;
+            lacaio.mapa = -1;
+            lacaio.vivo = true;
+            lacaio.vida = 10;
+
+            lacaio2Adicionado = false;
+            lacaio3Adicionado = false;
+
+            chaveSpawn = true;
+            chaveTesouroNoBau = false;
+            chaveTesouroSpawn = true;
+            espadaTesouroNoBau = false;
+            espadaTesouroSpawn = true;
+            diamanteTesouroNoBau = false;
+            diamanteTesouroSpawn = true;
+
+            glockDourada = false;
+            glockDouradaSpawn = true;
+
+            puzzle1Resolvido = false;
+            puzzle2Resolvido = false;
+            puzzleDesbloqueado = false;
+            curou = false;
+            pontuacao = 0;
+            mapaBloqueado = false;
+    }
                 
         if (pausa) {
             Rectangle retomar = {500, 400, 250, 50};
@@ -1592,7 +1627,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             }
             
             if (CheckCollisionPointRec(GetMousePosition(), sair) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-                  menu(backgroundMenu);
+                  CloseWindow();
             }
         }
     }
