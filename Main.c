@@ -83,6 +83,35 @@ bool curou = false;
 float timerBalao = 0.0f;
 bool colidiu = false;
 bool colidiu1 = false;
+
+// ############################
+// FLAGS	
+// ############################
+bool andandoDireita = true;             // Direção inicial
+bool chavePegandoFlag = false;          // Verifica se tá pegando a chave
+bool puzzleDesbloqueado = false;        // Verifica se pode acessar a sala do puzzle 
+
+bool chaveTesouroPegandoFlag = false;   //Verifica se tá pegando a chave do tesouro
+bool chaveTesouroSpawn = true;          //Verifica se a chave do tesouro pode spawnar
+bool chaveTesouroNoBau = false;         //Verifica se a chave do tesouro está no baú
+
+bool espadaTesouroPegandoFlag = false;  //Verifica se tá pegando a espada
+bool espadaTesouroSpawn = true;         //Verifica se a espada pode spawnar
+bool espadaTesouroNoBau = false;        //Verifica se a espada está no baú 
+
+bool diamanteTesouroPegandoFlag = false;//Verifica se está pegando o diamante
+bool diamanteTesouroSpawn = true;       //Verifica se o diamante pode spawnar
+bool diamanteTesouroNoBau = false;      //Verifica se o diamante está no baú
+
+bool botao1Pressionado = false;
+bool botao2Pressionado = false;
+
+bool segurandoItem = false;
+bool personagemParado = true;
+
+bool glockDourada = false;
+bool glockDouradaSpawn = true;
+
 //Colisão Universal
 bool CollisionObject(Rectangle playerCollision, Rectangle objeto) {
     if (CheckCollisionRecs(playerCollision, objeto)) {
@@ -207,6 +236,41 @@ void menu(Texture2D backgroundMenu) {
         if (CheckCollisionPointRec(GetMousePosition(), botaoIniciar) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
             pausa = false;
             PlaySound(confirm);
+                  
+            // Após pressionar Enter, redefine as variáveis e o estado do jogo
+            player.vivo = true;
+            player.vida = 5;
+            player.mapa = 0;
+            player.x = 800;
+            player.y = 200;
+
+            lacaio.x = 100;
+            lacaio.y = 200;
+            lacaio.mapa = -1;
+            lacaio.vivo = true;
+            lacaio.vida = 10;
+
+            lacaio2Adicionado = false;
+            lacaio3Adicionado = false;
+
+            chaveSpawn = true;
+            chaveTesouroNoBau = false;
+            chaveTesouroSpawn = true;
+            espadaTesouroNoBau = false;
+            espadaTesouroSpawn = true;
+            diamanteTesouroNoBau = false;
+            diamanteTesouroSpawn = true;
+
+            glockDourada = false;
+            glockDouradaSpawn = true;
+
+            puzzle1Resolvido = false;
+            puzzle2Resolvido = false;
+            puzzleDesbloqueado = false;
+            curou = false;
+            pontuacao = 0;
+            mapaBloqueado = false;
+            levandoDanoFlag = false;
             break;  
         }
         else if (CheckCollisionPointRec(GetMousePosition(), botaoSair) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
@@ -475,33 +539,7 @@ void ShowIntro() {
 
 // Função principal do jogo
 void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D pegandoChaveEsquerda, Texture2D pegandoChaveDireita, Texture2D mapa1, Texture2D mapa2, Texture2D arena, Texture2D mensagem1, Texture2D menuBack, Texture2D espadaTesouro, Texture2D chaveTesouro, Texture2D bau, Texture2D bauPreenchido, Texture2D botao1Off, Texture2D botao1On, Texture2D botao2Off, Texture2D botao2On, Texture2D pegandoChaveTesouroDireita, Texture2D pegandoChaveTesouroEsquerda, Texture2D pegandoEspadaEsquerda, Texture2D pegandoEspadaDireita, Texture2D bauPreenchido2, Texture2D diamante, Texture2D pegandoDiamanteEsquerda,Texture2D  pegandoDiamanteDireita, Texture2D bauPreenchido3, Texture2D puzzle1, Texture2D spritesheet, Texture2D spritesheetRight, Texture2D spriteWalkLeft, Texture2D spriteWalkRight,Texture2D pegandoEsquerdaIdle, Texture2D pegandoDireitaIdle, Texture2D backgroundMenu,Texture2D pegandoChaveEsquerdaIdle,Texture2D pegandoChaveDireitaIdle, Texture2D pegandoChaveTesouroEsquerdaIdle, Texture2D pegandoChaveTesouroDireitaIdle, Texture2D pegandoEspadaEsquerdaIdle, Texture2D pegandoEspadaDireitaIdle, Texture2D pegandoDiamanteEsquerdaIdle, Texture2D pegandoDiamanteDireitaIdle, Texture2D bala,Texture2D danoLacaioEsquerda ,Texture2D danoLacaioDireita, Texture2D diamanteFree, Texture2D atirandoEsquerda, Texture2D atirandoDireita, Texture2D lacaioDireita, Texture2D lacaioEsquerda, Texture2D lacaioAtaqueEsquerda, Texture2D lacaioAtaqueDireita, Texture2D levandoDano, Texture2D mensagem2, Texture2D puzzle2, Texture2D vida1,Texture2D vida2,Texture2D vida3,Texture2D vida4,Texture2D vida5,   Texture2D lacaioVida1,Texture2D lacaioVida2,Texture2D lacaioVida3,Texture2D lacaioVida4,Texture2D lacaioVida5,Texture2D lacaioVida6,Texture2D lacaioVida7,Texture2D lacaioVida8, Texture2D lacaioVida9,Texture2D lacaioVida10, Texture2D fogo,Texture2D procuraChave,Texture2D procuraEspadas,Texture2D procuraDiamante,Texture2D achouChave,Texture2D achouEspadas,Texture2D achouDiamante, Texture2D potion, Texture2D secret,Texture2D atirandoEsquerdaDourado,Texture2D atirandoDireitaDourado, Texture2D glock, Sound andando,Sound tiro, Sound uhr, Sound lacaioSom, Sound abrindoPorta,Sound destrancandoPorta,Sound portaTrancada,Sound pegandoItem, Sound end, Sound heal, Sound getGlock, Music musica, Sound desert) {
-    // ############################
-    // FLAGS	
-    // ############################
-    bool andandoDireita = true;             // Direção inicial
-    bool chavePegandoFlag = false;          // Verifica se tá pegando a chave
-    bool puzzleDesbloqueado = false;        // Verifica se pode acessar a sala do puzzle 
     
-    bool chaveTesouroPegandoFlag = false;   //Verifica se tá pegando a chave do tesouro
-    bool chaveTesouroSpawn = true;          //Verifica se a chave do tesouro pode spawnar
-    bool chaveTesouroNoBau = false;         //Verifica se a chave do tesouro está no baú
-    
-    bool espadaTesouroPegandoFlag = false;  //Verifica se tá pegando a espada
-    bool espadaTesouroSpawn = true;         //Verifica se a espada pode spawnar
-    bool espadaTesouroNoBau = false;        //Verifica se a espada está no baú 
-    
-    bool diamanteTesouroPegandoFlag = false;//Verifica se está pegando o diamante
-    bool diamanteTesouroSpawn = true;       //Verifica se o diamante pode spawnar
-    bool diamanteTesouroNoBau = false;      //Verifica se o diamante está no baú
-
-    bool botao1Pressionado = false;
-    bool botao2Pressionado = false;
-
-    bool segurandoItem = false;
-    bool personagemParado = true;
-    
-    bool glockDourada = false;
-    bool glockDouradaSpawn = true;
     
     // ############################
     // 	CONFIG DE MAPA	
@@ -1628,9 +1666,11 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 DrawText("APOIO AO TIME E FEEDBACK DURANTE O DESENVOLVIMENTO",515, 660, 20, GREEN);
                 EndDrawing();
             }
-
             
-            CloseWindow();
+            //Chama o menu e mostra a introdução novamente
+            StopSound(end);
+            menu(backgroundMenu);
+            ShowIntro();
         }//tela abse de gameover
         if (!player.vivo) {
             // Exibe a tela de "Game Over" e aguarda o jogador pressionar Enter
@@ -1641,41 +1681,10 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 DrawText("Pressione ENTER para reiniciar", 450, 350, 20, WHITE);
                 EndDrawing();
             }
-
-            // Após pressionar Enter, redefine as variáveis e o estado do jogo
-            player.vivo = true;
-            player.vida = 5;
-            player.mapa = 0;
-            player.x = 800;
-            player.y = 200;
-
-            lacaio.x = 100;
-            lacaio.y = 200;
-            lacaio.mapa = -1;
-            lacaio.vivo = true;
-            lacaio.vida = 10;
-
-            lacaio2Adicionado = false;
-            lacaio3Adicionado = false;
-
-            chaveSpawn = true;
-            chaveTesouroNoBau = false;
-            chaveTesouroSpawn = true;
-            espadaTesouroNoBau = false;
-            espadaTesouroSpawn = true;
-            diamanteTesouroNoBau = false;
-            diamanteTesouroSpawn = true;
-
-            glockDourada = false;
-            glockDouradaSpawn = true;
-
-            puzzle1Resolvido = false;
-            puzzle2Resolvido = false;
-            puzzleDesbloqueado = false;
-            curou = false;
-            pontuacao = 0;
-            mapaBloqueado = false;
-            levandoDanoFlag = false;
+            
+            //Chama o menu novamente
+            menu(backgroundMenu);
+            ShowIntro();
     }
                 
         if (pausa) {
