@@ -16,6 +16,8 @@ Este é um jogo envolvendo diversos temas como RPG,puzzle,mistério e ação e r
 2. Abra o Main.c e pressione **F6** para abrir a janela de execução de scripts.
 3. Escolha a opção raylib_compile_execute e rode o jogo.
 
+---
+
 ### Opção 2. Makefile no Linux/WSL
 1. Instalar o  GCC:
 ```
@@ -48,6 +50,8 @@ cd Jogo-AED
 ```
 make run
 ```
+
+---
 
 ### Opção 3. Compilar e Rodar no Visual Studio Code
 1. Instale a biblioteca Raylib.
