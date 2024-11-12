@@ -753,6 +753,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             // Atualize o timer do ataque
             timerAtaque += 1;
             if (lacaio.vivo && lacaio.mapa == player.mapa) {
+                
                 // Movimenta no eixo X em direção ao jogador
                 if (lacaio.x < player.x -200) {
                     lacaio.x += velocidadeLacaio;
@@ -988,28 +989,13 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     player.x = 200;
                     player.y = 540;
                 }
-                
-                if(CollisionObject(playerCollision, diamanteTesouroCollision) && !puzzle2Resolvido){
-                        colidiu = true;
-                }
-                
+
                 if(CollisionObject(playerCollision, diamanteTesouroCollision) && !diamanteTesouroPegandoFlag && pegando && !diamanteTesouroNoBau && puzzle2Resolvido){  //Verifica se pode pegar
                         PlaySound(pegandoItem);
                         diamanteTesouroPegandoFlag = true;
                         diamanteTesouroSpawn = false;
                 }
-                    
-                if(colidiu){
-                     timerBalao += GetFrameTime();
-                     DrawTextureEx(mensagem2, (Vector2){player.x + 30, player.y - 300}, 0.0f, 1.0f, WHITE);
-                     
-                     if(timerBalao >= 3){
-                         timerBalao = 0.0f;
-                         colidiu = false;
-                     }
-                }
-            
-                
+    
             } else if(player.mapa == 1) {
                 
                 CollisionObject(playerCollision, mesaMapa1);
@@ -1098,19 +1084,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     lacaio2Adicionado = true;
                 }
                 
-                if(CollisionObject(playerCollision, arenaCollision) && !chavePegandoFlag && !puzzleDesbloqueado ){
-                    colidiu1 = true;
-                }
-                
-                if(colidiu1){
-                     timerBalao += GetFrameTime();
-                     DrawTextureEx(mensagem1, (Vector2){player.x + 30, player.y - 300}, 0.0f, 3.0f, WHITE);
-                     
-                     if(timerBalao >= 3){
-                         timerBalao = 0.0f;
-                         colidiu1 = false;
-                     }
-                }
+
                 
 
             } else if(player.mapa == 3) {
@@ -1217,12 +1191,44 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     }
                     
                 }
+                
+                                    
+                                    
+                if(CollisionObject(playerCollision, diamanteTesouroCollision) && !puzzle2Resolvido){
+                        colidiu = true;
+                }
+                
+                if(colidiu){
+                     timerBalao += GetFrameTime();
+                     DrawTextureEx(mensagem2, (Vector2){player.x + 30, player.y - 300}, 0.0f, 1.0f, WHITE);
+                     
+                     if(timerBalao >= 3){
+                         timerBalao = 0.0f;
+                         colidiu = false;
+                     }
+                }
+            
+            
             }
             else if(player.mapa == 1){
                 DrawTexture(mapa1, 0, 0, WHITE);          
             }
             else if(player.mapa == 2){
                 DrawTexture(mapa2, 0, 0, WHITE);
+                
+                if(CollisionObject(playerCollision, arenaCollision) && !chavePegandoFlag && !puzzleDesbloqueado ){
+                    colidiu1 = true;
+                }
+                
+                if(colidiu1){
+                     timerBalao += GetFrameTime();
+                     DrawTextureEx(mensagem1, (Vector2){player.x + 30, player.y - 300}, 0.0f, 3.0f, WHITE);
+                     
+                     if(timerBalao >= 3){
+                         timerBalao = 0.0f;
+                         colidiu1 = false;
+                     }
+                }
             
             } else if(player.mapa == 3){
                 //DrawTexture(secret, 0,0, WHITE);
