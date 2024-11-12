@@ -1,6 +1,6 @@
 # Um dia no museu
 
-Este é um jogo envolvendo diversos temas como RPG,puzzle,mistério e ação e referenciando o ponto turístico de Pernambuco o Instituto Ricardo Brennand,também conhecido como Castelo de Brennand, o jogo foi desenvolvido em C usando a biblioteca [Raylib](https://www.raylib.com/). O jogo pode ser executado diretamente no Notepad++ utilizando a tecla **F6**.
+Este é um jogo envolvendo diversos temas como RPG,puzzle,mistério e ação e referenciando o ponto turístico de Pernambuco o Instituto Ricardo Brennand,também conhecido como Castelo de Brennand, o jogo foi desenvolvido em C usando a biblioteca [Raylib](https://www.raylib.com/). O jogo pode ser executado diretamente no Notepad++ for raylib utilizando a tecla **F6**.
 
 ## Pré-requisitos
 
