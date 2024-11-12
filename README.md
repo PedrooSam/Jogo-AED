@@ -59,5 +59,6 @@ make run
 2. Tenha o compilador GCC instalado.
    - [MinGW para Windows](http://www.mingw.org/) ou [GCC para Linux](https://gcc.gnu.org/)
 3. Aperte F5 no arquivo Main.c
-   - Obs: Caso esse aviso de erro apareça, aperte em "Debug Anyway". Marque "Remember my choice for this task"![image](https://github.com/user-attachments/assets/6c7bdcf6-386a-4563-8a32-29b5b154cb33)
+   - Obs: Caso esse aviso de erro apareça, aperte em "Debug Anyway". Marque "Remember my choice for this task"
+      ![image](https://github.com/user-attachments/assets/6c7bdcf6-386a-4563-8a32-29b5b154cb33)
 
