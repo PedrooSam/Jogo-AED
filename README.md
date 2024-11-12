@@ -4,14 +4,15 @@ Este é um jogo envolvendo diversos temas como RPG,puzzle,mistério e ação e r
 
 ## Pré-requisitos
 
-### Notepad++ for raylib
+### Opções
+### 1. Notepad++ for raylib
 1. Instale a biblioteca Raylib.
    - [Guia de instalação da Raylib](https://www.raylib.com/)
 2. Tenha o compilador GCC instalado.
    - [MinGW para Windows](http://www.mingw.org/) ou [GCC para Linux](https://gcc.gnu.org/)
 3. Quando o Raylib estiver instalado, um aplicativo chamado "Notepad++ for raylib" será instalado automaticamente. Use essa IDE para rodar o jogo.
 
-#### Como Rodar o Jogo no Notepad++ for raylib
+#### 2. Como Rodar o Jogo no Notepad++ for raylib
 
 1. Abra o arquivo `Jogo-AED` em abrir pasta como área de trabalho na aba de ficheiro no **Notepad++ for raylib**.
 2. Abra o Main.c e pressione **F6** para abrir a janela de execução de scripts.
@@ -50,7 +51,7 @@ cd Jogo-AED
 make run
 ```
 
-### Compilar e Rodar no Visual Studio Code
+### 3. Compilar e Rodar no Visual Studio Code
 1. Instale a biblioteca Raylib.
    - [Guia de instalação da Raylib](https://www.raylib.com/)
 2. Tenha o compilador GCC instalado.
