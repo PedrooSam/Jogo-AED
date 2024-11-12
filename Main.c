@@ -442,7 +442,6 @@ float getTime(float timer) {
 // Função da intro
 void ShowIntro() {
     int currentScene = 0;
-    bool proceed = false;
 
     Texture2D images[2];    
     images[0] = LoadTexture("ui/lore.png");
@@ -1599,7 +1598,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 DrawText("FELIPE MATIAS: ",320, 150, 20, YELLOW);
                 DrawText("PERSONAGENS, ANIMAÇÕES, CENÁRIOS, ITENS, UI ",515, 150, 20, GREEN);
                 DrawText("SISTEMA DE LUTA E INTELIGENCIA DOS INIMIGOS ",515, 200, 20, GREEN);
-                DrawText("IMPLEMENTAÇÃO EFEITOS SONOROS E MÚSICAS",515, 250, 20, GREEN);
+                DrawText("IMPLEMENTAÇÃO DE EFEITOS SONOROS E MÚSICAS",515, 250, 20, GREEN);
                 
                 DrawText("IMPLEMENTAÇÃO DE FUNCIONALIDADES E COLISÃO: ",200, 310, 20, GREEN);
                 
@@ -1700,7 +1699,7 @@ int main(void) {
     InitWindow(larguraTela, alturaTela, "Um dia no Castelo");
     SetTargetFPS(60);
     
-    //ToggleFullscreen();
+    ToggleFullscreen();
 
     InitAudioDevice();
     //Music LinkPark = LoadMusicStream("caminho/para/sua/musica.mp3");
