@@ -194,6 +194,8 @@ void menu(Texture2D backgroundMenu) {
     Rectangle botaoIniciar = {540, 250, 200, 100};
     Rectangle botaoSair = {540, 400, 200, 100};
     
+    Sound confirm = LoadSound("audios/confirm.mp3");
+    
     while (1) {
         BeginDrawing();
 
@@ -204,9 +206,11 @@ void menu(Texture2D backgroundMenu) {
         // Verificar clique no botão
         if (CheckCollisionPointRec(GetMousePosition(), botaoIniciar) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
             pausa = false;
+            PlaySound(confirm);
             break;  
         }
         else if (CheckCollisionPointRec(GetMousePosition(), botaoSair) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            PlaySound(confirm);
             CloseWindow();
             break;
         }           
@@ -227,6 +231,8 @@ bool puzzleIcons(Texture puzzle2, Music musica){
     Rectangle alternativa3Collision = {700, 390, 125, 125};
     int preenchidos = 0; // Contador de posições preenchidas em `lista`
     
+    Sound confirm = LoadSound("audios/confirm.mp3");
+    
     while (preenchidos < 3) {
         // Atualiza o fluxo da música em cada loop para que continue tocando
         UpdateMusicStream(musica);
@@ -243,14 +249,17 @@ bool puzzleIcons(Texture puzzle2, Music musica){
         if (CheckCollisionPointRec(GetMousePosition(), alternativa1Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
             lista[preenchidos] = 1;
             preenchidos++;
+            PlaySound(confirm);
         }
         if (CheckCollisionPointRec(GetMousePosition(), alternativa2Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) { 
             lista[preenchidos] = 3;
             preenchidos++;
+            PlaySound(confirm);
         }
         if (CheckCollisionPointRec(GetMousePosition(), alternativa3Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
             lista[preenchidos] = 2;
             preenchidos++;
+            PlaySound(confirm);
         }
         if(IsKeyPressed(KEY_ESCAPE))//player nao quer mais fazer o puzzle
             return false;
@@ -313,6 +322,7 @@ bool puzzleOrdenar(Texture2D puzzle1, Music musica) {
     sprintf(texto3, "%d", c);
     sprintf(texto4, "%d", d);
     
+    Sound confirm = LoadSound("audios/confirm.mp3");
     
     // Define as áreas de colisão para os botões
     Rectangle alternativa1Collision = {520, 310, 200, 60};
@@ -347,18 +357,22 @@ bool puzzleOrdenar(Texture2D puzzle1, Music musica) {
         if (CheckCollisionPointRec(GetMousePosition(), alternativa1Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
             lista[preenchidos] = a;
             preenchidos++;
+            PlaySound(confirm);
         }
         if (CheckCollisionPointRec(GetMousePosition(), alternativa2Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) { 
             lista[preenchidos] = b;
             preenchidos++;
+            PlaySound(confirm);
         }
         if (CheckCollisionPointRec(GetMousePosition(), alternativa3Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
             lista[preenchidos] = c;
             preenchidos++;
+            PlaySound(confirm);
         }
         if (CheckCollisionPointRec(GetMousePosition(), alternativa4Collision) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) { 
             lista[preenchidos] = d;
             preenchidos++; 
+            PlaySound(confirm);
         }
         if(IsKeyPressed(KEY_ESCAPE))//player nao quer mais fazer o puzzle
             return false;
@@ -425,7 +439,41 @@ float getTime(float timer) {
     timer += GetFrameTime();  // Atualiza o timer com o tempo decorrido desde o último quadro
     return timer;  // Retorna o timer atualizado
 }
+// Função da intro
+void ShowIntro() {
+    int currentScene = 0;
+    bool proceed = false;
+
+    Texture2D images[2];    
+    images[0] = LoadTexture("ui/lore.png");
+    images[1] = LoadTexture("ui/move.png"); // Imagem com os controles
     
+    Sound confirm = LoadSound("audios/confirm.mp3");
+    
+    while (!WindowShouldClose() && currentScene < 2) {
+        // Atualizar para próxima cena quando ENTER for pressionado
+        if (IsKeyPressed(KEY_ENTER)) {
+            currentScene++;
+            PlaySound(confirm);
+        }
+
+        BeginDrawing();
+        ClearBackground(BLACK);
+
+        // Exibir imagem e texto da cena atual
+        if (currentScene < 2) {
+            DrawTexture(images[currentScene], 0, 0, WHITE);
+        }
+
+        EndDrawing();
+    }
+
+    // Limpar as texturas das imagens
+    for (int i = 0; i < 2; i++) {
+        UnloadTexture(images[i]);
+    }
+}
+
 // Função principal do jogo
 void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D pegandoChaveEsquerda, Texture2D pegandoChaveDireita, Texture2D mapa1, Texture2D mapa2, Texture2D arena, Texture2D mensagem1, Texture2D menuBack, Texture2D espadaTesouro, Texture2D chaveTesouro, Texture2D bau, Texture2D bauPreenchido, Texture2D botao1Off, Texture2D botao1On, Texture2D botao2Off, Texture2D botao2On, Texture2D pegandoChaveTesouroDireita, Texture2D pegandoChaveTesouroEsquerda, Texture2D pegandoEspadaEsquerda, Texture2D pegandoEspadaDireita, Texture2D bauPreenchido2, Texture2D diamante, Texture2D pegandoDiamanteEsquerda,Texture2D  pegandoDiamanteDireita, Texture2D bauPreenchido3, Texture2D puzzle1, Texture2D spritesheet, Texture2D spritesheetRight, Texture2D spriteWalkLeft, Texture2D spriteWalkRight,Texture2D pegandoEsquerdaIdle, Texture2D pegandoDireitaIdle, Texture2D backgroundMenu,Texture2D pegandoChaveEsquerdaIdle,Texture2D pegandoChaveDireitaIdle, Texture2D pegandoChaveTesouroEsquerdaIdle, Texture2D pegandoChaveTesouroDireitaIdle, Texture2D pegandoEspadaEsquerdaIdle, Texture2D pegandoEspadaDireitaIdle, Texture2D pegandoDiamanteEsquerdaIdle, Texture2D pegandoDiamanteDireitaIdle, Texture2D bala,Texture2D danoLacaioEsquerda ,Texture2D danoLacaioDireita, Texture2D diamanteFree, Texture2D atirandoEsquerda, Texture2D atirandoDireita, Texture2D lacaioDireita, Texture2D lacaioEsquerda, Texture2D lacaioAtaqueEsquerda, Texture2D lacaioAtaqueDireita, Texture2D levandoDano, Texture2D mensagem2, Texture2D puzzle2, Texture2D vida1,Texture2D vida2,Texture2D vida3,Texture2D vida4,Texture2D vida5,   Texture2D lacaioVida1,Texture2D lacaioVida2,Texture2D lacaioVida3,Texture2D lacaioVida4,Texture2D lacaioVida5,Texture2D lacaioVida6,Texture2D lacaioVida7,Texture2D lacaioVida8, Texture2D lacaioVida9,Texture2D lacaioVida10, Texture2D fogo,Texture2D procuraChave,Texture2D procuraEspadas,Texture2D procuraDiamante,Texture2D achouChave,Texture2D achouEspadas,Texture2D achouDiamante, Texture2D potion, Texture2D secret,Texture2D atirandoEsquerdaDourado,Texture2D atirandoDireitaDourado, Texture2D glock, Sound andando,Sound tiro, Sound uhr, Sound lacaioSom, Sound abrindoPorta,Sound destrancandoPorta,Sound portaTrancada,Sound pegandoItem, Sound end, Sound heal, Sound getGlock, Music musica, Sound desert) {
     // ############################
@@ -594,6 +642,8 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     int larguraSecret = secret.width / totalFramesSecret;
     int alturaFrameSecret = secret.height;
     
+        
+    ShowIntro();
     while (!WindowShouldClose()) {
             pontuacao += 1;
             
@@ -1549,7 +1599,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 DrawText("FELIPE MATIAS: ",320, 150, 20, YELLOW);
                 DrawText("PERSONAGENS, ANIMAÇÕES, CENÁRIOS, ITENS, UI ",515, 150, 20, GREEN);
                 DrawText("SISTEMA DE LUTA E INTELIGENCIA DOS INIMIGOS ",515, 200, 20, GREEN);
-                DrawText("IMPLEMENTAÇÃO E INTEGRAÇÃO DAS MECÂNICAS DO JOGO E SONS",515, 250, 20, GREEN);
+                DrawText("IMPLEMENTAÇÃO EFEITOS SONOROS E MÚSICAS",515, 250, 20, GREEN);
                 
                 DrawText("IMPLEMENTAÇÃO DE FUNCIONALIDADES E COLISÃO: ",200, 310, 20, GREEN);
                 
@@ -1650,7 +1700,8 @@ int main(void) {
     InitWindow(larguraTela, alturaTela, "Um dia no Castelo");
     SetTargetFPS(60);
     
-    ToggleFullscreen();
+    //ToggleFullscreen();
+
     InitAudioDevice();
     //Music LinkPark = LoadMusicStream("caminho/para/sua/musica.mp3");
     
@@ -1772,6 +1823,7 @@ int main(void) {
     Texture2D atirandoEsquerdaDourado = LoadTexture("Imagens/atirandoSuperEsquerda.png");
     Texture2D atirandoDireitaDourado = LoadTexture("Imagens/atirandoSuperDireita.png");
     Texture2D glock = LoadTexture("Imagens/glockDourada.png");
+
     // SONS
     
     Sound andando = LoadSound("audios/andando.mp3");
@@ -1790,6 +1842,8 @@ int main(void) {
     PlayMusicStream(musica);
     
     Sound desert = LoadSound("audios/desert.mp3");
+    
+    
     
     menu(backgroundMenu);
     
