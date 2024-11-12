@@ -11,7 +11,7 @@ Este é um jogo envolvendo diversos temas como RPG,puzzle,mistério e ação e r
    - [MinGW para Windows](http://www.mingw.org/) ou [GCC para Linux](https://gcc.gnu.org/)
 3. Quando o Raylib estiver instalado, um aplicativo chamado "Notepad++ for raylib" será instalado automaticamente. Use essa IDE para rodar o jogo.
 
-### Como Rodar o Jogo no Notepad++ for raylib
+**Como Rodar o Jogo no Notepad++ for raylib**
 
 1. Abra o arquivo `Jogo-AED` em abrir pasta como área de trabalho na aba de ficheiro no **Notepad++ for raylib**.
 2. Abrao Main.c e pressione **F6** para abrir a janela de execução de scripts.
