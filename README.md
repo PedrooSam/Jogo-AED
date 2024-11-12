@@ -14,7 +14,7 @@ Este é um jogo envolvendo diversos temas como RPG,puzzle,mistério e ação e r
 #### Como Rodar o Jogo no Notepad++ for raylib
 
 1. Abra o arquivo `Jogo-AED` em abrir pasta como área de trabalho na aba de ficheiro no **Notepad++ for raylib**.
-2. Abrao Main.c e pressione **F6** para abrir a janela de execução de scripts.
+2. Abra o Main.c e pressione **F6** para abrir a janela de execução de scripts.
 3. Escolha a opção raylib_compile_execute e rode o jogo.
 
 ### Makefile no Linux/WSL
