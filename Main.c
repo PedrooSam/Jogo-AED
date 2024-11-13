@@ -126,15 +126,13 @@ bool bossAtack2Flag = false;
 bool bossIndoDireita = true;
 bool lacaioIndoDireita = true;
 int timerAtaqueB = 1000;
-int timerAtaqueB2 = 0;
-int igualouAltura = 0;
 float distanciaXB = 0.0f;
 float distanciaYB = 0.0f;
 bool acertou = false;
-int bossAtack2Count = 0;
-bool liberaAnimacao = false;
-bool bossCorre = false;
-bool direcaoAtaqueBoss = false;
+
+bool alcance = false;
+int timerAtaqueB2 = 0;
+bool acertou1 = false;
 
 //delay do som de dano
 float delayUrh = 0.0f;
@@ -977,7 +975,6 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             // ############################
             timerAtaqueB += 1;
             timerAtaqueB2 += 1;
-            igualouAltura += 1;
             float velocidadeBoss = 300.0f * GetFrameTime();
 
             if (boss.vivo && boss.mapa == player.mapa) {
@@ -1006,54 +1003,34 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     if (distanciaYB <= 50 && !acertou && (distanciaXB < 20 || (distanciaXB < 350 && !bossIndoDireita))) {
                         acertou = true;
                         levandoDanoFlag = true;
-                        player.vida -= 1;   // Reduz a vida do jogador
+                        player.vida -= 2;   // Reduz a vida do jogador
                     }
                 }  
                 
-                // Movimento e ação para o Golpe 2
-                if(bossAtack2Flag) {
-                    // Define a direção inicial do ataque uma vez, no início do ataque
-                    if (!bossCorre) {    
-                        direcaoAtaqueBoss = bossIndoDireita; // Armazena a direção inicial para o Golpe 2
+                if(bossAtack2Flag){
+                    // Movimenta no eixo X em direção ao jogador
+                    if (boss.x < player.x - 200) {
+                        boss.x += velocidadeBoss;
+                    } else if (boss.x > player.x) {
+                        boss.x -= velocidadeBoss;
+                    }
 
-                        // Alinha o boss na altura do jogador
-                        if (boss.y < player.y - playerOffSet) {
-                            boss.y += velocidadeBoss;
-                        } else if (boss.y > player.y - playerOffSet) {
-                            boss.y -= velocidadeBoss;
-                        }
-
-                        // Verifica se já alinhou no eixo Y
-                        if (distanciaYB <= 50) {
-                            bossCorre = true; // Ativa a fase de corrida
-                        }
+                    // Movimenta no eixo Y em direção ao jogador
+                    if (boss.y < player.y - playerOffSet) {
+                        boss.y += velocidadeBoss;
+                    } else if (boss.y > player.y - playerOffSet) {
+                        boss.y -= velocidadeBoss;
                     }
                     
-                    // Fase de corrida reta no eixo X
-                    if (bossCorre) {
-                        // Movimenta o boss na direção definida no início do ataque
-                        if (direcaoAtaqueBoss) {
-                            boss.x += velocidadeBoss;
-                        } else {
-                            boss.x -= velocidadeBoss;
-                        }
-
-                        // Verifica se o boss acertou o jogador ou chegou ao limite de ataque
-                        if (distanciaYB <= 50 && !acertou && (distanciaXB < 20 || (distanciaXB < 350 && !direcaoAtaqueBoss))) {
-                            player.vida -= 1;          // Causa dano ao jogador
-                            liberaAnimacao = true;     // Ativa a animação de golpe
-                            bossAtack2Flag = false;    // Termina o ataque
-                            bossCorre = false;         // Reseta a flag de corrida para o próximo ataque
-                        }
-
-                        // Verifica se o boss colidiu com a parede
-                        if ((boss.x <= 30 && !direcaoAtaqueBoss) || (boss.x >= 1000 && direcaoAtaqueBoss)) {
-                            bossAtack2Flag = false;    // Termina o ataque se colidir com a parede
-                            bossCorre = false;
-                        }
-                    }
+                    // Verifica se o boss está dentro do alcance de ataque
+                    if (distanciaYB <= 50 && !acertou1 && (distanciaXB < 20 || (distanciaXB < 350 && !bossIndoDireita))) {
+                        alcance = true;
+                        acertou1 = true;
+                        levandoDanoFlag = true;
+                        player.vida -= 1;   // Reduz a vida do jogador
+                    }    
                 }
-
+                
                 // Atualiza distâncias absolutas entre o boss e o jogador em cada eixo
                 distanciaXB = fabsf((player.x - 200) - boss.x);
                 distanciaYB = fabsf((player.y - playerOffSet) - boss.y);
@@ -1065,15 +1042,18 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     bossAtack1Flag = true; // Inicia o Golpe 1
                 }
                 
-                // Temporização para iniciar o Golpe 2
-                if(timerAtaqueB2 >= 100){
+                if(timerAtaqueB2 >= 200) {
+                    acertou1 = false;
                     timerAtaqueB2 = 0;
-                    bossAtack2Flag = true; // Inicia o Golpe 2
+                    bossAtack2Flag = true; // Inicia o Golpe 1
                 }
+                
+                
             }
 
             //Verifica se o player morreu
             if(player.vida <= 0){
+                StopSound(bossMusica);
                 player.vivo = false;
             }
             
@@ -1265,7 +1245,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             }
 
             // Correr até liberar animação do atack 2
-            if(!liberaAnimacao){
+            if(!alcance){
                 timerBossRun += GetFrameTime();  // Incrementa timerlacaioAtaque
                 if (timerBossRun >= tempoBossRun) {
                     atualBossRun++;
@@ -1279,7 +1259,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             }
             
              // Atualização boss atack2
-            if (bossAtack2Flag  && liberaAnimacao) {
+            if (bossAtack2Flag && alcance) {
                 timerBossAtack2 += GetFrameTime();  // Incrementa timerlacaioAtaque
                 if (timerBossAtack2 >= tempoBossAtack2) {
                     atualBossAtack2++;
@@ -1288,7 +1268,6 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     if(atualBossAtack2 > totalBossAtack2){
                         atualBossAtack2 = 0;
                         bossAtack2Flag = false;
-                        liberaAnimacao = false;
                     }
                 }
             }
@@ -1359,7 +1338,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 
                 StopMusicStream(musica);
                 // Verifica se a música terminou e reinicia se necessário
-                if (!IsSoundPlaying(bossMusica) && boss.vivo) {
+                if (!IsSoundPlaying(bossMusica) && boss.vivo && player.vivo) {
                     PlaySound(bossMusica);
                 }
                 if(CollisionObject(playerCollision, doorCollision)) {
@@ -1798,7 +1777,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     }
                 }else if(bossAtack2Flag ){
                     if(bossIndoDireita){
-                        if(!liberaAnimacao){
+                        if(!alcance){
                             Rectangle sourceRec = {atualBossRun * larguraBossRun, 0, larguraBossRun, alturaBossRun};
                             DrawTextureRec(bossRunRight, sourceRec, (Vector2){boss.x,boss.y}, WHITE );
                         }else{
@@ -1806,7 +1785,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                             DrawTextureRec(bossAtack2, sourceRec2, (Vector2){boss.x,boss.y}, WHITE);
                         }
                     }else{
-                        if(!liberaAnimacao){
+                        if(!alcance){
                             Rectangle sourceRec = {atualBossRun * larguraBossRun, 0, larguraBossRun, alturaBossRun};
                             DrawTextureRec(bossRunLeft, sourceRec, (Vector2){boss.x,boss.y}, WHITE );
                         }else{
@@ -2082,12 +2061,8 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
            }
             
             char pontuacaoTexto[100];
-            if(bossCorre){
-                sprintf(pontuacaoTexto, "TRUE atual: %d TimerAtack2 %d Altura: %d", atualBossAtack2, timerAtaqueB2, igualouAltura);
-            }
-            else {sprintf(pontuacaoTexto, "FALSE atual: %d TimerAtack2 %d Altura: %d", atualBossAtack2, timerAtaqueB2, igualouAltura);
-            }
-            DrawText(pontuacaoTexto, 200,500,40,BLACK);
+
+            //DrawText(pontuacaoTexto, 200,500,40,BLACK);
             EndDrawing();
         }
 
