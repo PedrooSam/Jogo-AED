@@ -34,6 +34,7 @@ typedef struct {
 Objeto player;
 Objeto lacaio;
 Objeto boss;
+Objeto pocao;
 
 //Projeteis
 Projetil projetil;
@@ -133,6 +134,10 @@ bool acertou = false;
 bool alcance = false;
 int timerAtaqueB2 = 0;
 bool acertou1 = false;
+bool curouBoss = false;
+
+int bulletCount = 0;
+bool liberaPotion = false;
 
 //delay do som de dano
 float delayUrh = 0.0f;
@@ -295,7 +300,7 @@ void menu(Texture2D backgroundMenu) {
             boss.y = 200;
             boss.mapa = -1;
             boss.vivo = true;
-            boss.vida = 50;
+            boss.vida = 100;
 
             lacaio2Adicionado = false;
             lacaio3Adicionado = false;
@@ -657,7 +662,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     player.y = 200;
     player.mapa = 0; 
     player.vivo = true;
-    player.vida = 5;
+    player.vida = 10000;
     
     //posição lacaio
     lacaio.x = 100;
@@ -671,12 +676,14 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     boss.y = 500;
     boss.mapa = -1;
     boss.vivo = true;
-    boss.vida = 50;
+    boss.vida = 100;
     
     //posição de chave
     chave.x = 500;
     chave.y = 550;
     chave.mapa = 0;
+    
+    
 
     // ############################
     // 	CONFIG DE ANIMAÇÃO	
@@ -822,6 +829,10 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     //ShowIntro();
     //ShowLoading();
     while (!WindowShouldClose()) {
+            
+            if(pocao.y < 400) pocao.y += 300;
+            pocao.mapa = -1;
+            
             pontuacao += 1;
             
             UpdateMusicStream(musica);
@@ -1042,7 +1053,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     bossAtack1Flag = true; // Inicia o Golpe 1
                 }
                 
-                if(timerAtaqueB2 >= 200) {
+                else if(timerAtaqueB2 >= 200) {
                     acertou1 = false;
                     timerAtaqueB2 = 0;
                     bossAtack2Flag = true; // Inicia o Golpe 1
@@ -1179,6 +1190,15 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             
             // Atualização potion
             if(!curou){
+                timerPotion = getTime(timerPotion);
+                frameAtualPotion = getFrame(timerPotion, tempoFramePotion, totalFramesPotion, frameAtualPotion);
+                if(timerPotion > tempoFramePotion){
+                    timerPotion = 0.0f;
+                }
+            }
+            
+            // Atualização potion do boss
+            if(!curouBoss){
                 timerPotion = getTime(timerPotion);
                 frameAtualPotion = getFrame(timerPotion, tempoFramePotion, totalFramesPotion, frameAtualPotion);
                 if(timerPotion > tempoFramePotion){
@@ -1330,7 +1350,8 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             Rectangle botao2Collision = {400,350,50,50};  
             
             Rectangle glockDouradaCollision = {700, 575, 50, 50};
-
+            
+            Rectangle pocoes = {pocao.x, pocao.y, 70, 70};
             
             //Verifica as colisões 
             if(player.mapa == -1){
@@ -1734,8 +1755,10 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     
                     if(glockDourada){
                         boss.vida -= 2;
+                        bulletCount++;
                     }else{
                         boss.vida -= 1;
+                        bulletCount ++;
                     }
                         
                     if(boss.vida <= 0){
@@ -1854,6 +1877,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                    
             //Potion
             
+            
             Rectangle potionCollision = {1000, 600, 70, 70};
             if(lacaio2Adicionado && !lacaio.vivo && player.mapa == 2 && !curou){
                 Rectangle sourcePotion = { frameAtualPotion * larguraPotion, 0, larguraPotion, alturaFramePotion};
@@ -1864,7 +1888,24 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     curou = true;
                     player.vida ++;}
             }
-              
+            
+            if (!liberaPotion && bulletCount >= 10 && player.mapa == -1) {
+                bulletCount -= 10;
+                pocao.x = GetRandomValue(100, 1000); // Exemplo de intervalo para posição X
+                pocao.y = GetRandomValue(100, 600);  // Exemplo de intervalo para posição Y
+                liberaPotion = true; // Marca a poção como criada para não mudar de lugar
+            }
+
+            if(liberaPotion){
+                Rectangle sourcePotion = { frameAtualPotion * larguraPotion, 0, larguraPotion, alturaFramePotion};
+                DrawTextureRec(potion, sourcePotion, (Vector2){pocao.x, pocao.y}, WHITE);
+                
+                if(CollisionObject(playerCollision, pocoes)) {
+                    PlaySound(heal);
+                    player.vida ++;
+                    liberaPotion = false;
+                }
+            }
               
             if(player.vivo){
                 //Sombra
@@ -2061,8 +2102,8 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
            }
             
             char pontuacaoTexto[100];
-
-            //DrawText(pontuacaoTexto, 200,500,40,BLACK);
+            sprintf(pontuacaoTexto, "Vida boss: %d", boss.vida);
+            DrawText(pontuacaoTexto, 200,500,40,BLACK);
             EndDrawing();
         }
 
