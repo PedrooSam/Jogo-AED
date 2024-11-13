@@ -977,7 +977,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 }
                 
                 // Verifica se o lacaio está dentro do alcance de ataque
-                if (distanciaYB <= 50 && !acertou && (distanciaXB < 20 || (distanciaXB <= 200 && !bossIndoDireita))) {
+                if (distanciaYB <= 50 && !acertou && (distanciaXB < 20 || (distanciaXB < 250 && !bossIndoDireita))) {
                     acertou = true;
                     levandoDanoFlag = true;
                     player.vida -= 1;   // Reduz a vida do jogador
@@ -1151,7 +1151,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
 
                 if (timerBossAtack1 >= tempoBossAtack1) {
                     // Verifica a distância entre o boss e o jogador para definir se ele corre ou ataca
-                    if (distanciaYB > 50 || (distanciaXB > 20 && bossIndoDireita) || (distanciaXB > 100 && !bossIndoDireita)) {
+                    if (distanciaYB > 50 || (distanciaXB > 20 && bossIndoDireita) || (distanciaXB > 250 && !bossIndoDireita)) {
                         // Enquanto o boss estiver longe, ele continua "correndo"
                         if (atualBossAtack1 < 5 || atualBossAtack1 > 6) {
                             atualBossAtack1 = 5; // Define o frame de corrida inicial
@@ -1941,11 +1941,11 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             
             char pontuacaoTexto[100];
             if(bossAtack1Flag){
-                sprintf(pontuacaoTexto, "TRUE atual: %d ", atualBossAtack1);
+                sprintf(pontuacaoTexto, "TRUE atual: %d DistanciaXB %f", atualBossAtack1, distanciaXB);
             }
-            else {sprintf(pontuacaoTexto, "FALSE atual: %d ", atualBossAtack1);
+            else {sprintf(pontuacaoTexto, "FALSE atual: %d DistanciaXB %f", atualBossAtack1, distanciaXB);
             }
-            DrawText(pontuacaoTexto, 500,500,40,WHITE);
+            DrawText(pontuacaoTexto, 500,500,40,BLACK);
             EndDrawing();
         }
 
