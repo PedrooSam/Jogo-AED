@@ -1669,9 +1669,9 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 DrawTextureEx(procuraDiamante, (Vector2){150, 100}, 0.0f, 1.0f, WHITE );
            }
             
-            char pontuacaoTexto[100];
+            /*char pontuacaoTexto[100];
             sprintf(pontuacaoTexto, "frame atual: %d, ", frameAtuallacaioAtaque);
-            DrawText(pontuacaoTexto, 500,500,40,WHITE);
+            DrawText(pontuacaoTexto, 500,500,40,WHITE);*/
             EndDrawing();
         }
 
