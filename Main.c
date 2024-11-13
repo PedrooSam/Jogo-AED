@@ -10,6 +10,8 @@ typedef struct Node {
 	struct Node *mapaSecundario;
 } Node;
 
+
+
 typedef struct {
     int x;
     int y; 
@@ -178,6 +180,22 @@ void inserirMapa(Node **head, Node **tail, int n, Node *mapaSec) {
   }
 }
 
+void inserirMapaInicio(Node **head, int n, Node *mapaSec) {
+  Node *novo = (Node*)malloc(sizeof(Node));  
+  if (novo != NULL){
+    novo->n = n;    
+    novo->prox = *head;
+    novo->ant = NULL;
+    if(mapaSec != NULL) mapaSec->ant = novo;
+    novo->mapaSecundario = mapaSec;
+
+    if(*head!=NULL){
+      (*head)->ant = novo;
+    }    
+    *head = novo;
+  }
+}
+
 void configurarMapaSecundario(Node **mapa, int n) {
     Node *novo = (Node*)malloc(sizeof(Node));  
     novo->n = n;
@@ -265,13 +283,13 @@ void menu(Texture2D backgroundMenu) {
 
             lacaio.x = 100;
             lacaio.y = 200;
-            lacaio.mapa = -1;
+            lacaio.mapa = 100;
             lacaio.vivo = true;
             lacaio.vida = 10;
             
             boss.x = 100;
             boss.y = 200;
-            boss.mapa = 4;
+            boss.mapa = -1;
             boss.vivo = true;
             boss.vida = 50;
 
@@ -618,13 +636,13 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     Node *tail = NULL;
     Node *mapaSec0 = NULL;
     
-    configurarMapaSecundario(&mapaSec0, -1);
+    configurarMapaSecundario(&mapaSec0, 100);
     
     inserirMapa(&head, &tail, 0, NULL);
     inserirMapa(&head, &tail, 1, NULL);
     inserirMapa(&head, &tail, 2, mapaSec0);
     inserirMapa(&head, &tail, 3, NULL);
-    inserirMapa(&head, &tail, 4, NULL);
+    inserirMapa(&head, &tail, -1, NULL);
     
     //posicao bala 
     projetil.ativo = false;
@@ -640,14 +658,14 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     //posição lacaio
     lacaio.x = 100;
     lacaio.y = 200;
-    lacaio.mapa = -1;
+    lacaio.mapa = 100;
     lacaio.vivo = true;
     lacaio.vida = 10; //VIDA LACAIO
     
     //posição boss
     boss.x = 100;
     boss.y = 200;
-    boss.mapa = 4;
+    boss.mapa = -1;
     boss.vivo = true;
     boss.vida = 50;
     
@@ -1146,7 +1164,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             }
             
            // Atualização do ataque do boss (bossAtack1)
-            if (bossAtack1Flag && player.mapa == 4) {
+            if (bossAtack1Flag && player.mapa == -1) {
                 timerBossAtack1 += GetFrameTime();  // Incrementa o timer do ataque
 
                 if (timerBossAtack1 >= tempoBossAtack1) {
@@ -1190,7 +1208,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 player.x = 0;
             }
             
-            if(player.mapa != -1 && player.mapa != 4){    
+            if(player.mapa != 100 && player.mapa != -1){    
                 if (player.y < 325 + playerOffSet) {     // Limite teto
                     player.y = 325 + playerOffSet;
                 }
@@ -1245,7 +1263,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             Rectangle glockDouradaCollision = {700, 575, 50, 50};
             
             //Verifica as colisões 
-            if(player.mapa == 4){
+            if(player.mapa == -1){
                 if(CollisionObject(playerCollision, doorCollision)) {
                     player.x = 200;
                     player.y = 540;
@@ -1271,7 +1289,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 if(CollisionObject(playerCollision, doorCollisionEsquerda)) {
                     player.x = 900;
                     player.y = 540;
-                    player.mapa = 4;
+                    player.mapa = -1;
                 }
 
                 if(CollisionObject(playerCollision, diamanteTesouroCollision) && !diamanteTesouroPegandoFlag && pegando && !diamanteTesouroNoBau && puzzle2Resolvido){  //Verifica se pode pegar
@@ -1381,7 +1399,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     glockDourada = true;
                     glockDouradaSpawn = false;
                 }
-            } else if(player.mapa == -1){
+            } else if(player.mapa == 100){
                 CollisionObject(playerCollision, pilarEsqMapa3);
                 CollisionObject(playerCollision, pilarMapa3);
                 CollisionObject(playerCollision, pilarDirMapa3);
@@ -1453,7 +1471,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             ClearBackground(RAYWHITE);
             
             // Só vai desenhar o item se estiver no mapa dele
-            if(player.mapa == 4){
+            if(player.mapa == -1){
                 //DrawTexture(mapa4, 0, 0, WHITE);
             }
             else if(player.mapa == 0) {
@@ -1522,7 +1540,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     DrawTextureEx(glock, (Vector2){700, 570}, 0.0f, 1.0f, WHITE);
                 }
               
-            } else if(player.mapa == -1){
+            } else if(player.mapa == 100){
                 DrawTexture(arena,0,0,WHITE);
                 //Chave do tesouro 
                 
