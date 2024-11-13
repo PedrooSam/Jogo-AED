@@ -651,7 +651,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     //posição jogador
     player.x = 800;
     player.y = 200;
-    player.mapa = 0; 
+    player.mapa = -1; 
     player.vivo = true;
     player.vida = 5;
     
@@ -663,8 +663,8 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     lacaio.vida = 10; //VIDA LACAIO
     
     //posição boss
-    boss.x = 100;
-    boss.y = 200;
+    boss.x = 500;
+    boss.y = 500;
     boss.mapa = -1;
     boss.vivo = true;
     boss.vida = 50;
@@ -807,8 +807,8 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     int larguraBossAtack2 = bossAtack2.width / totalBossAtack2;
     int alturaBossAtack2 = bossAtack2.height;
     
-    ShowIntro();
-    ShowLoading();
+    //ShowIntro();
+    //ShowLoading();
     while (!WindowShouldClose()) {
             pontuacao += 1;
             
@@ -995,7 +995,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 }
                 
                 // Verifica se o lacaio está dentro do alcance de ataque
-                if (distanciaYB <= 50 && !acertou && (distanciaXB < 20 || (distanciaXB < 250 && !bossIndoDireita))) {
+                if (distanciaYB <= 50 && !acertou && (distanciaXB < 20 || (distanciaXB < 350 && !bossIndoDireita))) {
                     acertou = true;
                     levandoDanoFlag = true;
                     player.vida -= 1;   // Reduz a vida do jogador
@@ -1163,30 +1163,37 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 if (timerBossIdle >= tempoBossIdle) timerBossIdle = 0.0f;  // Reseta timerlacaioWalk
             }
             
-           // Atualização do ataque do boss (bossAtack1)
+            // Atualização do ataque do boss (bossAtack1)
             if (bossAtack1Flag && player.mapa == -1) {
                 timerBossAtack1 += GetFrameTime();  // Incrementa o timer do ataque
 
                 if (timerBossAtack1 >= tempoBossAtack1) {
-                    // Verifica a distância entre o boss e o jogador para definir se ele corre ou ataca
-                    if (distanciaYB > 50 || (distanciaXB > 20 && bossIndoDireita) || (distanciaXB > 250 && !bossIndoDireita)) {
-                        // Enquanto o boss estiver longe, ele continua "correndo"
-                        if (atualBossAtack1 < 5 || atualBossAtack1 > 6) {
-                            atualBossAtack1 = 5; // Define o frame de corrida inicial
+                    timerBossAtack1 = 0.0f;  // Reseta o timer do ataque
+
+                    // Verifica a distância para determinar o comportamento
+                    if (!acertou) {
+                        // Alterna entre os frames 5 e 6 para a animação de corrida
+                        if (atualBossAtack1 == 5) {
+                            atualBossAtack1 = 6;
+                        } else if(atualBossAtack1 == 6){
+                            atualBossAtack1 = 5;
+                        } else{
+                            atualBossAtack1++;
                         }
-                        atualBossAtack1 = (atualBossAtack1 == 5) ? 6 : 5; // Alterna entre os frames de corrida
                     } else {
-                        // Quando ele está perto o suficiente, passa para os frames de ataque
+                        // Incrementa o frame do ataque apenas quando está no alcance (acertou)
                         atualBossAtack1++;
-                        if (atualBossAtack1 < totalBossAtack1) {
-                            atualBossAtack1 = 0;
-                            bossAtack1Flag = false; // Termina o ataque
+                        
+                        // Verifica se todos os frames de ataque foram exibidos
+                        if (atualBossAtack1 >= totalBossAtack1) {
+                            atualBossAtack1 = 0;        // Reseta para o frame inicial do ataque
+                            bossAtack1Flag = false;     // Termina o ataque
                         }
                     }
-
-                    timerBossAtack1 = 0.0f;  // Reseta o timer do ataque
                 }
             }
+
+            
 
             
              // Atualização boss atack2
@@ -2219,7 +2226,7 @@ int main(void) {
     Sound desert = LoadSound("audios/desert.mp3");
     Sound deathSound = LoadSound("audios/deathSound.mp3");
     
-    menu(backgroundMenu);
+    //menu(backgroundMenu);
     
     iniciarJogo(backgroundImage, personagemPegando, personagemPegandoEsquerda, chaveCenario, pegandoChaveEsquerda, pegandoChaveDireita, mapa1, mapa2, arena, mensagem1, menuBack, espadaTesouro, chaveTesouro , bau, bauPreenchido, botao1Off, botao1On, botao2Off, botao2On, pegandoChaveTesouroDireita, pegandoChaveTesouroEsquerda, pegandoEspadaEsquerda, pegandoEspadaDireita, bauPreenchido2, diamante, pegandoDiamanteEsquerda, pegandoDiamanteDireita, bauPreenchido3, puzzle1, spritesheet, spritesheetRight, spriteWalkLeft, spriteWalkRight, pegandoEsquerdaIdle, pegandoDireitaIdle, backgroundMenu, pegandoChaveEsquerdaIdle, pegandoChaveDireitaIdle, pegandoChaveTesouroEsquerdaIdle, pegandoChaveTesouroDireitaIdle, pegandoEspadaEsquerdaIdle, pegandoEspadaDireitaIdle, pegandoDiamanteEsquerdaIdle, pegandoDiamanteDireitaIdle, bala,danoLacaioEsquerda, danoLacaioDireita, diamanteFree, atirandoEsquerda, atirandoDireita, lacaioDireita, lacaioEsquerda, lacaioAtaqueEsquerda, lacaioAtaqueDireita, levandoDano, mensagem2, puzzle2, vida1, vida2, vida3, vida4, vida5, lacaioVida1, lacaioVida2, lacaioVida3, lacaioVida4, lacaioVida5, lacaioVida6, lacaioVida7, lacaioVida8, lacaioVida9, lacaioVida10, fogo, procuraChave, procuraEspadas, procuraDiamante, achouChave, achouEspadas, achouDiamante,potion,secret, atirandoEsquerdaDourado, atirandoDireitaDourado, glock, death,deathLeft, shadow,bossIdle,bossIdleLeft,bossAtack1,bossAtack1Left,bossAtack2 ,bossAtack2Left,mapa4, andando, tiro, uhr, lacaioSom, abrindoPorta, destrancandoPorta, portaTrancada, pegandoItem, end, heal, getGlock, musica, desert, deathSound);
     
