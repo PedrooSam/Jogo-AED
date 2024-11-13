@@ -116,6 +116,9 @@ bool glockDouradaSpawn = true;
 bool deathFlag = false;
 bool deathSoundPlayed = false;
 
+//delay do som de dano
+float delayUrh = 0.0f;
+
 //Colisão Universal
 bool CollisionObject(Rectangle playerCollision, Rectangle objeto) {
     if (CheckCollisionRecs(playerCollision, objeto)) {
@@ -847,7 +850,10 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             float velocidadeLacaio = 150.0f * GetFrameTime();
             // Atualize o timer do ataque
             timerAtaque += 1;
+            delayUrh += 1;
             if (lacaio.vivo && lacaio.mapa == player.mapa) {
+                
+                Sound sword = LoadSound("audios/swordSound.mp3");
                 
                 // Movimenta no eixo X em direção ao jogador
                 if (lacaio.x < player.x -200) {
@@ -871,7 +877,12 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
 
                 // Verifica se o lacaio está dentro do alcance de ataque
                 if (distanciaY <= 50 && timerAtaque >= intervalo && (distanciaX <= 100 || (distanciaX <= 200 && !lacaioIndoDireita))) {
-                    PlaySound(uhr);
+                    PlaySound(sword);
+
+                    if(delayUrh >= 20){
+                        PlaySound(uhr);   
+                        delayUrh = 0.0f;
+                    }
                     lacaioAtacando = true;
                     levandoDanoFlag = true;
                     player.vida -= 1;   // Reduz a vida do jogador
