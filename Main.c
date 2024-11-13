@@ -638,7 +638,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     //animação idle
     int totalFrames = 4;
     int frameAtual = 0;
-    float tempoFrame = 0.2f;
+    float tempoFrame = 0.15f;
     float timer = 0.0f;
     int larguraFrame = spritesheet.width / totalFrames;
     int alturaFrame = spritesheet.height;
@@ -1114,9 +1114,9 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 CollisionObject(playerCollision, pilarEsqMapa0);
                 
                 if(CollisionObject(playerCollision, doorCollision)) {
-                    player.mapa = getNextMapaPrincipal(head);
                     player.x = 200;
                     player.y = 540;
+                    player.mapa = getNextMapaPrincipal(head);
                 }
 
                 if(CollisionObject(playerCollision, diamanteTesouroCollision) && !diamanteTesouroPegandoFlag && pegando && !diamanteTesouroNoBau && puzzle2Resolvido){  //Verifica se pode pegar
@@ -1148,14 +1148,14 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 
                 if(!mapaBloqueado){     // Não vai poder sar do mapa enquanto não matar o monstro
                     if(CollisionObject(playerCollision, doorCollisionEsquerda)) {
-                        player.mapa = getAntMapaPrincipal(head);
                         player.x = 920;
                         player.y = 540;
+                        player.mapa = getAntMapaPrincipal(head);
                     }
-                    else if(CollisionObject(playerCollision, doorCollision)){
-                        player.mapa = getNextMapaPrincipal(head);
+                    else if(CollisionObject(playerCollision, doorCollision)){                     
                         player.x = 200;
                         player.y = 540;
+                        player.mapa = getNextMapaPrincipal(head);
                     }
                 }
             }
@@ -1171,9 +1171,9 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 
                 if(!mapaBloqueado){     // Não vai poder sar do mapa enquanto não matar o monstro
                     if(CollisionObject(playerCollision, doorCollisionEsquerda)) {
-                        player.mapa = getAntMapaPrincipal(head);
                         player.x = 920;
                         player.y = 540;
+                        player.mapa = getAntMapaPrincipal(head);
                     }
 
                 }
@@ -1195,9 +1195,9 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                         PlaySound(abrindoPorta);
                         if(lacaio.vivo)PlaySound(lacaioSom);
                         
-                        player.mapa = getMapaSecundario(head);
                         player.x = 400;
                         player.y = 540;
+                        player.mapa = getMapaSecundario(head);
                     }else if(mapaBloqueado){
                         PlaySound(portaTrancada);
                     }else{
@@ -1216,9 +1216,9 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 }
             } else if(player.mapa == 3) {
                 if(CollisionObject(playerCollision, doorCollisionEsquerda)) {
-                    player.mapa = 2;
                     player.x = 920;
                     player.y = 540;
+                    player.mapa = getAntMapaPrincipal(head);
                 }
                 
                 if(!glockDourada && glockDouradaSpawn && CollisionObject(playerCollision, glockDouradaCollision)){
@@ -1321,7 +1321,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 
                                     
                                     
-                if(CollisionObject(playerCollision, diamanteTesouroCollision) && !puzzle2Resolvido){
+                if(CollisionObject(playerCollision, diamanteTesouroCollision) && !puzzle2Resolvido && player.x < 200 ){
                         colidiu = true;
                 }
                 
@@ -1334,8 +1334,6 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                          colidiu = false;
                      }
                 }
-            
-            
             }
             else if(player.mapa == 1){
                 DrawTexture(mapa1, 0, 0, WHITE);          
