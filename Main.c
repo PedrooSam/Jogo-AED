@@ -56,7 +56,7 @@ bool levandoDanoFlag = false;
 float distanciaX = 0; //Distancia entre lacaio e player
 float distanciaY = 0;
 
-float intervalo = 200.0f; //Intervalo de ataque do lacaio
+float intervalo = 150.0f; //Intervalo de ataque do lacaio
 float timerAtaque = 0.0f;
 
 //Cooldown do tiro 
@@ -87,6 +87,7 @@ bool colidiu1 = false;
 // ############################
 // FLAGS	
 // ############################
+
 bool andandoDireita = true;             // Direção inicial
 bool chavePegandoFlag = false;          // Verifica se tá pegando a chave
 bool puzzleDesbloqueado = false;        // Verifica se pode acessar a sala do puzzle 
@@ -684,7 +685,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     // Lacaio atacando 
     int totalFrameslacaioAtaque = 4;
     int frameAtuallacaioAtaque = 0;
-    float tempoFramelacaioAtaque = 0.2f;
+    float tempoFramelacaioAtaque = 0.1f;
     float timerlacaioAtaque = 0.0f;
     int larguraFramelacaioAtaque = lacaioAtaqueDireita.width / totalFrameslacaioAtaque;
     int alturaFramelacaioAtaque = lacaioAtaqueDireita.height;
@@ -839,7 +840,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 if (lacaio.x < player.x -200) {
                     lacaio.x += velocidadeLacaio;
                     lacaioIndoDireita = true;
-                } else if (lacaio.x > player.x - 100) {
+                } else if (lacaio.x > player.x) {
                     lacaioIndoDireita = false;
                     lacaio.x -= velocidadeLacaio;
                 }
@@ -856,7 +857,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 distanciaY = fabsf((player.y - playerOffSet) - lacaio.y);
 
                 // Verifica se o lacaio está dentro do alcance de ataque
-                if (distanciaX <= 100 && distanciaY <= 50 && timerAtaque >= intervalo) {
+                if (distanciaY <= 50 && timerAtaque >= intervalo && (distanciaX <= 100 || (distanciaX <= 200 && !lacaioIndoDireita))) {
                     PlaySound(uhr);
                     lacaioAtacando = true;
                     levandoDanoFlag = true;
@@ -944,12 +945,16 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             }
 
             // Atualização lacaio atacando
-            if (lacaio.vivo && lacaio.mapa == player.mapa) {
-                timerlacaioAtaque = getTime(timerlacaioAtaque);  // Incrementa timerlacaioAtaque
-                frameAtuallacaioAtaque = getFrame(timerlacaioAtaque, tempoFramelacaioAtaque, totalFrameslacaioAtaque, frameAtuallacaioAtaque);
+            if (lacaio.vivo && lacaio.mapa == player.mapa && lacaioAtacando) {
+                timerlacaioAtaque += GetFrameTime();  // Incrementa timerlacaioAtaque
                 if (timerlacaioAtaque >= tempoFramelacaioAtaque) {
+                    frameAtuallacaioAtaque++;
                     timerlacaioAtaque = 0.0f;  // Reseta timerlacaioAtaque
-                    lacaioAtacando = false;
+                    
+                    if(frameAtuallacaioAtaque > totalFrameslacaioAtaque){
+                        frameAtuallacaioAtaque = 0;
+                        lacaioAtacando = false;
+                    }
                 }
             }
 
@@ -1466,8 +1471,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                    }
                 }
             }
-            
-                        
+                   
             //Potion
             
             Rectangle potionCollision = {1000, 600, 70, 70};
@@ -1665,11 +1669,15 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 DrawTextureEx(procuraDiamante, (Vector2){150, 100}, 0.0f, 1.0f, WHITE );
            }
             
+            char pontuacaoTexto[100];
+            sprintf(pontuacaoTexto, "frame atual: %d, ", frameAtuallacaioAtaque);
+            DrawText(pontuacaoTexto, 500,500,40,WHITE);
             EndDrawing();
         }
 
         //tela abse de vitoria do jogo
         if(diamanteTesouroNoBau){ 
+            
             PlaySound(end);
             while(!IsKeyPressed(KEY_ENTER)){
                  BeginDrawing();
