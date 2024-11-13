@@ -734,7 +734,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     //Animação death
     int totalFramesDeath = 9;
     int frameAtualDeath = 0;
-    float tempoFrameDeath = 0.25f;
+    float tempoFrameDeath = 0.2f;
     float timerDeath = 0.0f;
     int larguraDeath = death.width / totalFramesDeath;
     int alturaFrameDeath = death.height;
