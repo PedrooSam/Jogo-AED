@@ -638,7 +638,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     //animação idle
     int totalFrames = 4;
     int frameAtual = 0;
-    float tempoFrame = 0.3f;
+    float tempoFrame = 0.2f;
     float timer = 0.0f;
     int larguraFrame = spritesheet.width / totalFrames;
     int alturaFrame = spritesheet.height;
