@@ -2163,6 +2163,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             EndDrawing();
         }
 
+        diamanteTesouroNoBau = true; 
         //tela abse de vitoria do jogo
         if(diamanteTesouroNoBau){ 
             
@@ -2177,32 +2178,25 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
 
                 DrawText(pontuacaoTexto,1050, 40, 20, GREEN);
                 
-                DrawText("PROGRAMAÇÃO E DESIGN:",200, 100, 20, GREEN);
-                DrawText("FELIPE MATIAS: ",320, 150, 20, YELLOW);
-                DrawText("PERSONAGENS, ANIMAÇÕES, CENÁRIOS, ITENS, UI ",515, 150, 20, GREEN);
-                DrawText("SISTEMA DE LUTA E INTELIGENCIA DOS INIMIGOS ",515, 200, 20, GREEN);
-                DrawText("IMPLEMENTAÇÃO DE EFEITOS SONOROS E MÚSICAS",515, 250, 20, GREEN);
+                DrawText("FELIPE MATIAS:",200, 100, 20, YELLOW);
+                DrawText("Design e construção dos mapas",515, 100, 20, GREEN);
+                DrawText("Animação completa de todos os personagens e objetos do jogo",515, 150, 20, GREEN);
+                DrawText("Desenvolvimento dos sistemas de interação, combate, e lógica dos lacaios",515, 200, 20, GREEN);
+                DrawText("Design e programação do chefes (boss) ",515, 250, 20, GREEN);
+                DrawText("Implementação dos sistemas de tiro e de vida",515, 300, 20, GREEN);
+                DrawText("Edição e inserção de sons e músicas para o ambiente e eventos do jogo",515, 350, 20, GREEN);
                 
-                DrawText("IMPLEMENTAÇÃO DE FUNCIONALIDADES E COLISÃO: ",200, 310, 20, GREEN);
+                DrawText("PEDRO SAMPAIO E GABRIEL LANDIM: ",200, 410 , 20, YELLOW);   
+                DrawText("Criação dos puzzles e menu",650, 410, 20, GREEN);
                 
-                DrawText("LUCAS FERREIRA: ",320, 360, 20, YELLOW);
-                DrawText("LÓGICA DOS MAPAS COM LISTA DUPLAMENTE ENCADEADA",515, 360, 20, GREEN);
+                DrawText("LUCAS FERREIRA: ",200, 470, 20, YELLOW);
+                DrawText("Implementação da lógica de lista duplamente encadeada nos mapas",515, 470, 20, GREEN);
                 
-                DrawText("PEDRO SAMPAIO: ",320, 410 , 20, YELLOW);   
-                DrawText("DESENVOLVIMENTO DOS PUZZLES E MENU",515, 410, 20, GREEN);
+                DrawText("FELIPE FRANÇA: ",200, 560, 20, YELLOW);
+                DrawText("Composição da música tema",515, 560, 20, GREEN);
                 
-                DrawText("GABRIEL LANDIM: ",320, 460, 20, YELLOW);
-                DrawText("DESENVOLVIMENTO DOS PUZZLES E MENU",515, 460, 20, GREEN); 
-                
-                DrawText("DESIGN DE ÁUDIO: ",200, 510, 20, GREEN);
-                
-                DrawText("FELIPE FRANÇA: ",320, 560, 20, YELLOW);
-                DrawText("EFEITOS SONOROS E MÚSICA: ",515, 560, 20, GREEN);
-                
-                DrawText("APOIO E COLABORAÇÃO",200, 610, 20, GREEN);
-                
-                DrawText("LUIS GUSTAVO: ",320, 660, 20, YELLOW);
-                DrawText("APOIO AO TIME E FEEDBACK DURANTE O DESENVOLVIMENTO",515, 660, 20, GREEN);
+                DrawText("LUIS GUSTAVO: ",200, 660, 20, YELLOW);
+                DrawText("Feedback e apoio criativo",515, 660, 20, GREEN);
                 EndDrawing();
             }
             
