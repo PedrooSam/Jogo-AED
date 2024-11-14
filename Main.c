@@ -126,7 +126,7 @@ bool bossAtack1Flag = false;
 bool bossAtack2Flag = false;
 bool bossIndoDireita = true;
 bool lacaioIndoDireita = true;
-int timerAtaqueB = 0;
+int timerAtaqueB = 300;
 float distanciaXB = 0.0f;
 float distanciaYB = 0.0f;
 bool acertou = false;
@@ -331,6 +331,14 @@ void menu(Texture2D backgroundMenu) {
             boss.vivo = true;
             boss.x = 500;
             boss.y = 500;
+            
+            bossAtack1Flag = false;
+            bossAtack2Flag = false;
+            timerAtaqueB = 300;
+            timerAtaqueB2 = 0;
+            acertou1 = false;
+            
+            bulletCount = 0;
             
             break;  
         }
@@ -854,12 +862,14 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     int larguraSeta = seta.width / totalSeta;
     int alturaSeta = seta.height;
     
-    //ShowIntro();
-    //ShowLoading();
+    ShowIntro();
+    ShowLoading();
     while (!WindowShouldClose()) {
             
             if(pocao.y < 400) pocao.y += 300;
             pocao.mapa = -1;
+            
+            
             
             pontuacao += 1;
             
@@ -1010,11 +1020,11 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             // ############################
             //  BOSS
             // ############################
-            timerAtaqueB += 1;
-            timerAtaqueB2 += 1;
             float velocidadeBoss = 300.0f * GetFrameTime();
 
             if (boss.vivo && boss.mapa == player.mapa) {
+                timerAtaqueB += 1;
+                timerAtaqueB2 += 1;
                 
                 // Determina direção do boss com base na posição do player
                 if (boss.x < player.x - 50) bossIndoDireita = true;
@@ -1076,6 +1086,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 if(timerAtaqueB >= 500) {
                     acertou = false;
                     timerAtaqueB = 0;
+                    timerAtaqueB2 = 0;
                     bossAtack1Flag = true; // Inicia o Golpe 1
                 }
                 
@@ -2162,8 +2173,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             DrawText(pontuacaoTexto, 200,500,40,BLACK);
             EndDrawing();
         }
-
-        diamanteTesouroNoBau = true; 
+        
         //tela abse de vitoria do jogo
         if(diamanteTesouroNoBau){ 
             
@@ -2178,7 +2188,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
 
                 DrawText(pontuacaoTexto,1050, 40, 20, GREEN);
                 
-                DrawText("FELIPE MATIAS:",200, 100, 20, YELLOW);
+                DrawText("FELIPE MATIAS:",200, 100, 30, YELLOW);
                 DrawText("Design e construção dos mapas",515, 100, 20, GREEN);
                 DrawText("Animação completa de todos os personagens e objetos do jogo",515, 150, 20, GREEN);
                 DrawText("Desenvolvimento dos sistemas de interação, combate, e lógica dos lacaios",515, 200, 20, GREEN);
@@ -2186,18 +2196,22 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 DrawText("Implementação dos sistemas de tiro e de vida",515, 300, 20, GREEN);
                 DrawText("Edição e inserção de sons e músicas para o ambiente e eventos do jogo",515, 350, 20, GREEN);
                 
-                DrawText("PEDRO SAMPAIO E GABRIEL LANDIM: ",200, 410 , 20, YELLOW);   
-                DrawText("Criação dos puzzles e menu",650, 410, 20, GREEN);
+                DrawText("PEDRO SAMPAIO: ",200, 410 , 20, YELLOW);   
+                DrawText("Criação dos puzzles e menu", 515, 410, 20, GREEN);
                 
-                DrawText("LUCAS FERREIRA: ",200, 470, 20, YELLOW);
-                DrawText("Implementação da lógica de lista duplamente encadeada nos mapas",515, 470, 20, GREEN);
+                DrawText("LUCAS FERREIRA: ",200, 440, 20, YELLOW);
+                DrawText("Implementação da lógica de lista duplamente encadeada nos mapas",515, 440, 20, GREEN);
                 
-                DrawText("FELIPE FRANÇA: ",200, 560, 20, YELLOW);
-                DrawText("Composição da música tema",515, 560, 20, GREEN);
+                DrawText("FELIPE FRANÇA: ",200, 470, 20, YELLOW);
+                DrawText("Composição da música tema",515, 470, 20, GREEN);
                 
-                DrawText("LUIS GUSTAVO: ",200, 660, 20, YELLOW);
-                DrawText("Feedback e apoio criativo",515, 660, 20, GREEN);
+                DrawText("LUIS GUSTAVO: ",200, 500, 20, YELLOW);
+                DrawText("Feedback e apoio criativo",515, 500, 20, GREEN);
+                
+                DrawText("GABRIEL LANDIM: ", 200, 530,20, YELLOW);
+                DrawText("Criação dos puzzles e menu", 515, 530, 20, GREEN);
                 EndDrawing();
+
             }
             
             //Chama o menu e mostra a introdução novamente
@@ -2254,7 +2268,7 @@ int main(void) {
     InitWindow(larguraTela, alturaTela, "Um dia no Castelo");
     SetTargetFPS(60);
     
-    //ToggleFullscreen();
+    ToggleFullscreen();
 
     InitAudioDevice();
     
