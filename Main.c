@@ -1900,11 +1900,13 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
 
             if(player.vivo){
                 //Sombra
-                if(personagemParado && pegando && !andandoDireita) DrawTextureEx(shadow, (Vector2){player.x + 85, player.y + 70}, 0.0f, 1.0f, WHITE);
+                if(personagemParado && pegando && !andandoDireita) DrawTextureEx(shadow, (Vector2){player.x -15 , player.y + 70}, 0.0f, 1.0f, WHITE);
                 
-                else if(!personagemParado && pegando && !andandoDireita) DrawTextureEx(shadow, (Vector2){player.x + 70, player.y + 75}, 0.0f, 1.0f, WHITE);
+                else if(!personagemParado && pegando && !andandoDireita && !segurandoItem) DrawTextureEx(shadow, (Vector2){player.x + 70, player.y + 75}, 0.0f, 1.0f, WHITE);
                 
-                else if(atirou && !andandoDireita) DrawTextureEx(shadow, (Vector2){player.x + 85, player.y + 70}, 0.0f, 1.0f, WHITE);
+                else if(!personagemParado && pegando && !andandoDireita)  DrawTextureEx(shadow, (Vector2){player.x - 30, player.y + 75}, 0.0f, 1.0f, WHITE);
+                
+                else if(atirou && !andandoDireita) DrawTextureEx(shadow, (Vector2){player.x - 15, player.y + 70}, 0.0f, 1.0f, WHITE);
                 
                 else if(personagemParado) DrawTextureEx(shadow, (Vector2){player.x - 15, player.y + 70}, 0.0f, 1.0f, WHITE);
                 
@@ -1922,7 +1924,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                         DrawTextureRec(pegandoDireitaIdle, sourceRecIdle, (Vector2){player.x, player.y - playerOffSet}, WHITE);
                     }else if(personagemParado && !segurandoItem){
                         Rectangle sourceRecIdle = { frameAtualIdle * larguraFrameIdle, 0, larguraFrameIdle, alturaFrameIdle};
-                        DrawTextureRec(pegandoEsquerdaIdle, sourceRecIdle, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                        DrawTextureRec(pegandoEsquerdaIdle, sourceRecIdle, (Vector2){player.x - 100, player.y - playerOffSet}, WHITE);
                     }
                     
                     else if(chavePegandoFlag && andandoDireita) { // primeira chave
@@ -1936,10 +1938,10 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     } else if(chavePegandoFlag) {               
                         if(personagemParado){
                             Rectangle sourceRecIdle = { frameAtualIdle * larguraFrameIdle, 0, larguraFrameIdle, alturaFrameIdle};
-                            DrawTextureRec(pegandoChaveEsquerdaIdle, sourceRecIdle, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                            DrawTextureRec(pegandoChaveEsquerdaIdle, sourceRecIdle, (Vector2){player.x - 100, player.y - playerOffSet}, WHITE);
                         }else{
                             Rectangle sourceRecKey = {  frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey};
-                            DrawTextureRec(pegandoChaveEsquerda, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                            DrawTextureRec(pegandoChaveEsquerda, sourceRecKey, (Vector2){player.x - 100, player.y - playerOffSet}, WHITE);
                         }
                     }
      
@@ -1954,10 +1956,10 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     } else if(chaveTesouroPegandoFlag) {
                         if(personagemParado){
                             Rectangle sourceRecIdle = { frameAtualIdle * larguraFrameIdle, 0, larguraFrameIdle, alturaFrameIdle};
-                            DrawTextureRec(pegandoChaveTesouroEsquerdaIdle, sourceRecIdle, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                            DrawTextureRec(pegandoChaveTesouroEsquerdaIdle, sourceRecIdle, (Vector2){player.x - 100, player.y - playerOffSet}, WHITE);
                         }else{
                             Rectangle sourceRecKey = { frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey };
-                            DrawTextureRec(pegandoChaveTesouroEsquerda, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                            DrawTextureRec(pegandoChaveTesouroEsquerda, sourceRecKey, (Vector2){player.x - 100, player.y - playerOffSet}, WHITE);
                         }
                     }
                     
@@ -1972,10 +1974,10 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     } else if(espadaTesouroPegandoFlag) {
                          if(personagemParado){
                             Rectangle sourceRecIdle = { frameAtualIdle * larguraFrameIdle, 0, larguraFrameIdle, alturaFrameIdle};
-                            DrawTextureRec(pegandoEspadaEsquerdaIdle, sourceRecIdle, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                            DrawTextureRec(pegandoEspadaEsquerdaIdle, sourceRecIdle, (Vector2){player.x - 100, player.y - playerOffSet}, WHITE);
                         }else{
                             Rectangle sourceRecKey = { frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey };
-                            DrawTextureRec(pegandoEspadaEsquerda, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                            DrawTextureRec(pegandoEspadaEsquerda, sourceRecKey, (Vector2){player.x - 100, player.y - playerOffSet}, WHITE);
                         }
                     } 
                     
@@ -1990,10 +1992,10 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     } else if(diamanteTesouroPegandoFlag) {
                         if(personagemParado){
                             Rectangle sourceRecIdle = { frameAtualIdle * larguraFrameIdle, 0, larguraFrameIdle, alturaFrameIdle};
-                            DrawTextureRec(pegandoDiamanteEsquerdaIdle, sourceRecIdle, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                            DrawTextureRec(pegandoDiamanteEsquerdaIdle, sourceRecIdle, (Vector2){player.x - 100, player.y - playerOffSet}, WHITE);
                         }else{
                             Rectangle sourceRecKey = { frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey };
-                            DrawTextureRec(pegandoDiamanteEsquerda, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE); 
+                            DrawTextureRec(pegandoDiamanteEsquerda, sourceRecKey, (Vector2){player.x - 100, player.y - playerOffSet}, WHITE); 
                         }
                     }
                     
@@ -2032,10 +2034,10 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                         if(atirou && !segurandoItem && !pegando){
                             if(glockDourada){
                                 Rectangle sourceRecKey = { frameAtualTiro * larguraFrameTiro, 0, larguraFrameTiro, alturaFrameTiro };
-                                DrawTextureRec(atirandoEsquerdaDourado, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                                DrawTextureRec(atirandoEsquerdaDourado, sourceRecKey, (Vector2){player.x - 100, player.y - playerOffSet}, WHITE);
                             }else{
                                 Rectangle sourceRecKey = { frameAtualTiro * larguraFrameTiro, 0, larguraFrameTiro, alturaFrameTiro };
-                                DrawTextureRec(atirandoEsquerda, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                                DrawTextureRec(atirandoEsquerda, sourceRecKey, (Vector2){player.x - 100, player.y - playerOffSet}, WHITE);
                             }
                         }else{
                             Rectangle sourceRec = { frameAtual * larguraFrame, 0, larguraFrame, alturaFrame };
