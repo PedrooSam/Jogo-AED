@@ -126,7 +126,7 @@ bool bossAtack1Flag = false;
 bool bossAtack2Flag = false;
 bool bossIndoDireita = true;
 bool lacaioIndoDireita = true;
-int timerAtaqueB = 1000;
+int timerAtaqueB = 0;
 float distanciaXB = 0.0f;
 float distanciaYB = 0.0f;
 bool acertou = false;
@@ -326,6 +326,12 @@ void menu(Texture2D backgroundMenu) {
             
             deathFlag = false;
             deathSoundPlayed = false;
+            bulletCount = 0;
+            boss.vida = 100;
+            boss.vivo = true;
+            boss.x = 500;
+            boss.y = 500;
+            
             break;  
         }
         else if (CheckCollisionPointRec(GetMousePosition(), botaoSair) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
@@ -662,7 +668,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     player.y = 200;
     player.mapa = 0; 
     player.vivo = true;
-    player.vida = 10000;
+    player.vida = 5;
     
     //posição lacaio
     lacaio.x = 100;
@@ -1014,11 +1020,11 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     if (distanciaYB <= 50 && !acertou && (distanciaXB < 20 || (distanciaXB < 350 && !bossIndoDireita))) {
                         acertou = true;
                         levandoDanoFlag = true;
-                        player.vida -= 2;   // Reduz a vida do jogador
+                        player.vida -= 1;   // Reduz a vida do jogador
                     }
                 }  
                 
-                if(bossAtack2Flag){
+                else if(bossAtack2Flag){
                     // Movimenta no eixo X em direção ao jogador
                     if (boss.x < player.x - 200) {
                         boss.x += velocidadeBoss;
@@ -1047,7 +1053,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 distanciaYB = fabsf((player.y - playerOffSet) - boss.y);
                 
                 // Temporização para iniciar o Golpe 1
-                if(timerAtaqueB >= 1000) {
+                if(timerAtaqueB >= 500) {
                     acertou = false;
                     timerAtaqueB = 0;
                     bossAtack1Flag = true; // Inicia o Golpe 1
@@ -1362,7 +1368,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 if (!IsSoundPlaying(bossMusica) && boss.vivo && player.vivo) {
                     PlaySound(bossMusica);
                 }
-                if(CollisionObject(playerCollision, doorCollision)) {
+                if(CollisionObject(playerCollision, doorCollision) && !boss.vivo ) {
                     player.x = 200;
                     player.y = 540;
                     player.mapa = 0;
@@ -1384,13 +1390,13 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     player.mapa = getNextMapaPrincipal(head);
                 }
                 
-                if(CollisionObject(playerCollision, doorCollisionEsquerda)) {
+                if(lacaio3Adicionado && !lacaio.vivo && CollisionObject(playerCollision, doorCollisionEsquerda)) {
                     player.x = 900;
                     player.y = 540;
                     player.mapa = -1;
                 }
 
-                if(CollisionObject(playerCollision, diamanteTesouroCollision) && !diamanteTesouroPegandoFlag && pegando && !diamanteTesouroNoBau && puzzle2Resolvido){  //Verifica se pode pegar
+                if(!boss.vivo && CollisionObject(playerCollision, diamanteTesouroCollision) && pegando){  //Verifica se pode pegar
                         PlaySound(pegandoItem);
                         diamanteTesouroPegandoFlag = true;
                         diamanteTesouroSpawn = false;
@@ -1449,7 +1455,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
 
                 }
                 
-                if(puzzle1Resolvido && !puzzle2Resolvido && CollisionObject(playerCollision, doorCollision)){
+                if(lacaio2Adicionado && lacaio3Adicionado && !lacaio.vivo && CollisionObject(playerCollision, doorCollision)){
                     player.x = 100;
                     player.mapa = getNextMapaPrincipal(head);
                 }
@@ -1487,9 +1493,9 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 }
             } else if(player.mapa == 3) {
                 if(CollisionObject(playerCollision, doorCollisionEsquerda)) {
-                    player.x = 920;
+                    player.x = 900;
                     player.y = 540;
-                    player.mapa = getAntMapaPrincipal(head);
+                    player.mapa = 2;
                 }
                 
                 if(!glockDourada && glockDouradaSpawn && CollisionObject(playerCollision, glockDouradaCollision)){
@@ -1547,18 +1553,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     diamanteTesouroNoBau = true;
                     diamanteTesouroPegandoFlag = false;
                     pegando = false;
-               }
-                
-               if(CollisionObject(playerCollision, bauTesouroCollision) && diamanteTesouroPegandoFlag && puzzle2Resolvido){    // Verifica se colocou o diamante no bau
-                    StopSound(andando);
-                    diamanteTesouroSpawn = false;
-                    diamanteTesouroNoBau = true;
-                    diamanteTesouroPegandoFlag = false;
-                    pegando = false;
-               }
-                
-            
-                
+               }    
             } 
             
             // ############################
@@ -1570,7 +1565,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             
             // Só vai desenhar o item se estiver no mapa dele
             if(player.mapa == -1){
-                //DrawTexture(mapa4, 0, 0, WHITE);
+                DrawTexture(mapa4, 0, 0, WHITE);
             }
             else if(player.mapa == 0) {
                 DrawTexture(backgroundImage, 0, 0, WHITE);
@@ -1583,10 +1578,10 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 if(!diamanteTesouroNoBau){
                     
                     if(diamanteTesouroSpawn && !diamanteTesouroPegandoFlag){                             // Verifica se pode desenhar o diamante
-                        if(!puzzle2Resolvido){
+                        if(boss.vivo){
                         DrawTextureEx(diamante, (Vector2){60, 500},0.0f, 3.0f,WHITE);
                         }
-                        else{
+                        else if(boss.vida <= 0){
                         DrawTextureEx(diamanteFree, (Vector2){100, 500},0.0f, 3.0f,WHITE);    
                         }
                     }
@@ -1594,7 +1589,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 }
                 
                                     
-                                    
+                                 
                 if(CollisionObject(playerCollision, diamanteTesouroCollision) && !puzzle2Resolvido && player.x < 200 ){
                         colidiu = true;
                 }
@@ -1757,7 +1752,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                         boss.vida -= 2;
                         bulletCount++;
                     }else{
-                        boss.vida -= 1;
+                        boss.vida -= 100;
                         bulletCount ++;
                     }
                         
@@ -1784,6 +1779,39 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     }
                 }
             }
+            
+                        //Potion            
+            Rectangle potionCollision = {1000, 600, 70, 70};
+            if(lacaio2Adicionado && !lacaio.vivo && player.mapa == 2 && !curou){
+                Rectangle sourcePotion = { frameAtualPotion * larguraPotion, 0, larguraPotion, alturaFramePotion};
+                DrawTextureRec(potion, sourcePotion, (Vector2){1000, 600}, WHITE);
+                
+                if(CollisionObject(playerCollision, potionCollision)) {
+                    PlaySound(heal);
+                    curou = true;
+                    player.vida += 2;}
+            }
+            
+            if (!liberaPotion && bulletCount >= 10 && player.mapa == -1) {
+                bulletCount -= 10;
+                pocao.x = GetRandomValue(100, 1000); // Exemplo de intervalo para posição X
+                pocao.y = GetRandomValue(100, 600);  // Exemplo de intervalo para posição Y
+                liberaPotion = true; // Marca a poção como criada para não mudar de lugar
+            }
+
+            if(liberaPotion){
+                Rectangle sourcePotion = { frameAtualPotion * larguraPotion, 0, larguraPotion, alturaFramePotion};
+                DrawTextureRec(potion, sourcePotion, (Vector2){pocao.x, pocao.y}, WHITE);
+                
+                if(CollisionObject(playerCollision, pocoes)) {
+                    PlaySound(heal);
+                    player.vida += 2;
+                    liberaPotion = false;
+                    
+                    if(player.vida > 5) player.vida = 5;
+                }
+            }
+              
             
             //###########################################
             //################BOSS#######################
@@ -1875,38 +1903,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 }
             }
                    
-            //Potion
-            
-            
-            Rectangle potionCollision = {1000, 600, 70, 70};
-            if(lacaio2Adicionado && !lacaio.vivo && player.mapa == 2 && !curou){
-                Rectangle sourcePotion = { frameAtualPotion * larguraPotion, 0, larguraPotion, alturaFramePotion};
-                DrawTextureRec(potion, sourcePotion, (Vector2){1000, 600}, WHITE);
-                
-                if(CollisionObject(playerCollision, potionCollision)) {
-                    PlaySound(heal);
-                    curou = true;
-                    player.vida ++;}
-            }
-            
-            if (!liberaPotion && bulletCount >= 10 && player.mapa == -1) {
-                bulletCount -= 10;
-                pocao.x = GetRandomValue(100, 1000); // Exemplo de intervalo para posição X
-                pocao.y = GetRandomValue(100, 600);  // Exemplo de intervalo para posição Y
-                liberaPotion = true; // Marca a poção como criada para não mudar de lugar
-            }
 
-            if(liberaPotion){
-                Rectangle sourcePotion = { frameAtualPotion * larguraPotion, 0, larguraPotion, alturaFramePotion};
-                DrawTextureRec(potion, sourcePotion, (Vector2){pocao.x, pocao.y}, WHITE);
-                
-                if(CollisionObject(playerCollision, pocoes)) {
-                    PlaySound(heal);
-                    player.vida ++;
-                    liberaPotion = false;
-                }
-            }
-              
             if(player.vivo){
                 //Sombra
                 if(personagemParado && pegando && !andandoDireita) DrawTextureEx(shadow, (Vector2){player.x + 85, player.y + 70}, 0.0f, 1.0f, WHITE);
