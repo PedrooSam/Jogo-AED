@@ -1234,23 +1234,14 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             }
             
             // Atualização potion
-            if(!curou){
+            if(!curou || !curouBoss || lacaioCount == 4){
                 timerPotion = getTime(timerPotion);
                 frameAtualPotion = getFrame(timerPotion, tempoFramePotion, totalFramesPotion, frameAtualPotion);
                 if(timerPotion > tempoFramePotion){
                     timerPotion = 0.0f;
                 }
             }
-            
-            // Atualização potion do boss
-            if(!curouBoss){
-                timerPotion = getTime(timerPotion);
-                frameAtualPotion = getFrame(timerPotion, tempoFramePotion, totalFramesPotion, frameAtualPotion);
-                if(timerPotion > tempoFramePotion){
-                    timerPotion = 0.0f;
-                }
-            }
-            
+
             // Atualização lacaio death
             if (deathFlag) {
                 timerDeath += GetFrameTime();  // Incrementa timerLevandoDano
@@ -1741,7 +1732,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 }
                              
             }
-            
+
             //Verificacao chave
             if(chaveTesouroPegandoFlag && !pegando && !chaveTesouroNoBau){                                         //Verifica se deixou a chave cair 
                     chaveTesouroPegandoFlag = false;
@@ -1868,7 +1859,18 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     if(player.vida > 5) player.vida = 5;
                 }
             }
-
+            
+            if(lacaioCount == 4 && player.mapa == 0){
+                Rectangle sourcePotion = { frameAtualPotion * larguraPotion, 0, larguraPotion, alturaFramePotion};
+                DrawTextureRec(potion, sourcePotion, (Vector2){potionCollision.x, potionCollision.y}, WHITE);
+                
+                if(CollisionObject(playerCollision, potionCollision)) {
+                    PlaySound(heal);
+                    player.vida += 2;
+                    lacaioCount = 0;
+                    if(player.vida > 5) player.vida = 5;
+                }
+            }
             //lacaio
             if(lacaio.mapa == player.mapa && lacaio.vivo){
                 
@@ -2085,15 +2087,11 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     }
                 }else if(bossAtack2Flag ){
                     if(bossIndoDireita){
-
-                            Rectangle sourceRec2 = { atualBossAtack2 * larguraBossAtack2, 0, larguraBossAtack2, alturaBossAtack2};
-                            DrawTextureRec(bossAtack2, sourceRec2, (Vector2){boss.x,boss.y}, WHITE);
-                        
+                        Rectangle sourceRec2 = { atualBossAtack2 * larguraBossAtack2, 0, larguraBossAtack2, alturaBossAtack2};
+                        DrawTextureRec(bossAtack2, sourceRec2, (Vector2){boss.x,boss.y}, WHITE);
                     }else{
-
-                            Rectangle sourceRec2 = { atualBossAtack2 * larguraBossAtack2, 0, larguraBossAtack2, alturaBossAtack2};
-                            DrawTextureRec(bossAtack2Left, sourceRec2, (Vector2){boss.x,boss.y}, WHITE);
-                        
+                        Rectangle sourceRec2 = { atualBossAtack2 * larguraBossAtack2, 0, larguraBossAtack2, alturaBossAtack2};
+                        DrawTextureRec(bossAtack2Left, sourceRec2, (Vector2){boss.x,boss.y}, WHITE);
                     }
                 }else{
                     if(bossIndoDireita){
@@ -2117,24 +2115,39 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             // ############################
             //  UI/Interface
             // ############################
-            if(player.vida == 5) DrawTextureEx(vida5, (Vector2){20,20}, 0.0f, 5.0f, WHITE);
-            else if(player.vida == 4) DrawTextureEx(vida4, (Vector2){20,20}, 0.0f, 5.0f, WHITE);
-            else if(player.vida == 3) DrawTextureEx(vida3, (Vector2){20,20}, 0.0f, 5.0f, WHITE);
-            else if(player.vida == 2) DrawTextureEx(vida2, (Vector2){20,20}, 0.0f, 5.0f, WHITE);
-            else if(player.vida == 1) DrawTextureEx(vida1, (Vector2){20,20}, 0.0f, 5.0f, WHITE);
+            if(player.vida == 5) 
+                DrawTextureEx(vida5, (Vector2){20,20}, 0.0f, 5.0f, WHITE);
+            else if(player.vida == 4) 
+                DrawTextureEx(vida4, (Vector2){20,20}, 0.0f, 5.0f, WHITE);
+            else if(player.vida == 3) 
+                DrawTextureEx(vida3, (Vector2){20,20}, 0.0f, 5.0f, WHITE);
+            else if(player.vida == 2) 
+                DrawTextureEx(vida2, (Vector2){20,20}, 0.0f, 5.0f, WHITE);
+            else if(player.vida == 1) 
+                DrawTextureEx(vida1, (Vector2){20,20}, 0.0f, 5.0f, WHITE);
             
             //UI lacaio
             if(lacaio.mapa == player.mapa){
-            if(lacaio.vida == 10) DrawTextureEx(lacaioVida10, (Vector2){700, 20}, 0.0f, 5.0f, WHITE);
-            else if(lacaio.vida == 9) DrawTextureEx(lacaioVida9, (Vector2){700, 20}, 0.0f, 5.0f, WHITE);
-            else if(lacaio.vida == 8) DrawTextureEx(lacaioVida8, (Vector2){700, 20}, 0.0f, 5.0f, WHITE);
-            else if(lacaio.vida == 7) DrawTextureEx(lacaioVida7, (Vector2){700, 20}, 0.0f, 5.0f, WHITE);
-            else if(lacaio.vida == 6) DrawTextureEx(lacaioVida6, (Vector2){700, 20}, 0.0f, 5.0f, WHITE);
-            else if(lacaio.vida == 5) DrawTextureEx(lacaioVida5, (Vector2){700, 20}, 0.0f, 5.0f, WHITE);
-            else if(lacaio.vida == 4) DrawTextureEx(lacaioVida4, (Vector2){700, 20}, 0.0f, 5.0f, WHITE);
-            else if(lacaio.vida == 3) DrawTextureEx(lacaioVida3, (Vector2){700, 20}, 0.0f, 5.0f, WHITE);
-            else if(lacaio.vida == 2) DrawTextureEx(lacaioVida2, (Vector2){700, 20}, 0.0f, 5.0f, WHITE);
-            else if(lacaio.vida == 1) DrawTextureEx(lacaioVida1, (Vector2){700, 20}, 0.0f, 5.0f, WHITE);
+            if(lacaio.vida == 10) 
+                DrawTextureEx(lacaioVida10, (Vector2){700, 20}, 0.0f, 5.0f, WHITE);
+            else if(lacaio.vida == 9) 
+                DrawTextureEx(lacaioVida9, (Vector2){700, 20}, 0.0f, 5.0f, WHITE);
+            else if(lacaio.vida == 8) 
+                DrawTextureEx(lacaioVida8, (Vector2){700, 20}, 0.0f, 5.0f, WHITE);
+            else if(lacaio.vida == 7) 
+                DrawTextureEx(lacaioVida7, (Vector2){700, 20}, 0.0f, 5.0f, WHITE);
+            else if(lacaio.vida == 6) 
+                DrawTextureEx(lacaioVida6, (Vector2){700, 20}, 0.0f, 5.0f, WHITE);
+            else if(lacaio.vida == 5) 
+                DrawTextureEx(lacaioVida5, (Vector2){700, 20}, 0.0f, 5.0f, WHITE);
+            else if(lacaio.vida == 4) 
+                DrawTextureEx(lacaioVida4, (Vector2){700, 20}, 0.0f, 5.0f, WHITE);
+            else if(lacaio.vida == 3) 
+                DrawTextureEx(lacaioVida3, (Vector2){700, 20}, 0.0f, 5.0f, WHITE);
+            else if(lacaio.vida == 2) 
+                DrawTextureEx(lacaioVida2, (Vector2){700, 20}, 0.0f, 5.0f, WHITE);
+            else if(lacaio.vida == 1) 
+                DrawTextureEx(lacaioVida1, (Vector2){700, 20}, 0.0f, 5.0f, WHITE);
             }
 
             //UI boss
@@ -2264,7 +2277,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             BeginDrawing();
             DrawTexture(menuBack, 10, 50 , WHITE );
             DrawText("Retomar", 510, 400, 30, GOLD);
-            DrawText("Sair do jogo", 510, 450, 30, GOLD);
+            DrawText("Voltar ao menu", 510, 450, 30, GOLD);
             DrawText("PAUSE", 500, 290, 70, GOLD);
             EndDrawing();
             
@@ -2273,7 +2286,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             }
             
             if (CheckCollisionPointRec(GetMousePosition(), sair) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-                  CloseWindow();
+                  menu(backgroundMenu);
             }
         }
     }
