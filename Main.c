@@ -45,6 +45,8 @@ bool lacaioAtingido = false;
 bool lacaioAtacando = false;
 bool lacaio2Adicionado = false;
 bool lacaio3Adicionado = false;
+bool lacaio4Adicionado = false;
+int lacaioCount = 0;
 
 // Jogador
 int playerOffSet = 140; //hitbox do boneco
@@ -138,6 +140,7 @@ bool curouBoss = false;
 
 int bulletCount = 0;
 bool liberaPotion = false;
+bool secretFree = false;
 
 //delay do som de dano
 float delayUrh = 0.0f;
@@ -304,6 +307,7 @@ void menu(Texture2D backgroundMenu) {
 
             lacaio2Adicionado = false;
             lacaio3Adicionado = false;
+            lacaio4Adicionado = false;
 
             chaveSpawn = true;
             chaveTesouroNoBau = false;
@@ -337,9 +341,10 @@ void menu(Texture2D backgroundMenu) {
             timerAtaqueB = 300;
             timerAtaqueB2 = 0;
             acertou1 = false;
+            secretFree = false;
+            lacaioCount = 0;
             
             bulletCount = 0;
-            
             break;  
         }
         else if (CheckCollisionPointRec(GetMousePosition(), botaoSair) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
@@ -1397,6 +1402,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             
             Rectangle pocoes = {pocao.x, pocao.y, 70, 70};
             
+            glockDourada = true;
             //Verifica as colisões 
             if(player.mapa == -1){
                 //UpdateSound(bossMusica);
@@ -1493,7 +1499,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
 
                 }
                 
-                if(lacaio2Adicionado && lacaio3Adicionado && !lacaio.vivo && CollisionObject(playerCollision, doorCollision)){
+                if(CollisionObject(playerCollision, doorCollision) && secretFree){
                     player.x = 100;
                     player.mapa = getNextMapaPrincipal(head);
                 }
@@ -1541,6 +1547,17 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     glockDourada = true;
                     glockDouradaSpawn = false;
                 }
+                
+                if(puzzle2Resolvido && !lacaio4Adicionado){
+                    PlaySound(lacaioSom);
+                    lacaio.vivo = true;
+                    lacaio.vida = 10;
+                    lacaio.mapa = 3;
+                    lacaio.x = 1000;
+                    lacaio4Adicionado = true;
+                    deathSoundPlayed = false;
+                }
+                
             } else if(player.mapa == 100){
                 CollisionObject(playerCollision, pilarEsqMapa3);
                 CollisionObject(playerCollision, pilarMapa3);
@@ -1779,6 +1796,10 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     if(lacaio.vida <= 0){
                         lacaio.vivo = false;
                         deathFlag = true;
+                        
+                        lacaioCount ++;
+                        
+                        if(lacaioCount == 3) secretFree = true;
                     }
                 }
                 
@@ -1827,7 +1848,10 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 if(CollisionObject(playerCollision, potionCollision)) {
                     PlaySound(heal);
                     curou = true;
-                    player.vida += 2;}
+                    player.vida += 2;
+                    
+                    if(player.vida > 5) player.vida = 5;
+                }
             }
             
             if (!liberaPotion && bulletCount >= 10 && player.mapa == -1) {
