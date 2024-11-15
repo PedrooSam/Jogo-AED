@@ -2089,9 +2089,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     }
                 }
             }    
-  
-                
-            player.mapa = -1;
+
             //###########################################
             //################BOSS#######################
             //###########################################
