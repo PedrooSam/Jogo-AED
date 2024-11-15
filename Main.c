@@ -141,6 +141,7 @@ bool curouBoss = false;
 int bulletCount = 0;
 bool liberaPotion = false;
 bool secretFree = false;
+bool deathSoundBossPlayed = false;
 
 //delay do som de dano
 float delayUrh = 0.0f;
@@ -343,6 +344,7 @@ void menu(Texture2D backgroundMenu) {
             acertou1 = false;
             secretFree = false;
             lacaioCount = 0;
+            deathSoundBossPlayed = false;
             
             bulletCount = 0;
             break;  
@@ -658,6 +660,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     
     Sound bossMusica = LoadSound("audios/bossMusica.mp3");
     Sound sword = LoadSound("audios/swordSound.mp3");
+    Sound deathSoundBoss = LoadSound("audios/deathSoundBoss.mp3");
     
     //UI boss
     Texture2D boss10 = LoadTexture("ui/boss/10.png");
@@ -1109,6 +1112,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 StopSound(bossMusica);
                 player.vivo = false;
             }
+            
             
             //verifica se tá segurando algo
             if(!chavePegandoFlag && !chaveTesouroPegandoFlag && !espadaTesouroPegandoFlag && !diamanteTesouroPegandoFlag){
@@ -1818,6 +1822,11 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     if(boss.vida <= 0){
                         boss.vivo = false;
                         StopSound(bossMusica);
+                        
+                        if(!deathSoundBossPlayed){
+                            PlaySound(deathSoundBoss);
+                            deathSoundBossPlayed = true;
+                        }
                     }
                 }
                 
