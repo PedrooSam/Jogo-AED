@@ -661,6 +661,9 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     Sound bossMusica = LoadSound("audios/bossMusica.mp3");
     Sound sword = LoadSound("audios/swordSound.mp3");
     Sound deathSoundBoss = LoadSound("audios/deathSoundBoss.mp3");
+    Sound swordA2wrong = LoadSound("audios/swordAtack2(off).mp3");
+    Sound swordA2 = LoadSound("audios/swordAtack2.mp3");
+    Sound bossRun = LoadSound("audios/bossRun.mp3");
     
     //UI boss
     Texture2D boss10 = LoadTexture("ui/boss/10.png");
@@ -808,7 +811,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     // Animação potion
     int totalFramesPotion = 8;
     int frameAtualPotion = 0;
-    float tempoFramePotion = 0.1f;
+    float tempoFramePotion = 0.2f;
     float timerPotion = 0.0f;
     int larguraPotion = potion.width / totalFramesPotion;
     int alturaFramePotion = potion.height;
@@ -853,14 +856,6 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     float timerBossAtack2 = 0.0f;
     int larguraBossAtack2 = bossAtack2.width / totalBossAtack2;
     int alturaBossAtack2 = bossAtack2.height;
-    
-    //Run
-    int totalBossRun = 7;
-    int atualBossRun = 0;
-    float tempoBossRun = 0.1f;
-    float timerBossRun = 0.0f;
-    int larguraBossRun = bossRunLeft.width / totalBossRun;
-    int alturaBossRun = bossRunLeft.height;
    
     //Seta
     int totalSeta = 7;
@@ -870,8 +865,8 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     int larguraSeta = seta.width / totalSeta;
     int alturaSeta = seta.height;
     
-    //ShowIntro();
-    //ShowLoading();
+    ShowIntro();
+    ShowLoading();
     while (!WindowShouldClose()) {
             
             if(pocao.y < 400) pocao.y += 300;
@@ -1059,6 +1054,8 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                         acertou = true;
                         levandoDanoFlag = true;
                         player.vida -= 1;   // Reduz a vida do jogador
+                        PlaySound(sword);
+                        PlaySound(uhr);
                     }
                 }  
                 
@@ -1079,11 +1076,12 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     
                     // Verifica se o boss está dentro do alcance de ataque
                     if (distanciaYB <= 50 && !acertou1 && (distanciaXB < 20 || (distanciaXB < 350 && !bossIndoDireita))) {
-                        alcance = true;
+                        PlaySound(swordA2);
+                        PlaySound(uhr);
                         acertou1 = true;
                         levandoDanoFlag = true;
                         player.vida -= 1;   // Reduz a vida do jogador
-                    }    
+                    }
                 }
                 
                 // Atualiza distâncias absolutas entre o boss e o jogador em cada eixo
@@ -1092,6 +1090,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 
                 // Temporização para iniciar o Golpe 1
                 if(timerAtaqueB >= 500) {
+                    PlaySound(bossRun);
                     acertou = false;
                     timerAtaqueB = 0;
                     timerAtaqueB2 = 0;
@@ -1101,7 +1100,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 else if(timerAtaqueB2 >= 200) {
                     acertou1 = false;
                     timerAtaqueB2 = 0;
-                    bossAtack2Flag = true; // Inicia o Golpe 1
+                    bossAtack2Flag = true; // Inicia o Golpe 2
                 }
                 
                 
@@ -1299,7 +1298,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     } else {
                         // Incrementa o frame do ataque apenas quando está no alcance (acertou)
                         atualBossAtack1++;
-                        
+                        StopSound(bossRun);
                         // Verifica se todos os frames de ataque foram exibidos
                         if (atualBossAtack1 >= totalBossAtack1) {
                             atualBossAtack1 = 0;        // Reseta para o frame inicial do ataque
@@ -1310,26 +1309,14 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 }
             }
 
-            // Correr até liberar animação do atack 2
-            if(!alcance){
-                timerBossRun += GetFrameTime();  // Incrementa timerlacaioAtaque
-                if (timerBossRun >= tempoBossRun) {
-                    atualBossRun++;
-                    timerBossRun = 0.0f;  // Reseta timerlacaioAtaque
-                    
-                    if(atualBossRun > totalBossRun){
-                        atualBossAtack2 = 0;
-                    }
-                }
-            
-            }
-            
              // Atualização boss atack2
-            if (bossAtack2Flag && alcance) {
+            if (bossAtack2Flag) {
                 timerBossAtack2 += GetFrameTime();  // Incrementa timerlacaioAtaque
                 if (timerBossAtack2 >= tempoBossAtack2) {
                     atualBossAtack2++;
                     timerBossAtack2 = 0.0f;  // Reseta timerlacaioAtaque
+                    
+                    if(atualBossAtack2 == 3) PlaySound(swordA2wrong);
                     
                     if(atualBossAtack2 > totalBossAtack2){
                         atualBossAtack2 = 0;
@@ -1405,8 +1392,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             Rectangle glockDouradaCollision = {700, 575, 50, 50};
             
             Rectangle pocoes = {pocao.x, pocao.y, 70, 70};
-            
-            glockDourada = true;
+
             //Verifica as colisões 
             if(player.mapa == -1){
                 //UpdateSound(bossMusica);
@@ -2099,21 +2085,15 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     }
                 }else if(bossAtack2Flag ){
                     if(bossIndoDireita){
-                        if(!alcance){
-                            Rectangle sourceRec = {atualBossRun * larguraBossRun, 0, larguraBossRun, alturaBossRun};
-                            DrawTextureRec(bossRunRight, sourceRec, (Vector2){boss.x,boss.y}, WHITE );
-                        }else{
+
                             Rectangle sourceRec2 = { atualBossAtack2 * larguraBossAtack2, 0, larguraBossAtack2, alturaBossAtack2};
                             DrawTextureRec(bossAtack2, sourceRec2, (Vector2){boss.x,boss.y}, WHITE);
-                        }
+                        
                     }else{
-                        if(!alcance){
-                            Rectangle sourceRec = {atualBossRun * larguraBossRun, 0, larguraBossRun, alturaBossRun};
-                            DrawTextureRec(bossRunLeft, sourceRec, (Vector2){boss.x,boss.y}, WHITE );
-                        }else{
+
                             Rectangle sourceRec2 = { atualBossAtack2 * larguraBossAtack2, 0, larguraBossAtack2, alturaBossAtack2};
                             DrawTextureRec(bossAtack2Left, sourceRec2, (Vector2){boss.x,boss.y}, WHITE);
-                        }
+                        
                     }
                 }else{
                     if(bossIndoDireita){
@@ -2305,7 +2285,7 @@ int main(void) {
     InitWindow(larguraTela, alturaTela, "Um dia no Castelo");
     SetTargetFPS(60);
     
-    //ToggleFullscreen();
+    ToggleFullscreen();
 
     InitAudioDevice();
     
@@ -2466,7 +2446,7 @@ int main(void) {
     Sound desert = LoadSound("audios/desert.mp3");
     Sound deathSound = LoadSound("audios/deathSound.mp3");
     
-    //menu(backgroundMenu);
+    menu(backgroundMenu);
     
     iniciarJogo(backgroundImage, personagemPegando, personagemPegandoEsquerda, chaveCenario, pegandoChaveEsquerda, pegandoChaveDireita, mapa1, mapa2, arena, mensagem1, menuBack, espadaTesouro, chaveTesouro , bau, bauPreenchido, botao1Off, botao1On, botao2Off, botao2On, pegandoChaveTesouroDireita, pegandoChaveTesouroEsquerda, pegandoEspadaEsquerda, pegandoEspadaDireita, bauPreenchido2, diamante, pegandoDiamanteEsquerda, pegandoDiamanteDireita, bauPreenchido3, puzzle1, spritesheet, spritesheetRight, spriteWalkLeft, spriteWalkRight, pegandoEsquerdaIdle, pegandoDireitaIdle, backgroundMenu, pegandoChaveEsquerdaIdle, pegandoChaveDireitaIdle, pegandoChaveTesouroEsquerdaIdle, pegandoChaveTesouroDireitaIdle, pegandoEspadaEsquerdaIdle, pegandoEspadaDireitaIdle, pegandoDiamanteEsquerdaIdle, pegandoDiamanteDireitaIdle, bala,danoLacaioEsquerda, danoLacaioDireita, diamanteFree, atirandoEsquerda, atirandoDireita, lacaioDireita, lacaioEsquerda, lacaioAtaqueEsquerda, lacaioAtaqueDireita, levandoDano, mensagem2, puzzle2, vida1, vida2, vida3, vida4, vida5, lacaioVida1, lacaioVida2, lacaioVida3, lacaioVida4, lacaioVida5, lacaioVida6, lacaioVida7, lacaioVida8, lacaioVida9, lacaioVida10, fogo, procuraChave, procuraEspadas, procuraDiamante, achouChave, achouEspadas, achouDiamante,potion,secret, atirandoEsquerdaDourado, atirandoDireitaDourado, glock, death,deathLeft, shadow,bossIdle,bossIdleLeft,bossAtack1,bossAtack1Left,bossAtack2 ,bossAtack2Left,mapa4, bossRunLeft, bossRunRight, seta, andando, tiro, uhr, lacaioSom, abrindoPorta, destrancandoPorta, portaTrancada, pegandoItem, end, heal, getGlock, musica, desert, deathSound);
     
