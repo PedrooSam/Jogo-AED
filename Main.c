@@ -143,6 +143,9 @@ bool liberaPotion = false;
 bool secretFree = false;
 bool deathSoundBossPlayed = false;
 
+int bossDanoTimer = 0;
+bool bossTomouDano = false;
+
 //delay do som de dano
 float delayUrh = 0.0f;
 
@@ -656,7 +659,7 @@ void ShowLoading(){
 }
 
 // Função principal do jogo
-void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D pegandoChaveEsquerda, Texture2D pegandoChaveDireita, Texture2D mapa1, Texture2D mapa2, Texture2D arena, Texture2D mensagem1, Texture2D menuBack, Texture2D espadaTesouro, Texture2D chaveTesouro, Texture2D bau, Texture2D bauPreenchido, Texture2D botao1Off, Texture2D botao1On, Texture2D botao2Off, Texture2D botao2On, Texture2D pegandoChaveTesouroDireita, Texture2D pegandoChaveTesouroEsquerda, Texture2D pegandoEspadaEsquerda, Texture2D pegandoEspadaDireita, Texture2D bauPreenchido2, Texture2D diamante, Texture2D pegandoDiamanteEsquerda,Texture2D  pegandoDiamanteDireita, Texture2D bauPreenchido3, Texture2D puzzle1, Texture2D spritesheet, Texture2D spritesheetRight, Texture2D spriteWalkLeft, Texture2D spriteWalkRight,Texture2D pegandoEsquerdaIdle, Texture2D pegandoDireitaIdle, Texture2D backgroundMenu,Texture2D pegandoChaveEsquerdaIdle,Texture2D pegandoChaveDireitaIdle, Texture2D pegandoChaveTesouroEsquerdaIdle, Texture2D pegandoChaveTesouroDireitaIdle, Texture2D pegandoEspadaEsquerdaIdle, Texture2D pegandoEspadaDireitaIdle, Texture2D pegandoDiamanteEsquerdaIdle, Texture2D pegandoDiamanteDireitaIdle, Texture2D bala,Texture2D danoLacaioEsquerda ,Texture2D danoLacaioDireita, Texture2D diamanteFree, Texture2D atirandoEsquerda, Texture2D atirandoDireita, Texture2D lacaioDireita, Texture2D lacaioEsquerda, Texture2D lacaioAtaqueEsquerda, Texture2D lacaioAtaqueDireita, Texture2D levandoDano, Texture2D mensagem2, Texture2D puzzle2, Texture2D vida1,Texture2D vida2,Texture2D vida3,Texture2D vida4,Texture2D vida5,   Texture2D lacaioVida1,Texture2D lacaioVida2,Texture2D lacaioVida3,Texture2D lacaioVida4,Texture2D lacaioVida5,Texture2D lacaioVida6,Texture2D lacaioVida7,Texture2D lacaioVida8, Texture2D lacaioVida9,Texture2D lacaioVida10, Texture2D fogo,Texture2D procuraChave,Texture2D procuraEspadas,Texture2D procuraDiamante,Texture2D achouChave,Texture2D achouEspadas,Texture2D achouDiamante, Texture2D potion, Texture2D secret,Texture2D atirandoEsquerdaDourado,Texture2D atirandoDireitaDourado, Texture2D glock,Texture2D death, Texture2D deathLeft, Texture2D shadow,Texture2D bossIdle,Texture2D bossIdleLeft,Texture2D bossAtack1,Texture2D bossAtack1Left,Texture2D bossAtack2 , Texture2D bossAtack2Left, Texture2D mapa4,Texture2D bossRunLeft, Texture2D bossRunRight,Texture2D seta, Sound andando,Sound tiro, Sound uhr, Sound lacaioSom, Sound abrindoPorta,Sound destrancandoPorta,Sound portaTrancada,Sound pegandoItem, Sound end, Sound heal, Sound getGlock, Music musica, Sound desert, Sound deathSound) {
+void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D pegandoChaveEsquerda, Texture2D pegandoChaveDireita, Texture2D mapa1, Texture2D mapa2, Texture2D arena, Texture2D mensagem1, Texture2D menuBack, Texture2D espadaTesouro, Texture2D chaveTesouro, Texture2D bau, Texture2D bauPreenchido, Texture2D botao1Off, Texture2D botao1On, Texture2D botao2Off, Texture2D botao2On, Texture2D pegandoChaveTesouroDireita, Texture2D pegandoChaveTesouroEsquerda, Texture2D pegandoEspadaEsquerda, Texture2D pegandoEspadaDireita, Texture2D bauPreenchido2, Texture2D diamante, Texture2D pegandoDiamanteEsquerda,Texture2D  pegandoDiamanteDireita, Texture2D bauPreenchido3, Texture2D puzzle1, Texture2D spritesheet, Texture2D spritesheetRight, Texture2D spriteWalkLeft, Texture2D spriteWalkRight,Texture2D pegandoEsquerdaIdle, Texture2D pegandoDireitaIdle, Texture2D backgroundMenu,Texture2D pegandoChaveEsquerdaIdle,Texture2D pegandoChaveDireitaIdle, Texture2D pegandoChaveTesouroEsquerdaIdle, Texture2D pegandoChaveTesouroDireitaIdle, Texture2D pegandoEspadaEsquerdaIdle, Texture2D pegandoEspadaDireitaIdle, Texture2D pegandoDiamanteEsquerdaIdle, Texture2D pegandoDiamanteDireitaIdle, Texture2D bala,Texture2D danoLacaioEsquerda ,Texture2D danoLacaioDireita, Texture2D diamanteFree, Texture2D atirandoEsquerda, Texture2D atirandoDireita, Texture2D lacaioDireita, Texture2D lacaioEsquerda, Texture2D lacaioAtaqueEsquerda, Texture2D lacaioAtaqueDireita, Texture2D levandoDano, Texture2D mensagem2, Texture2D puzzle2, Texture2D vida1,Texture2D vida2,Texture2D vida3,Texture2D vida4,Texture2D vida5,   Texture2D lacaioVida1,Texture2D lacaioVida2,Texture2D lacaioVida3,Texture2D lacaioVida4,Texture2D lacaioVida5,Texture2D lacaioVida6,Texture2D lacaioVida7,Texture2D lacaioVida8, Texture2D lacaioVida9,Texture2D lacaioVida10, Texture2D fogo,Texture2D procuraChave,Texture2D procuraEspadas,Texture2D procuraDiamante,Texture2D achouChave,Texture2D achouEspadas,Texture2D achouDiamante, Texture2D potion, Texture2D secret,Texture2D atirandoEsquerdaDourado,Texture2D atirandoDireitaDourado, Texture2D glock,Texture2D death, Texture2D deathLeft, Texture2D shadow,Texture2D bossIdle,Texture2D bossIdleLeft,Texture2D bossAtack1,Texture2D bossAtack1Left,Texture2D bossAtack2 , Texture2D bossAtack2Left, Texture2D mapa4,Texture2D seta, Sound andando,Sound tiro, Sound uhr, Sound lacaioSom, Sound abrindoPorta,Sound destrancandoPorta,Sound portaTrancada,Sound pegandoItem, Sound end, Sound heal, Sound getGlock, Music musica, Sound desert, Sound deathSound) {
     
     Sound bossMusica = LoadSound("audios/bossMusica.mp3");
     Sound sword = LoadSound("audios/swordSound.mp3");
@@ -664,6 +667,14 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     Sound swordA2wrong = LoadSound("audios/swordAtack2(off).mp3");
     Sound swordA2 = LoadSound("audios/swordAtack2.mp3");
     Sound bossRun = LoadSound("audios/bossRun.mp3");
+    
+    //Dano boss
+    Texture2D bossIdleDano = LoadTexture("boss/IdleDano.png");
+    Texture2D bossIdleLeftDano = LoadTexture("boss/IdleLeftDano.png");
+    Texture2D bossAtack1Dano = LoadTexture("boss/Atack1Dano.png");
+    Texture2D bossAtack1LeftDano = LoadTexture("boss/Atack1LeftDano.png");
+    Texture2D bossAtack2Dano = LoadTexture("boss/Atack2Dano.png");
+    Texture2D bossAtack2LeftDano = LoadTexture("boss/Atack2LeftDano.png");
     
     //UI boss
     Texture2D boss10 = LoadTexture("ui/boss/10.png");
@@ -1105,6 +1116,14 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 
                 
             }
+            
+            if (bossTomouDano) {
+                bossDanoTimer++;
+            if (bossDanoTimer > 10) {  // Durando 10 frames como branco
+                bossTomouDano = false; // Retorna ao normal
+                bossDanoTimer = 0;
+            }
+        }
 
             //Verifica se o player morreu
             if(player.vida <= 0){
@@ -1796,6 +1815,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                         bulletCount ++;
                     }
                         
+                    bossTomouDano = true;
                     if(boss.vida <= 0){
                         boss.vivo = false;
                         StopSound(bossMusica);
@@ -2071,40 +2091,37 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             }    
   
                 
-            
+            player.mapa = -1;
             //###########################################
             //################BOSS#######################
             //###########################################
-            
-            if(boss.vivo && boss.mapa == player.mapa){
-                if(bossAtack1Flag ){
-                    if(bossIndoDireita){
-                        Rectangle sourceRec1 = { atualBossAtack1 * larguraBossAtack1, 0, larguraBossAtack1, alturaBossAtack1};
-                        DrawTextureRec(bossAtack1, sourceRec1, (Vector2){boss.x,boss.y}, WHITE);
-                    }else{
-                        Rectangle sourceRec1 = { atualBossAtack1 * larguraBossAtack1, 0, larguraBossAtack1, alturaBossAtack1};
-                        DrawTextureRec(bossAtack1Left, sourceRec1, (Vector2){boss.x,boss.y}, WHITE);
+            if (boss.vivo && boss.mapa == player.mapa) {
+                if (bossAtack1Flag) {
+                    // Atack 1
+                    Rectangle sourceRec1 = { atualBossAtack1 * larguraBossAtack1, 0, larguraBossAtack1, alturaBossAtack1 };
+                    if (bossIndoDireita) {
+                        DrawTextureRec(bossTomouDano ? bossAtack1Dano : bossAtack1, sourceRec1, (Vector2){boss.x, boss.y}, WHITE);
+                    } else {
+                        DrawTextureRec(bossTomouDano ? bossAtack1LeftDano : bossAtack1Left, sourceRec1, (Vector2){boss.x, boss.y}, WHITE);
                     }
-                }else if(bossAtack2Flag ){
-                    if(bossIndoDireita){
-                        Rectangle sourceRec2 = { atualBossAtack2 * larguraBossAtack2, 0, larguraBossAtack2, alturaBossAtack2};
-                        DrawTextureRec(bossAtack2, sourceRec2, (Vector2){boss.x,boss.y}, WHITE);
-                    }else{
-                        Rectangle sourceRec2 = { atualBossAtack2 * larguraBossAtack2, 0, larguraBossAtack2, alturaBossAtack2};
-                        DrawTextureRec(bossAtack2Left, sourceRec2, (Vector2){boss.x,boss.y}, WHITE);
+                } else if (bossAtack2Flag) {
+                    // Atack 2
+                    Rectangle sourceRec2 = { atualBossAtack2 * larguraBossAtack2, 0, larguraBossAtack2, alturaBossAtack2 };
+                    if (bossIndoDireita) {
+                        DrawTextureRec(bossTomouDano ? bossAtack2Dano : bossAtack2, sourceRec2, (Vector2){boss.x, boss.y}, WHITE);
+                    } else {
+                        DrawTextureRec(bossTomouDano ? bossAtack2LeftDano : bossAtack2Left, sourceRec2, (Vector2){boss.x, boss.y}, WHITE);
                     }
-                }else{
-                    if(bossIndoDireita){
-                        Rectangle sourceRec = { atualBossIdle * larguraBossIdle, 0, larguraBossIdle, alturaBossIdle};
-                        DrawTextureRec(bossIdle, sourceRec, (Vector2){boss.x,boss.y}, WHITE);
+                } else {
+                    // Idle
+                    Rectangle sourceRec = { atualBossIdle * larguraBossIdle, 0, larguraBossIdle, alturaBossIdle };
+                    if (bossIndoDireita) {
+                        DrawTextureRec(bossTomouDano ? bossIdleDano : bossIdle, sourceRec, (Vector2){boss.x, boss.y}, WHITE);
+                    } else {
+                        DrawTextureRec(bossTomouDano ? bossIdleLeftDano : bossIdleLeft, sourceRec, (Vector2){boss.x, boss.y}, WHITE);
                     }
-                    else{
-                        Rectangle sourceRec = { atualBossIdle * larguraBossIdle, 0, larguraBossIdle, alturaBossIdle};
-                        DrawTextureRec(bossIdleLeft, sourceRec, (Vector2){boss.x,boss.y}, WHITE);
-                    }
-                    
                 }
-            }
+        }
             //Fogo
             if(mapaBloqueado){
                 Rectangle sourceFogo = { frameAtualFogo * larguraFogo, 0, larguraFogo, alturaFrameFogo};
@@ -2433,9 +2450,7 @@ int main(void) {
     Texture2D bossAtack2 = LoadTexture("boss/Atack2.png");
     Texture2D bossAtack2Left = LoadTexture("boss/Atack2Left.png");
     Texture2D mapa4 = LoadTexture("cenario/mapa4.png");
-    
-    Texture2D bossRunLeft = LoadTexture("boss/runLeft.png");
-    Texture2D bossRunRight = LoadTexture("boss/runRight.png");
+
     Texture2D seta = LoadTexture("ui/seta.png");
     
     
@@ -2461,7 +2476,7 @@ int main(void) {
     
     menu(backgroundMenu);
     
-    iniciarJogo(backgroundImage, personagemPegando, personagemPegandoEsquerda, chaveCenario, pegandoChaveEsquerda, pegandoChaveDireita, mapa1, mapa2, arena, mensagem1, menuBack, espadaTesouro, chaveTesouro , bau, bauPreenchido, botao1Off, botao1On, botao2Off, botao2On, pegandoChaveTesouroDireita, pegandoChaveTesouroEsquerda, pegandoEspadaEsquerda, pegandoEspadaDireita, bauPreenchido2, diamante, pegandoDiamanteEsquerda, pegandoDiamanteDireita, bauPreenchido3, puzzle1, spritesheet, spritesheetRight, spriteWalkLeft, spriteWalkRight, pegandoEsquerdaIdle, pegandoDireitaIdle, backgroundMenu, pegandoChaveEsquerdaIdle, pegandoChaveDireitaIdle, pegandoChaveTesouroEsquerdaIdle, pegandoChaveTesouroDireitaIdle, pegandoEspadaEsquerdaIdle, pegandoEspadaDireitaIdle, pegandoDiamanteEsquerdaIdle, pegandoDiamanteDireitaIdle, bala,danoLacaioEsquerda, danoLacaioDireita, diamanteFree, atirandoEsquerda, atirandoDireita, lacaioDireita, lacaioEsquerda, lacaioAtaqueEsquerda, lacaioAtaqueDireita, levandoDano, mensagem2, puzzle2, vida1, vida2, vida3, vida4, vida5, lacaioVida1, lacaioVida2, lacaioVida3, lacaioVida4, lacaioVida5, lacaioVida6, lacaioVida7, lacaioVida8, lacaioVida9, lacaioVida10, fogo, procuraChave, procuraEspadas, procuraDiamante, achouChave, achouEspadas, achouDiamante,potion,secret, atirandoEsquerdaDourado, atirandoDireitaDourado, glock, death,deathLeft, shadow,bossIdle,bossIdleLeft,bossAtack1,bossAtack1Left,bossAtack2 ,bossAtack2Left,mapa4, bossRunLeft, bossRunRight, seta, andando, tiro, uhr, lacaioSom, abrindoPorta, destrancandoPorta, portaTrancada, pegandoItem, end, heal, getGlock, musica, desert, deathSound);
+    iniciarJogo(backgroundImage, personagemPegando, personagemPegandoEsquerda, chaveCenario, pegandoChaveEsquerda, pegandoChaveDireita, mapa1, mapa2, arena, mensagem1, menuBack, espadaTesouro, chaveTesouro , bau, bauPreenchido, botao1Off, botao1On, botao2Off, botao2On, pegandoChaveTesouroDireita, pegandoChaveTesouroEsquerda, pegandoEspadaEsquerda, pegandoEspadaDireita, bauPreenchido2, diamante, pegandoDiamanteEsquerda, pegandoDiamanteDireita, bauPreenchido3, puzzle1, spritesheet, spritesheetRight, spriteWalkLeft, spriteWalkRight, pegandoEsquerdaIdle, pegandoDireitaIdle, backgroundMenu, pegandoChaveEsquerdaIdle, pegandoChaveDireitaIdle, pegandoChaveTesouroEsquerdaIdle, pegandoChaveTesouroDireitaIdle, pegandoEspadaEsquerdaIdle, pegandoEspadaDireitaIdle, pegandoDiamanteEsquerdaIdle, pegandoDiamanteDireitaIdle, bala,danoLacaioEsquerda, danoLacaioDireita, diamanteFree, atirandoEsquerda, atirandoDireita, lacaioDireita, lacaioEsquerda, lacaioAtaqueEsquerda, lacaioAtaqueDireita, levandoDano, mensagem2, puzzle2, vida1, vida2, vida3, vida4, vida5, lacaioVida1, lacaioVida2, lacaioVida3, lacaioVida4, lacaioVida5, lacaioVida6, lacaioVida7, lacaioVida8, lacaioVida9, lacaioVida10, fogo, procuraChave, procuraEspadas, procuraDiamante, achouChave, achouEspadas, achouDiamante,potion,secret, atirandoEsquerdaDourado, atirandoDireitaDourado, glock, death,deathLeft, shadow,bossIdle,bossIdleLeft,bossAtack1,bossAtack1Left,bossAtack2 ,bossAtack2Left,mapa4, seta, andando, tiro, uhr, lacaioSom, abrindoPorta, destrancandoPorta, portaTrancada, pegandoItem, end, heal, getGlock, musica, desert, deathSound);
     
     CloseWindow();
     return 0;
