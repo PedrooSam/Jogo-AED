@@ -990,7 +990,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             // 	LACAIO
             // ############################
             
-            float velocidadeLacaio = 200.0f * GetFrameTime();
+            float velocidadeLacaio = 150.0f * GetFrameTime();
             // Atualize o timer do ataque
             timerAtaque += 1;
             delayUrh += 1;
@@ -2215,7 +2215,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             
             char pontuacaoTexto[100];
             sprintf(pontuacaoTexto, "Vida boss: %d", boss.vida);
-            DrawText(pontuacaoTexto, 200,500,40,BLACK);
+            //DrawText(pontuacaoTexto, 200,500,40,BLACK);
             EndDrawing();
         }
         
