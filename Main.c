@@ -2220,10 +2220,9 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 DrawText("OBRIGADO POR JOGAR!",445, 40, 30, GREEN);
                 
                 char pontuacaoTexto[100];
-                pontuacao /= 60;
-                sprintf(pontuacaoTexto, "TEMPO: %d SEGUNDOS", pontuacao);
+                sprintf(pontuacaoTexto, "TEMPO: %d SEGUNDOS", (pontuacao / 60));
 
-                DrawText(pontuacaoTexto,1050, 40, 20, GREEN);
+                DrawText(pontuacaoTexto,1020, 40, 20, GREEN);
                 
                 DrawText("FELIPE MATIAS:",200, 100, 30, YELLOW);
                 DrawText("Design e construção dos mapas",515, 100, 20, GREEN);
