@@ -10,8 +10,6 @@ typedef struct Node {
 	struct Node *mapaSecundario;
 } Node;
 
-
-
 typedef struct {
     int x;
     int y; 
@@ -276,7 +274,7 @@ void menu(Texture2D backgroundMenu) {
     Rectangle botaoIniciar = {540, 250, 200, 100};
     Rectangle botaoSair = {540, 400, 200, 100};
     
-    Sound confirm = LoadSound("audios/confirm.mp3");
+    Sound confirm = LoadSound("assets/audios/confirm.mp3");
     
     while (1) {
         BeginDrawing();
@@ -374,7 +372,7 @@ bool puzzleIcons(Texture puzzle2, Music musica){
     Rectangle alternativa3Collision = {700, 390, 125, 125};
     int preenchidos = 0; // Contador de posições preenchidas em `lista`
     
-    Sound confirm = LoadSound("audios/confirm.mp3");
+    Sound confirm = LoadSound("assets/audios/confirm.mp3");
     
     while (preenchidos < 3) {
         // Atualiza o fluxo da música em cada loop para que continue tocando
@@ -465,7 +463,7 @@ bool puzzleOrdenar(Texture2D puzzle1, Music musica) {
     sprintf(texto3, "%d", c);
     sprintf(texto4, "%d", d);
     
-    Sound confirm = LoadSound("audios/confirm.mp3");
+    Sound confirm = LoadSound("assets/audios/confirm.mp3");
     
     // Define as áreas de colisão para os botões
     Rectangle alternativa1Collision = {520, 310, 200, 60};
@@ -587,10 +585,10 @@ void ShowIntro() {
     int currentScene = 0;
 
     Texture2D images[2];    
-    images[0] = LoadTexture("ui/lore.png");
-    images[1] = LoadTexture("ui/move.png"); // Imagem com os controles
+    images[0] = LoadTexture("assets/ui/lore.png");
+    images[1] = LoadTexture("assets/ui/move.png"); // Imagem com os controles
     
-    Sound confirm = LoadSound("audios/confirm.mp3");
+    Sound confirm = LoadSound("assets/audios/confirm.mp3");
     
     while (!WindowShouldClose() && currentScene < 2) {
         // Atualizar para próxima cena quando ENTER for pressionado
@@ -617,7 +615,7 @@ void ShowIntro() {
 }
 
 void ShowLoading(){
-    Texture2D loading = LoadTexture("ui/loading.png");
+    Texture2D loading = LoadTexture("assets/ui/loading.png");
     
     int totalFrames = 4;
     int frameAtual = 0;
@@ -661,32 +659,32 @@ void ShowLoading(){
 // Função principal do jogo
 void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture2D personagemPegandoEsquerda, Texture2D chaveCenario, Texture2D pegandoChaveEsquerda, Texture2D pegandoChaveDireita, Texture2D mapa1, Texture2D mapa2, Texture2D arena, Texture2D mensagem1, Texture2D menuBack, Texture2D espadaTesouro, Texture2D chaveTesouro, Texture2D bau, Texture2D bauPreenchido, Texture2D botao1Off, Texture2D botao1On, Texture2D botao2Off, Texture2D botao2On, Texture2D pegandoChaveTesouroDireita, Texture2D pegandoChaveTesouroEsquerda, Texture2D pegandoEspadaEsquerda, Texture2D pegandoEspadaDireita, Texture2D bauPreenchido2, Texture2D diamante, Texture2D pegandoDiamanteEsquerda,Texture2D  pegandoDiamanteDireita, Texture2D bauPreenchido3, Texture2D puzzle1, Texture2D spritesheet, Texture2D spritesheetRight, Texture2D spriteWalkLeft, Texture2D spriteWalkRight,Texture2D pegandoEsquerdaIdle, Texture2D pegandoDireitaIdle, Texture2D backgroundMenu,Texture2D pegandoChaveEsquerdaIdle,Texture2D pegandoChaveDireitaIdle, Texture2D pegandoChaveTesouroEsquerdaIdle, Texture2D pegandoChaveTesouroDireitaIdle, Texture2D pegandoEspadaEsquerdaIdle, Texture2D pegandoEspadaDireitaIdle, Texture2D pegandoDiamanteEsquerdaIdle, Texture2D pegandoDiamanteDireitaIdle, Texture2D bala,Texture2D danoLacaioEsquerda ,Texture2D danoLacaioDireita, Texture2D diamanteFree, Texture2D atirandoEsquerda, Texture2D atirandoDireita, Texture2D lacaioDireita, Texture2D lacaioEsquerda, Texture2D lacaioAtaqueEsquerda, Texture2D lacaioAtaqueDireita, Texture2D levandoDano, Texture2D mensagem2, Texture2D puzzle2, Texture2D vida1,Texture2D vida2,Texture2D vida3,Texture2D vida4,Texture2D vida5,   Texture2D lacaioVida1,Texture2D lacaioVida2,Texture2D lacaioVida3,Texture2D lacaioVida4,Texture2D lacaioVida5,Texture2D lacaioVida6,Texture2D lacaioVida7,Texture2D lacaioVida8, Texture2D lacaioVida9,Texture2D lacaioVida10, Texture2D fogo,Texture2D procuraChave,Texture2D procuraEspadas,Texture2D procuraDiamante,Texture2D achouChave,Texture2D achouEspadas,Texture2D achouDiamante, Texture2D potion, Texture2D secret,Texture2D atirandoEsquerdaDourado,Texture2D atirandoDireitaDourado, Texture2D glock,Texture2D death, Texture2D deathLeft, Texture2D shadow,Texture2D bossIdle,Texture2D bossIdleLeft,Texture2D bossAtack1,Texture2D bossAtack1Left,Texture2D bossAtack2 , Texture2D bossAtack2Left, Texture2D mapa4,Texture2D seta, Sound andando,Sound tiro, Sound uhr, Sound lacaioSom, Sound abrindoPorta,Sound destrancandoPorta,Sound portaTrancada,Sound pegandoItem, Sound end, Sound heal, Sound getGlock, Music musica, Sound desert, Sound deathSound) {
     
-    Sound bossMusica = LoadSound("audios/bossMusica.mp3");
-    Sound sword = LoadSound("audios/swordSound.mp3");
-    Sound deathSoundBoss = LoadSound("audios/deathSoundBoss.mp3");
-    Sound swordA2wrong = LoadSound("audios/swordAtack2(off).mp3");
-    Sound swordA2 = LoadSound("audios/swordAtack2.mp3");
-    Sound bossRun = LoadSound("audios/bossRun.mp3");
+    Sound bossMusica = LoadSound("assets/audios/bossMusica.mp3");
+    Sound sword = LoadSound("assets/audios/swordSound.mp3");
+    Sound deathSoundBoss = LoadSound("assets/audios/deathSoundBoss.mp3");
+    Sound swordA2wrong = LoadSound("assets/audios/swordAtack2(off).mp3");
+    Sound swordA2 = LoadSound("assets/audios/swordAtack2.mp3");
+    Sound bossRun = LoadSound("assets/audios/bossRun.mp3");
     
     //Dano boss
-    Texture2D bossIdleDano = LoadTexture("boss/IdleDano.png");
-    Texture2D bossIdleLeftDano = LoadTexture("boss/IdleLeftDano.png");
-    Texture2D bossAtack1Dano = LoadTexture("boss/Atack1Dano.png");
-    Texture2D bossAtack1LeftDano = LoadTexture("boss/Atack1LeftDano.png");
-    Texture2D bossAtack2Dano = LoadTexture("boss/Atack2Dano.png");
-    Texture2D bossAtack2LeftDano = LoadTexture("boss/Atack2LeftDano.png");
+    Texture2D bossIdleDano = LoadTexture("assets/boss/IdleDano.png");
+    Texture2D bossIdleLeftDano = LoadTexture("assets/boss/IdleLeftDano.png");
+    Texture2D bossAtack1Dano = LoadTexture("assets/boss/Atack1Dano.png");
+    Texture2D bossAtack1LeftDano = LoadTexture("assets/boss/Atack1LeftDano.png");
+    Texture2D bossAtack2Dano = LoadTexture("assets/boss/Atack2Dano.png");
+    Texture2D bossAtack2LeftDano = LoadTexture("assets/boss/Atack2LeftDano.png");
     
     //UI boss
-    Texture2D boss10 = LoadTexture("ui/boss/10.png");
-    Texture2D boss9 = LoadTexture("ui/boss/9.png");
-    Texture2D boss8 = LoadTexture("ui/boss/8.png");
-    Texture2D boss7 = LoadTexture("ui/boss/7.png");
-    Texture2D boss6 = LoadTexture("ui/boss/6.png");
-    Texture2D boss5 = LoadTexture("ui/boss/5.png");
-    Texture2D boss4 = LoadTexture("ui/boss/4.png");
-    Texture2D boss3 = LoadTexture("ui/boss/3.png");
-    Texture2D boss2 = LoadTexture("ui/boss/2.png");
-    Texture2D boss1 = LoadTexture("ui/boss/1.png");
+    Texture2D boss10 = LoadTexture("assets/ui/boss/10.png");
+    Texture2D boss9 = LoadTexture("assets/ui/boss/9.png");
+    Texture2D boss8 = LoadTexture("assets/ui/boss/8.png");
+    Texture2D boss7 = LoadTexture("assets/ui/boss/7.png");
+    Texture2D boss6 = LoadTexture("assets/ui/boss/6.png");
+    Texture2D boss5 = LoadTexture("assets/ui/boss/5.png");
+    Texture2D boss4 = LoadTexture("assets/ui/boss/4.png");
+    Texture2D boss3 = LoadTexture("assets/ui/boss/3.png");
+    Texture2D boss2 = LoadTexture("assets/ui/boss/2.png");
+    Texture2D boss1 = LoadTexture("assets/ui/boss/1.png");
     //
     // ############################
     // 	CONFIG DE MAPA	
@@ -2268,8 +2266,8 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
         if (!player.vivo) {
             // Exibe a tela de "Game Over" e aguarda o jogador pressionar Enter
             
-            Texture2D gameOver = LoadTexture("ui/gameOver.png");
-            Sound gameOverSound = LoadSound("audios/gameOver.mp3");
+            Texture2D gameOver = LoadTexture("assets/ui/gameOver.png");
+            Sound gameOverSound = LoadSound("assets/audios/gameOver.mp3");
             PlaySound(gameOverSound);
             while (!IsKeyPressed(KEY_ENTER)) {
                 BeginDrawing();
@@ -2317,160 +2315,160 @@ int main(void) {
 
     InitAudioDevice();
     
-    Texture2D backgroundImage = LoadTexture("cenario/background.png");
+    Texture2D backgroundImage = LoadTexture("assets/cenario/background.png");
 
-    Texture2D personagemPegando = LoadTexture("Imagens/personagemPegando.png");
-    Texture2D personagemPegandoEsquerda = LoadTexture("Imagens/personagemPegandoEsquerda.png");
+    Texture2D personagemPegando = LoadTexture("assets/jogador/personagemPegando.png");
+    Texture2D personagemPegandoEsquerda = LoadTexture("assets/jogador/personagemPegandoEsquerda.png");
     
-    Texture2D chaveCenario = LoadTexture("cenario/chaveCenario.png");
+    Texture2D chaveCenario = LoadTexture("assets/cenario/chaveCenario.png");
     
-    Texture2D pegandoChaveDireita = LoadTexture("pegandoItens/personagemPegandoChaveDireita.png");
-    Texture2D pegandoChaveEsquerda = LoadTexture("pegandoItens/personagemPegandoChaveEsquerda.png");
+    Texture2D pegandoChaveDireita = LoadTexture("assets/pegandoItens/personagemPegandoChaveDireita.png");
+    Texture2D pegandoChaveEsquerda = LoadTexture("assets/pegandoItens/personagemPegandoChaveEsquerda.png");
     
-    Texture2D mapa1 = LoadTexture("cenario/mapa1.png");
-    Texture2D mapa2 = LoadTexture("cenario/mapa2.png");
+    Texture2D mapa1 = LoadTexture("assets/cenario/mapa1.png");
+    Texture2D mapa2 = LoadTexture("assets/cenario/mapa2.png");
     
-    Texture2D arena = LoadTexture("cenario/arena.png");
+    Texture2D arena = LoadTexture("assets/cenario/arena.png");
     
-    Texture2D mensagem1 = LoadTexture("mensagens/mensagem1.png");
+    Texture2D mensagem1 = LoadTexture("assets/mensagens/mensagem1.png");
     
-    Texture2D menuBack = LoadTexture("cenario/menuBack.png");
+    Texture2D menuBack = LoadTexture("assets/cenario/menuBack.png");
     
-    Texture2D espadaTesouro = LoadTexture("tesouro/espada.png");
-    Texture2D chaveTesouro = LoadTexture("tesouro/chaveTesouro.png");
-    Texture2D bau = LoadTexture("tesouro/bau.png");
-    Texture2D bauPreenchido = LoadTexture("tesouro/bauPreenchido.png");
+    Texture2D espadaTesouro = LoadTexture("assets/tesouro/espada.png");
+    Texture2D chaveTesouro = LoadTexture("assets/tesouro/chaveTesouro.png");
+    Texture2D bau = LoadTexture("assets/tesouro/bau.png");
+    Texture2D bauPreenchido = LoadTexture("assets/tesouro/bauPreenchido.png");
     
-    Texture2D botao1Off = LoadTexture("botoes/botao1Off.png");
-    Texture2D botao1On = LoadTexture("botoes/botao1On.png");
-    Texture2D botao2Off = LoadTexture("botoes/botao2Off.png");
-    Texture2D botao2On = LoadTexture("botoes/botao2On.png");
+    Texture2D botao1Off = LoadTexture("assets/botoes/botao1Off.png");
+    Texture2D botao1On = LoadTexture("assets/botoes/botao1On.png");
+    Texture2D botao2Off = LoadTexture("assets/botoes/botao2Off.png");
+    Texture2D botao2On = LoadTexture("assets/botoes/botao2On.png");
     
-    Texture2D pegandoChaveTesouroEsquerda = LoadTexture("pegandoItens/personagemPegandoChaveTesouroEsquerda.png");
-    Texture2D pegandoChaveTesouroDireita = LoadTexture("pegandoItens/personagemPegandoChaveTesouroDireita.png");
+    Texture2D pegandoChaveTesouroEsquerda = LoadTexture("assets/pegandoItens/personagemPegandoChaveTesouroEsquerda.png");
+    Texture2D pegandoChaveTesouroDireita = LoadTexture("assets/pegandoItens/personagemPegandoChaveTesouroDireita.png");
     
-    Texture2D pegandoEspadaEsquerda = LoadTexture("pegandoItens/personagemPegandoEspadaEsquerda.png");
-    Texture2D pegandoEspadaDireita = LoadTexture("pegandoItens/personagemPegandoEspadaDireita.png");
+    Texture2D pegandoEspadaEsquerda = LoadTexture("assets/pegandoItens/personagemPegandoEspadaEsquerda.png");
+    Texture2D pegandoEspadaDireita = LoadTexture("assets/pegandoItens/personagemPegandoEspadaDireita.png");
     
-    Texture2D bauPreenchido2 = LoadTexture("tesouro/bauPreenchido2.png");
+    Texture2D bauPreenchido2 = LoadTexture("assets/tesouro/bauPreenchido2.png");
     
-    Texture2D diamante = LoadTexture("tesouro/diamante.png");
-    Texture2D pegandoDiamanteEsquerda = LoadTexture("pegandoItens/personagemPegandoDiamanteEsquerda.png");
-    Texture2D pegandoDiamanteDireita = LoadTexture("pegandoItens/personagemPegandoDiamanteDireita.png");
-    Texture2D bauPreenchido3 = LoadTexture("tesouro/bauPreenchido3.png");
+    Texture2D diamante = LoadTexture("assets/tesouro/diamante.png");
+    Texture2D pegandoDiamanteEsquerda = LoadTexture("assets/pegandoItens/personagemPegandoDiamanteEsquerda.png");
+    Texture2D pegandoDiamanteDireita = LoadTexture("assets/pegandoItens/personagemPegandoDiamanteDireita.png");
+    Texture2D bauPreenchido3 = LoadTexture("assets/tesouro/bauPreenchido3.png");
     
-    Texture2D puzzle1 = LoadTexture("botoes/puzzle1.png");
-    Texture2D puzzle2 = LoadTexture("botoes/puzzle2.png");
+    Texture2D puzzle1 = LoadTexture("assets/botoes/puzzle1.png");
+    Texture2D puzzle2 = LoadTexture("assets/botoes/puzzle2.png");
     
-    Texture2D spritesheet = LoadTexture("Imagens/spritesheet.png");
-    Texture2D spritesheetRight = LoadTexture("Imagens/spritesheetRight.png");
+    Texture2D spritesheet = LoadTexture("assets/jogador/spritesheet.png");
+    Texture2D spritesheetRight = LoadTexture("assets/jogador/spritesheetRight.png");
     
-    Texture2D spriteWalkLeft = LoadTexture("Imagens/spriteWalkLeft.png");
-    Texture2D spriteWalkRight = LoadTexture("Imagens/spriteWalkRight.png");
+    Texture2D spriteWalkLeft = LoadTexture("assets/jogador/spriteWalkLeft.png");
+    Texture2D spriteWalkRight = LoadTexture("assets/jogador/spriteWalkRight.png");
     
-    Texture2D pegandoEsquerdaIdle = LoadTexture("Imagens/personagemPegandoIdleEsquerda.png");
-    Texture2D pegandoDireitaIdle = LoadTexture("Imagens/personagemPegandoIdleDireita.png");
+    Texture2D pegandoEsquerdaIdle = LoadTexture("assets/jogador/personagemPegandoIdleEsquerda.png");
+    Texture2D pegandoDireitaIdle = LoadTexture("assets/jogador/personagemPegandoIdleDireita.png");
     
-    Texture2D backgroundMenu = LoadTexture("Imagens/menu.png");
+    Texture2D backgroundMenu = LoadTexture("assets/cenario/menu.png");
     
-    Texture2D pegandoChaveEsquerdaIdle = LoadTexture("pegandoItens/personagemPegandoChaveEsquerdaIdle.png");
-    Texture2D pegandoChaveDireitaIdle = LoadTexture("pegandoItens/personagemPegandoChaveDireitaIdle.png");
-    Texture2D pegandoChaveTesouroEsquerdaIdle = LoadTexture("pegandoItens/personagemPegandoChaveTesouroEsquerdaIdle.png");
-    Texture2D pegandoChaveTesouroDireitaIdle = LoadTexture("pegandoItens/personagemPegandoChaveTesouroDireitaIdle.png");
-    Texture2D pegandoEspadaEsquerdaIdle = LoadTexture("pegandoItens/personagemPegandoEspadaEsquerdaIdle.png");
-    Texture2D pegandoEspadaDireitaIdle = LoadTexture("pegandoItens/personagemPegandoEspadaDireitaIdle.png");
-    Texture2D pegandoDiamanteEsquerdaIdle = LoadTexture("pegandoItens/personagemPegandoDiamanteEsquerdaIdle.png");
-    Texture2D pegandoDiamanteDireitaIdle = LoadTexture("pegandoItens/personagemPegandoDiamanteDireitaIdle.png");
+    Texture2D pegandoChaveEsquerdaIdle = LoadTexture("assets/pegandoItens/personagemPegandoChaveEsquerdaIdle.png");
+    Texture2D pegandoChaveDireitaIdle = LoadTexture("assets/pegandoItens/personagemPegandoChaveDireitaIdle.png");
+    Texture2D pegandoChaveTesouroEsquerdaIdle = LoadTexture("assets/pegandoItens/personagemPegandoChaveTesouroEsquerdaIdle.png");
+    Texture2D pegandoChaveTesouroDireitaIdle = LoadTexture("assets/pegandoItens/personagemPegandoChaveTesouroDireitaIdle.png");
+    Texture2D pegandoEspadaEsquerdaIdle = LoadTexture("assets/pegandoItens/personagemPegandoEspadaEsquerdaIdle.png");
+    Texture2D pegandoEspadaDireitaIdle = LoadTexture("assets/pegandoItens/personagemPegandoEspadaDireitaIdle.png");
+    Texture2D pegandoDiamanteEsquerdaIdle = LoadTexture("assets/pegandoItens/personagemPegandoDiamanteEsquerdaIdle.png");
+    Texture2D pegandoDiamanteDireitaIdle = LoadTexture("assets/pegandoItens/personagemPegandoDiamanteDireitaIdle.png");
 
-    Texture2D bala = LoadTexture("Imagens/bala.png");
+    Texture2D bala = LoadTexture("assets/jogador/bala.png");
     
-    Texture2D danoLacaioEsquerda =LoadTexture("lacaio/DanoEsquerda.png");
-    Texture2D danoLacaioDireita = LoadTexture("lacaio/DanoDireita.png");
+    Texture2D danoLacaioEsquerda =LoadTexture("assets/lacaio/DanoEsquerda.png");
+    Texture2D danoLacaioDireita = LoadTexture("assets/lacaio/DanoDireita.png");
     
-    Texture2D diamanteFree = LoadTexture("tesouro/diamanteFree.png");
+    Texture2D diamanteFree = LoadTexture("assets/tesouro/diamanteFree.png");
     
-    Texture2D atirandoDireita = LoadTexture("Imagens/atirandoDireita.png");
-    Texture2D atirandoEsquerda = LoadTexture("Imagens/atirandoEsquerda.png");
+    Texture2D atirandoDireita = LoadTexture("assets/jogador/atirandoDireita.png");
+    Texture2D atirandoEsquerda = LoadTexture("assets/jogador/atirandoEsquerda.png");
     
-    Texture2D lacaioDireita = LoadTexture("lacaio/LacaioWalkRight.png");
-    Texture2D lacaioEsquerda = LoadTexture("lacaio/LacaioWalkLeft.png");
+    Texture2D lacaioDireita = LoadTexture("assets/lacaio/LacaioWalkRight.png");
+    Texture2D lacaioEsquerda = LoadTexture("assets/lacaio/LacaioWalkLeft.png");
     
-    Texture2D lacaioAtaqueDireita = LoadTexture("lacaio/AtaqueDireita.png");
-    Texture2D lacaioAtaqueEsquerda = LoadTexture("lacaio/AtaqueEsquerda.png");
+    Texture2D lacaioAtaqueDireita = LoadTexture("assets/lacaio/AtaqueDireita.png");
+    Texture2D lacaioAtaqueEsquerda = LoadTexture("assets/lacaio/AtaqueEsquerda.png");
     
-    Texture2D levandoDano = LoadTexture("Imagens/personagemLevandoDano.png");
+    Texture2D levandoDano = LoadTexture("assets/jogador/personagemLevandoDano.png");
     
-    Texture2D mensagem2 = LoadTexture("mensagens/mensagem2.png");
+    Texture2D mensagem2 = LoadTexture("assets/mensagens/mensagem2.png");
     
-    Texture2D vida1 = LoadTexture("ui/vida1.png");
-    Texture2D vida2 = LoadTexture("ui/vida2.png");
-    Texture2D vida3 = LoadTexture("ui/vida3.png");
-    Texture2D vida4 = LoadTexture("ui/vida4.png");
-    Texture2D vida5 = LoadTexture("ui/vida5.png");
+    Texture2D vida1 = LoadTexture("assets/ui/vida1.png");
+    Texture2D vida2 = LoadTexture("assets/ui/vida2.png");
+    Texture2D vida3 = LoadTexture("assets/ui/vida3.png");
+    Texture2D vida4 = LoadTexture("assets/ui/vida4.png");
+    Texture2D vida5 = LoadTexture("assets/ui/vida5.png");
     
-    Texture2D lacaioVida1 = LoadTexture("ui/lacaioVida1.png");
-    Texture2D lacaioVida2 = LoadTexture("ui/lacaioVida2.png");
-    Texture2D lacaioVida3 = LoadTexture("ui/lacaioVida3.png");
-    Texture2D lacaioVida4 = LoadTexture("ui/lacaioVida4.png");
-    Texture2D lacaioVida5 = LoadTexture("ui/lacaioVida5.png");
-    Texture2D lacaioVida6 = LoadTexture("ui/lacaioVida6.png");
-    Texture2D lacaioVida7 = LoadTexture("ui/lacaioVida7.png");
-    Texture2D lacaioVida8 = LoadTexture("ui/lacaioVida8.png");
-    Texture2D lacaioVida9 = LoadTexture("ui/lacaioVida9.png");
-    Texture2D lacaioVida10 = LoadTexture("ui/lacaioVida10.png");
+    Texture2D lacaioVida1 = LoadTexture("assets/ui/lacaioVida1.png");
+    Texture2D lacaioVida2 = LoadTexture("assets/ui/lacaioVida2.png");
+    Texture2D lacaioVida3 = LoadTexture("assets/ui/lacaioVida3.png");
+    Texture2D lacaioVida4 = LoadTexture("assets/ui/lacaioVida4.png");
+    Texture2D lacaioVida5 = LoadTexture("assets/ui/lacaioVida5.png");
+    Texture2D lacaioVida6 = LoadTexture("assets/ui/lacaioVida6.png");
+    Texture2D lacaioVida7 = LoadTexture("assets/ui/lacaioVida7.png");
+    Texture2D lacaioVida8 = LoadTexture("assets/ui/lacaioVida8.png");
+    Texture2D lacaioVida9 = LoadTexture("assets/ui/lacaioVida9.png");
+    Texture2D lacaioVida10 = LoadTexture("assets/ui/lacaioVida10.png");
     
-    Texture2D fogo = LoadTexture("Imagens/fogo.png");
+    Texture2D fogo = LoadTexture("assets/jogador/fogo.png");
     
-    Texture2D procuraChave = LoadTexture("ui/procuraChave.png");
-    Texture2D procuraEspadas = LoadTexture("ui/procuraEspadas.png");
-    Texture2D procuraDiamante = LoadTexture("ui/procuraDiamante.png");
-    Texture2D achouChave = LoadTexture("ui/achouChave.png");
-    Texture2D achouEspadas = LoadTexture("ui/achouEspadas.png");
-    Texture2D achouDiamante = LoadTexture("ui/achouDiamante.png");
+    Texture2D procuraChave = LoadTexture("assets/ui/procuraChave.png");
+    Texture2D procuraEspadas = LoadTexture("assets/ui/procuraEspadas.png");
+    Texture2D procuraDiamante = LoadTexture("assets/ui/procuraDiamante.png");
+    Texture2D achouChave = LoadTexture("assets/ui/achouChave.png");
+    Texture2D achouEspadas = LoadTexture("assets/ui/achouEspadas.png");
+    Texture2D achouDiamante = LoadTexture("assets/ui/achouDiamante.png");
     
-    Texture2D potion = LoadTexture("cenario/potion.png");
+    Texture2D potion = LoadTexture("assets/cenario/potion.png");
     
-    Texture2D secret = LoadTexture("cenario/secret.png");
+    Texture2D secret = LoadTexture("assets/cenario/secret.png");
     
-    Texture2D atirandoEsquerdaDourado = LoadTexture("Imagens/atirandoSuperEsquerda.png");
-    Texture2D atirandoDireitaDourado = LoadTexture("Imagens/atirandoSuperDireita.png");
-    Texture2D glock = LoadTexture("Imagens/glockDourada.png");
+    Texture2D atirandoEsquerdaDourado = LoadTexture("assets/jogador/atirandoSuperEsquerda.png");
+    Texture2D atirandoDireitaDourado = LoadTexture("assets/jogador/atirandoSuperDireita.png");
+    Texture2D glock = LoadTexture("assets/jogador/glockDourada.png");
     
-    Texture2D death = LoadTexture("lacaio/death.png");
-    Texture2D deathLeft = LoadTexture("lacaio/deathLeft.png");
+    Texture2D death = LoadTexture("assets/lacaio/death.png");
+    Texture2D deathLeft = LoadTexture("assets/lacaio/deathLeft.png");
     
-    Texture2D shadow = LoadTexture("Imagens/shadow.png");
+    Texture2D shadow = LoadTexture("assets/jogador/shadow.png");
     
-    Texture2D bossIdle = LoadTexture("boss/Idle.png");
-    Texture2D bossIdleLeft = LoadTexture("boss/IdleLeft.png");
-    Texture2D bossAtack1 = LoadTexture("boss/Atack1.png");
-    Texture2D bossAtack1Left = LoadTexture("boss/Atack1Left.png");
-    Texture2D bossAtack2 = LoadTexture("boss/Atack2.png");
-    Texture2D bossAtack2Left = LoadTexture("boss/Atack2Left.png");
-    Texture2D mapa4 = LoadTexture("cenario/mapa4.png");
+    Texture2D bossIdle = LoadTexture("assets/boss/Idle.png");
+    Texture2D bossIdleLeft = LoadTexture("assets/boss/IdleLeft.png");
+    Texture2D bossAtack1 = LoadTexture("assets/boss/Atack1.png");
+    Texture2D bossAtack1Left = LoadTexture("assets/boss/Atack1Left.png");
+    Texture2D bossAtack2 = LoadTexture("assets/boss/Atack2.png");
+    Texture2D bossAtack2Left = LoadTexture("assets/boss/Atack2Left.png");
+    Texture2D mapa4 = LoadTexture("assets/cenario/mapa4.png");
 
-    Texture2D seta = LoadTexture("ui/seta.png");
+    Texture2D seta = LoadTexture("assets/ui/seta.png");
     
     
     // SONS
     
-    Sound andando = LoadSound("audios/andando.mp3");
-    Sound tiro = LoadSound("audios/tiro.mp3");
-    Sound uhr = LoadSound("audios/uhr.mp3");
-    Sound lacaioSom = LoadSound("audios/lacaio.mp3");
-    Sound abrindoPorta = LoadSound("audios/abrindoPorta.mp3");
-    Sound destrancandoPorta = LoadSound("audios/destrancandoPorta.mp3");
-    Sound portaTrancada = LoadSound("audios/portaTrancada.mp3");
-    Sound pegandoItem = LoadSound("audios/pegandoItem.mp3");
-    Sound end = LoadSound("audios/linkinPark.mp3");
-    Sound heal = LoadSound("audios/heal.mp3");
-    Sound getGlock = LoadSound("audios/getGlock.mp3");
+    Sound andando = LoadSound("assets/audios/andando.mp3");
+    Sound tiro = LoadSound("assets/audios/tiro.mp3");
+    Sound uhr = LoadSound("assets/audios/uhr.mp3");
+    Sound lacaioSom = LoadSound("assets/audios/lacaio.mp3");
+    Sound abrindoPorta = LoadSound("assets/audios/abrindoPorta.mp3");
+    Sound destrancandoPorta = LoadSound("assets/audios/destrancandoPorta.mp3");
+    Sound portaTrancada = LoadSound("assets/audios/portaTrancada.mp3");
+    Sound pegandoItem = LoadSound("assets/audios/pegandoItem.mp3");
+    Sound end = LoadSound("assets/audios/linkinPark.mp3");
+    Sound heal = LoadSound("assets/audios/heal.mp3");
+    Sound getGlock = LoadSound("assets/audios/getGlock.mp3");
     
-    Music musica = LoadMusicStream("audios/music.mp3"); 
+    Music musica = LoadMusicStream("assets/audios/music.mp3"); 
     PlayMusicStream(musica);
     
-    Sound desert = LoadSound("audios/desert.mp3");
-    Sound deathSound = LoadSound("audios/deathSound.mp3");
+    Sound desert = LoadSound("assets/audios/desert.mp3");
+    Sound deathSound = LoadSound("assets/audios/deathSound.mp3");
     
     menu(backgroundMenu);
     

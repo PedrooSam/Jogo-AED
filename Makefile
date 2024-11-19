@@ -1,5 +1,5 @@
 CC = gcc
-SRC = $(shell find -name '*.c')
+SRC = $(shell find src -name '*.c')
 OBJ = $(SRC:.c=.o)
 TARGET = Jogo-AED
 CFLAGS = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
