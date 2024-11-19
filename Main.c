@@ -2220,7 +2220,8 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 DrawText("OBRIGADO POR JOGAR!",445, 40, 30, GREEN);
                 
                 char pontuacaoTexto[100];
-                sprintf(pontuacaoTexto, "TEMPO: %d SERKS", pontuacao);
+                pontuacao /= 60;
+                sprintf(pontuacaoTexto, "TEMPO: %d SEGUNDOS", pontuacao);
 
                 DrawText(pontuacaoTexto,1050, 40, 20, GREEN);
                 
