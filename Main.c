@@ -746,17 +746,17 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     int alturaFrame = spritesheet.height;
     
     //animação walk
-    int totalFramesWalk = 5;
+    int totalFramesWalk = 4;
     int frameAtualWalk = 0;
-    float tempoFrameWalk = 0.1f;
+    float tempoFrameWalk = 0.15f;
     float timerWalk = 0.0f;
     int larguraFrameWalk = spriteWalkLeft.width / totalFramesWalk;
     int alturaFrameWalk = spriteWalkLeft.height;
     
     //animação pegando chave primária {Conta pra maioria das animações};
-    int totalFramesKey = 5;
+    int totalFramesKey = 4;
     int frameAtualKey = 0;
-    float tempoFrameKey = 0.1f;
+    float tempoFrameKey = 0.15f;
     float timerKey = 0.0f;
     int larguraFrameKey = pegandoChaveDireita.width / totalFramesKey;
     int alturaFrameKey = pegandoChaveDireita.height;
@@ -880,8 +880,6 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
             
             if(pocao.y < 400) pocao.y += 300;
             pocao.mapa = -1;
-            
-            
             
             pontuacao += 1;
             
@@ -1939,19 +1937,14 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
 
             if(player.vivo){
                 //Sombra
-                if(personagemParado && pegando && !andandoDireita && !segurandoItem) DrawTextureEx(shadow, (Vector2){player.x -15 , player.y + 70}, 0.0f, 1.0f, WHITE);
+                if(personagemParado) DrawTextureEx(shadow, (Vector2){player.x -45 , player.y + 70}, 0.0f, 1.5f, WHITE);
                 
-                else if(personagemParado && segurandoItem && !andandoDireita) DrawTextureEx(shadow, (Vector2){player.x + 90 , player.y + 70}, 0.0f, 1.0f, WHITE);
+                else if(personagemParado && segurandoItem && !andandoDireita) DrawTextureEx(shadow, (Vector2){player.x + 90 , player.y + 70}, 0.0f, 1.5f, WHITE);
                 
-                else if(!personagemParado && pegando && !andandoDireita && !segurandoItem) DrawTextureEx(shadow, (Vector2){player.x + 70, player.y + 75}, 0.0f, 1.0f, WHITE);
+                else if(atirou && !andandoDireita) DrawTextureEx(shadow, (Vector2){player.x - 15, player.y + 70}, 0.0f, 1.5f, WHITE);
                 
-                else if(!personagemParado && pegando && !andandoDireita)  DrawTextureEx(shadow, (Vector2){player.x + 70, player.y + 75}, 0.0f, 1.0f, WHITE);
-                
-                else if(atirou && !andandoDireita) DrawTextureEx(shadow, (Vector2){player.x - 15, player.y + 70}, 0.0f, 1.0f, WHITE);
-                
-                else if(personagemParado) DrawTextureEx(shadow, (Vector2){player.x - 15, player.y + 70}, 0.0f, 1.0f, WHITE);
-                
-                else if(!personagemParado)DrawTextureEx(shadow, (Vector2){player.x + 10, player.y + 75}, 0.0f, 1.0f, WHITE); 
+                else if(personagemParado) DrawTextureEx(shadow, (Vector2){player.x - 15, player.y + 70}, 0.0f, 1.5f, WHITE);
+             
  
                 // Verifica se o personagem está no estado de "pegando" e a direção em que ele está olhando
                 if(levandoDanoFlag){
@@ -2042,10 +2035,10 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     
                     else if (andandoDireita) {  // Andando e pegando normal 
                         Rectangle sourceRecKey = { frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey };
-                        DrawTextureRec(personagemPegando, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE); 
+                        DrawTextureRec(spriteWalkRight, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE); 
                     } else {
                         Rectangle sourceRecKey = { frameAtualKey * larguraFrameKey, 0, larguraFrameKey, alturaFrameKey };
-                        DrawTextureRec(personagemPegandoEsquerda, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE); 
+                        DrawTextureRec(spriteWalkLeft, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE); 
                     }
                     
                     
@@ -2311,7 +2304,7 @@ int main(void) {
     InitWindow(larguraTela, alturaTela, "Um dia no Castelo");
     SetTargetFPS(60);
     
-    ToggleFullscreen();
+    //ToggleFullscreen();
 
     InitAudioDevice();
     
