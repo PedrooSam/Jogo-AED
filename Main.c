@@ -1937,15 +1937,14 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
 
             if(player.vivo){
                 //Sombra
-                if(personagemParado) DrawTextureEx(shadow, (Vector2){player.x -45 , player.y + 70}, 0.0f, 1.5f, WHITE);
                 
-                else if(personagemParado && segurandoItem && !andandoDireita) DrawTextureEx(shadow, (Vector2){player.x + 90 , player.y + 70}, 0.0f, 1.5f, WHITE);
                 
-                else if(atirou && !andandoDireita) DrawTextureEx(shadow, (Vector2){player.x - 15, player.y + 70}, 0.0f, 1.5f, WHITE);
+                if(personagemParado && segurandoItem && !andandoDireita) DrawTextureEx(shadow, (Vector2){player.x + 90 , player.y + 70}, 0.0f, 1.5f, WHITE);
                 
-                else if(personagemParado) DrawTextureEx(shadow, (Vector2){player.x - 15, player.y + 70}, 0.0f, 1.5f, WHITE);
-             
- 
+                else if(atirou && !andandoDireita) DrawTextureEx(shadow, (Vector2){player.x - 45, player.y + 70}, 0.0f, 1.5f, WHITE);
+                
+                else if(personagemParado) DrawTextureEx(shadow, (Vector2){player.x - 45 , player.y + 70}, 0.0f, 1.5f, WHITE);
+  
                 // Verifica se o personagem está no estado de "pegando" e a direção em que ele está olhando
                 if(levandoDanoFlag){
                     Rectangle sourceRecLevandoDano = { frameAtualLevandoDano * larguraFrameLevandoDano, 0, larguraFrameLevandoDano, alturaFrameLevandoDano};
@@ -2058,7 +2057,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                                 DrawTextureRec(atirandoDireitaDourado, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);
                             }else{
                                 Rectangle sourceRecKey = { frameAtualTiro * larguraFrameTiro, 0, larguraFrameTiro, alturaFrameTiro };
-                                DrawTextureRec(atirandoDireita, sourceRecKey, (Vector2){player.x, player.y - playerOffSet}, WHITE);
+                                DrawTextureRec(atirandoDireita, sourceRecKey, (Vector2){player.x -16, player.y - playerOffSet}, WHITE);
                             }
                         }else{
                             Rectangle sourceRec = { frameAtual * larguraFrame, 0, larguraFrame, alturaFrame };
@@ -2071,7 +2070,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                                 DrawTextureRec(atirandoEsquerdaDourado, sourceRecKey, (Vector2){player.x - 100, player.y - playerOffSet}, WHITE);
                             }else{
                                 Rectangle sourceRecKey = { frameAtualTiro * larguraFrameTiro, 0, larguraFrameTiro, alturaFrameTiro };
-                                DrawTextureRec(atirandoEsquerda, sourceRecKey, (Vector2){player.x - 100, player.y - playerOffSet}, WHITE);
+                                DrawTextureRec(atirandoEsquerda, sourceRecKey, (Vector2){player.x - 105, player.y - playerOffSet}, WHITE);
                             }
                         }else{
                             Rectangle sourceRec = { frameAtual * larguraFrame, 0, larguraFrame, alturaFrame };
@@ -2304,7 +2303,7 @@ int main(void) {
     InitWindow(larguraTela, alturaTela, "Um dia no Castelo");
     SetTargetFPS(60);
     
-    //ToggleFullscreen();
+    ToggleFullscreen();
 
     InitAudioDevice();
     
