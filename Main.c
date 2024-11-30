@@ -143,6 +143,9 @@ bool deathSoundBossPlayed = false;
 
 int bossDanoTimer = 0;
 bool bossTomouDano = false;
+bool invoke = false;
+bool lacaioBossAdicionado = false;
+int lacaioBossCount = 0;
 
 //delay do som de dano
 float delayUrh = 0.0f;
@@ -336,7 +339,7 @@ void menu(Texture2D backgroundMenu) {
             boss.vida = 100;
             boss.vivo = true;
             boss.x = 500;
-            boss.y = 500;
+            boss.y = 200;
             
             bossAtack1Flag = false;
             bossAtack2Flag = false;
@@ -346,6 +349,8 @@ void menu(Texture2D backgroundMenu) {
             secretFree = false;
             lacaioCount = 0;
             deathSoundBossPlayed = false;
+            lacaioBossAdicionado = false;
+            lacaioBossCount = 0;
             
             bulletCount = 0;
             break;  
@@ -689,6 +694,9 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     // Death boss
     Texture2D bossDeathRight = LoadTexture("assets/boss/DeathRight.png");
     Texture2D bossDeathLeft = LoadTexture("assets/boss/DeathLeft.png");
+    // Boss Invoke
+    Texture2D invokeRight = LoadTexture("assets/boss/invokeRight.png");
+    Texture2D invokeLeft = LoadTexture("assets/boss/invokeLeft.png");
 
     //
     // ############################
@@ -713,7 +721,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     //posição jogador
     player.x = 800;
     player.y = 200;
-    player.mapa = -1; 
+    player.mapa = 0; 
     player.vivo = true;
     player.vida = 5;
     
@@ -886,6 +894,14 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     float timerDeathB = 0.0f;
     int larguraDeathB = bossDeathRight.width / totalDeathB;
     int alturaDeathB = bossDeathRight.height;
+    
+    //Boss invoke 
+    int totalInvoke = 7;
+    int atualInvoke = 0;
+    float tempoInvoke = 0.1f;
+    float timerInvoke = 0.0f;
+    int larguraInvoke = invokeRight.width / totalInvoke;
+    int alturaInvoke = invokeRight.height;
     
     ShowIntro();
     ShowLoading();
@@ -1102,6 +1118,28 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                         levandoDanoFlag = true;
                         player.vida -= 1;   // Reduz a vida do jogador
                     }
+                }
+                
+                if(boss.vida == 74 || boss.vida == 50 || boss.vida == 10 ){
+                    invoke = true;
+                    timerAtaqueB = 0;
+                    timerAtaqueB2 = 0;
+                    
+                    if(!lacaioBossAdicionado && lacaioBossCount < 3){
+                        lacaioBossAdicionado = true;
+                        lacaio.vivo = true;
+                        lacaio.vida = 10;
+                        lacaio.mapa = -1;
+                        lacaio.x = 500;
+                        lacaio.y = 200;
+                    }
+                }
+                
+                if(!lacaio.vivo && invoke && lacaioBossAdicionado){
+                    invoke = false;
+                    lacaioBossAdicionado = false;
+                    lacaioBossCount++;
+                    boss.vida -= 2;
                 }
                 
                 // Atualiza distâncias absolutas entre o boss e o jogador em cada eixo
@@ -1351,6 +1389,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 if (timerSeta >= tempoSeta) timerSeta = 0.0f;  // Reseta timerSeta
             }
             
+            // Atualização boss death
             if (boss.vida <= 0) {
                 if (atualDeathB < totalDeathB - 1) { // Apenas atualiza enquanto não alcançou o último frame
                     timerDeathB += GetFrameTime();
@@ -1361,6 +1400,16 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 }
             }
             
+            //Atualização boss invoke
+            // Atualização potion
+            if(invoke){
+                timerInvoke = getTime(timerInvoke);
+                atualInvoke = getFrame(timerInvoke, tempoInvoke, totalInvoke, atualInvoke);
+                if(timerInvoke > tempoInvoke){
+                    timerInvoke = 0.0f;
+                }
+            }
+                
             // Restringir o jogador para não sair da tela
             if (player.x < 0) {     // Lado esquerdo
                 player.x = 0;
@@ -1807,7 +1856,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     }
                 }
                 
-                if ((projetil.posicao.x > boss.x && projetil.posicao.x < boss.x + 200) && (projetil.posicao.y > boss.y && projetil.posicao.y < boss.y + 150) && boss.vivo && boss.mapa == player.mapa) {
+                if ((projetil.posicao.x > boss.x && projetil.posicao.x < boss.x + 200) && (projetil.posicao.y > boss.y && projetil.posicao.y < boss.y + 150) && boss.vivo && boss.mapa == player.mapa && !invoke) {
 
                     projetil.ativo = false;
                     
@@ -1815,7 +1864,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                         boss.vida -= 2;
                         bulletCount++;
                     }else{
-                        boss.vida -= 100;
+                        boss.vida -= 1;
                         bulletCount ++;
                     }
                         
@@ -1965,7 +2014,14 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                         } else {
                             DrawTextureRec(bossTomouDano ? bossAtack2LeftDano : bossAtack2Left, sourceRec2, (Vector2){boss.x, boss.y}, WHITE);
                         }
-                    } else {
+                    } else if(invoke) {    
+                        Rectangle sourceRec2 = { atualInvoke * larguraInvoke, 0, larguraInvoke, alturaInvoke};
+                        if(bossIndoDireita){
+                            DrawTextureRec(invokeRight, sourceRec2, (Vector2){boss.x, boss.y}, WHITE);
+                        }else{
+                            DrawTextureRec(invokeLeft, sourceRec2, (Vector2){boss.x, boss.y}, WHITE);
+                        }
+                    }else {
                         // Idle
                         Rectangle sourceRec = { atualBossIdle * larguraBossIdle, 0, larguraBossIdle, alturaBossIdle };
                         if (bossIndoDireita) {
