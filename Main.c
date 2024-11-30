@@ -1126,6 +1126,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     timerAtaqueB2 = 0;
                     
                     if(!lacaioBossAdicionado && lacaioBossCount < 3){
+                        PlaySound(lacaioSom);
                         lacaioBossAdicionado = true;
                         lacaio.vivo = true;
                         lacaio.vida = 10;
@@ -1140,6 +1141,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                     lacaioBossAdicionado = false;
                     lacaioBossCount++;
                     boss.vida -= 2;
+                    PlaySound(deathSound);
                 }
                 
                 // Atualiza distâncias absolutas entre o boss e o jogador em cada eixo
