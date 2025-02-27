@@ -301,7 +301,7 @@ void menu(Texture2D backgroundMenu) {
             lacaio.x = 100;
             lacaio.y = 200;
             lacaio.mapa = 100;
-            lacaio.vivo = true;
+            lacaio.vivo = false;
             lacaio.vida = 10;
             
             boss.x = 100;
@@ -351,6 +351,7 @@ void menu(Texture2D backgroundMenu) {
             deathSoundBossPlayed = false;
             lacaioBossAdicionado = false;
             lacaioBossCount = 0;
+            invoke = false;
             
             bulletCount = 0;
             break;  
@@ -729,7 +730,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     lacaio.x = 100;
     lacaio.y = 200;
     lacaio.mapa = 100;
-    lacaio.vivo = true;
+    lacaio.vivo = false;
     lacaio.vida = 10; //VIDA LACAIO
     
     //posição boss
@@ -743,9 +744,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
     chave.x = 500;
     chave.y = 550;
     chave.mapa = 0;
-    
-    
-
+   
     // ############################
     // 	CONFIG DE ANIMAÇÃO	
     // ############################
@@ -1853,8 +1852,9 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                         deathFlag = true;
                         
                         lacaioCount ++;
+                        lacaioAtacando = false;
                         
-                        if(lacaioCount == 3) secretFree = true;
+                        if(lacaioCount == 2) secretFree = true;
                     }
                 }
                 
@@ -1928,7 +1928,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 
                 if(CollisionObject(playerCollision, pocoes)) {
                     PlaySound(heal);
-                    player.vida += 2;
+                    player.vida += 3;
                     liberaPotion = false;
                     
                     if(player.vida > 5) player.vida = 5;
@@ -1941,7 +1941,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 
                 if(CollisionObject(playerCollision, potionCollision)) {
                     PlaySound(heal);
-                    player.vida += 2;
+                    player.vida += 3;
                     lacaioCount = 0;
                     if(player.vida > 5) player.vida = 5;
                 }
@@ -2209,7 +2209,7 @@ void iniciarJogo(Texture2D backgroundImage, Texture2D personagemPegando, Texture
                 DrawTextureEx(vida1, (Vector2){20,20}, 0.0f, 5.0f, WHITE);
             
             //UI lacaio
-            if(lacaio.mapa == player.mapa){
+            if(lacaio.mapa == player.mapa && lacaio.vivo){
             if(lacaio.vida == 10) 
                 DrawTextureEx(lacaioVida10, (Vector2){700, 20}, 0.0f, 5.0f, WHITE);
             else if(lacaio.vida == 9) 
